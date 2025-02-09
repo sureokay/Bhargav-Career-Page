@@ -1,304 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TKJDK6SF');</script>
-    <!-- End Google Tag Manager -->
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com https://www.googletagmanager.com; img-src 'self' data: https://*; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com/gtag/js;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https://*; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline';">
     <title>Bhargav Desai - QA Professional Portfolio</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX');
-    </script>
-
     <style>
         :root {
-            /* Light theme */
-            --primary-color-light: #1a237e;
-            --secondary-color-light: #0d47a1;
-            --accent-color-light: #1565c0;
-            --text-color-light: #1a237e;
-            --bg-color-light: #f5f5f5;
-            --section-bg-light: rgba(255, 255, 255, 0.9);
-
-            /* Dark theme */
-            --primary-color-dark: #3949ab;
-            --secondary-color-dark: #1e88e5;
-            --accent-color-dark: #82b1ff;
-            --text-color-dark: #e3f2fd;
-            --bg-color-dark: #121212;
-            --section-bg-dark: rgba(30, 30, 30, 0.9);
-
-            /* Default theme (light) */
-            --primary-color: var(--primary-color-light);
-            --secondary-color: var(--secondary-color-light);
-            --accent-color: var(--accent-color-light);
-            --text-color: var(--text-color-light);
-            --bg-color: var(--bg-color-light);
-            --section-bg: var(--section-bg-light);
+            --primary-color: #1a237e;
+            --secondary-color: #0d47a1;
+            --accent-color: #1565c0;
+            --text-color: #e3f2fd;
+            --section-bg: rgba(13, 71, 161, 0.9);
+            --hover-color: #1976d2;
         }
 
-        /* Dark theme class */
-        body.dark-theme {
-            --primary-color: var(--primary-color-dark);
-            --secondary-color: var(--secondary-color-dark);
-            --accent-color: var(--accent-color-dark);
-            --text-color: var(--text-color-dark);
-            --bg-color: var(--bg-color-dark);
-            --section-bg: var(--section-bg-dark);
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.5rem;
-            border-radius: 50%;
-            background: var(--section-bg);
-            border: none;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        .language-selector {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1000;
-        }
-
-        .language-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 20px;
-            background: var(--section-bg);
-            color: var(--text-color);
-            cursor: pointer;
-            margin-right: 0.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .language-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .language-btn.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        /* Rest of your existing styles */
-        /* ... (keep all the previous styles but remove typeform-related styles) ... */
-
-        /* Add new animation for theme transition */
         * {
-            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Add styles for certifications section */
-        .certifications-section {
-            background: var(--section-bg);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
         }
 
-        .certification-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+        header {
+            text-align: center;
+            padding: 3rem;
+            background: var(--section-bg);
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info {
+            margin-bottom: 2rem;
+        }
+
+        .profile-info h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
             margin-top: 1.5rem;
         }
 
-        .certification-card {
-            background: rgba(var(--primary-color), 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
             transition: transform 0.3s ease;
         }
 
-        .certification-card:hover {
+        .contact-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .linkedin-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #0077b5;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-top: 1rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .linkedin-profile:hover {
+            transform: translateY(-2px);
+            background: #005885;
+        }
+
+        .search-container {
+            margin: 2rem auto;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .experience-card {
+            background: var(--section-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .experience-card:hover {
             transform: translateY(-5px);
         }
 
-        /* Add styles for achievements section */
-        .achievements-section {
-            background: var(--section-bg);
-            padding: 2rem;
+        .experience-card h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .experience-period {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
             border-radius: 15px;
-            margin: 2rem 0;
+            font-size: 0.85rem;
+            transition: background-color 0.3s ease;
         }
 
-        .achievement-item {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            border-left: 4px solid var(--accent-color);
-            background: rgba(var(--primary-color), 0.05);
+        .skill-tag:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Add print-friendly styles */
-        @media print {
-            .theme-toggle,
-            .language-selector,
-            .search-container {
-                display: none;
-            }
-
-            body {
-                background: white;
-                color: black;
-            }
-
+        @media (max-width: 768px) {
             .container {
-                width: 100%;
-                margin: 0;
-                padding: 0;
+                padding: 1rem;
+            }
+            
+            .profile-info h1 {
+                font-size: 2rem;
+            }
+
+            .contact-details {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .experience-card {
+                margin-bottom: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKJDK6SF"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <!-- Theme Toggle Button -->
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-        <i class="fas fa-moon"></i>
-    </button>
+    <div class="container">
+        <header>
+            <div class="profile-info">
+                <h1>Bhargav Desai</h1>
+                <p>Global Software Quality and Project Consultant</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Nadiad, Gujarat, India</span>
+                    </div>
+                </div>
+                <a href="https://www.linkedin.com/in/bhargav-desai-43b0ab149/" target="_blank" rel="noopener noreferrer" class="linkedin-profile">
+                    <i class="fab fa-linkedin"></i>
+                    <span>LinkedIn Profile</span>
+                </a>
+            </div>
+        </header>
 
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <button class="language-btn active" onclick="changeLanguage('en')">EN</button>
-        <button class="language-btn" onclick="changeLanguage('hi')">हिंदी</button>
-        <button class="language-btn" onclick="changeLanguage('gu')">ગુજરાતી</button>
-    </div>
-
-    <!-- Rest of your existing HTML structure -->
-    <!-- ... (keep all the previous HTML but remove typeform-related elements) ... -->
-
-    <!-- Add Certifications Section -->
-    <div class="certifications-section">
-        <h2>Certifications & Training</h2>
-        <div class="certification-grid">
-            <div class="certification-card">
-                <i class="fas fa-certificate"></i>
-                <h3>Manual Testing</h3>
-                <p>Understanding Manual Testing Certification</p>
-            </div>
-            <div class="certification-card">
-                <i class="fas fa-certificate"></i>
-                <h3>API Testing</h3>
-                <p>API Testing Using Rest Assured</p>
-            </div>
-            <div class="certification-card">
-                <i class="fas fa-certificate"></i>
-                <h3>Test Automation</h3>
-                <p>Test Automation Tool Certification</p>
-            </div>
-            <div class="certification-card">
-                <i class="fas fa-certificate"></i>
-                <h3>AWS Fundamentals</h3>
-                <p>AWS Fundamentals Specialization</p>
-            </div>
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search skills, experiences, or companies..." 
+                autocomplete="off"
+                aria-label="Search"
+            >
         </div>
-    </div>
 
-    <!-- Add Achievements Section -->
-    <div class="achievements-section">
-        <h2>Key Achievements</h2>
-        <div class="achievement-item">
-            <h3>Project Management Excellence</h3>
-            <p>Successfully led and delivered multiple complex testing projects</p>
-        </div>
-        <div class="achievement-item">
-            <h3>Process Optimization</h3>
-            <p>Improved testing efficiency by implementing automated testing solutions</p>
-        </div>
-        <div class="achievement-item">
-            <h3>Team Leadership</h3>
-            <p>Managed and mentored testing teams across various projects</p>
+        <div class="experience-grid" id="experienceContainer">
+            <!-- Experiences will be dynamically added here -->
         </div>
     </div>
 
     <script>
-        // Theme Toggle Functionality
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.querySelector('.theme-toggle i');
-            
-            body.classList.toggle('dark-theme');
-            themeIcon.classList.toggle('fa-moon');
-            themeIcon.classList.toggle('fa-sun');
-            
-            // Save theme preference
-            localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+        // Experience data structure
+        const experiences = [
+            {
+                title: "Remote Software Quality Assurance Consultant",
+                company: "Self Employed",
+                period: "November 2020 - Present",
+                description: "Providing remote QA consulting services to clients worldwide.",
+                skills: ["JIRA", "Zephyr", "Slack", "Confluence", "Google Suite", "eCommerce Testing", "Web Application Testing"]
+            },
+            {
+                title: "Chief Technology Officer",
+                company: "Mangalam Placements Pvt Ltd",
+                period: "November 2020 - July 2021",
+                description: "Led development and testing of web and mobile applications, implementing innovative features.",
+                skills: ["Leadership", "Mobile Testing", "Web Testing", "User Experience", "Team Management", "Strategic Planning"]
+            },
+            {
+                title: "Senior Software Quality Assurance Engineer",
+                company: "Skyward Techno Solutions Pvt. Ltd",
+                period: "November 2019 - February 2021",
+                description: "Oversaw mobile application testing and led test case planning and execution.",
+                skills: ["Mobile Testing", "Test Planning", "Quality Metrics", "Process Improvement", "JIRA Integration"]
+            },
+            {
+                title: "Freelance Expert",
+                company: "Freelancer",
+                period: "March 2011 - November 2019",
+                description: "Conducted functional, regression, integration, and automation testing using Selenium.",
+                skills: ["Selenium", "BDD", "Cucumber", "Ruby", "JavaScript", "Sikuli", "Nokogiri"]
+            },
+            {
+                title: "Software QA Engineer",
+                company: "Musikaar",
+                period: "March 2010 - February 2011",
+                description: "Developed test cases and managed virtual infrastructure testing.",
+                skills: ["Test Case Development", "Virtual Infrastructure", "BAT Reports", "ESXi Servers"]
+            },
+            {
+                title: "Software Test Engineer",
+                company: "Indusa",
+                period: "September 2008 - February 2010",
+                description: "Configured testing procedures and managed testing methodologies.",
+                skills: ["SENDMAIL", "POSTFIX", "CLEARQUEST", "Agile Methodology", "Configuration Management"]
+            }
+        ];
+
+        // Safely escape HTML to prevent XSS
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
-        // Language Change Functionality
-        const translations = {
-            en: {
-                title: "Global Software Quality and Project Consultant",
-                search: "Search skills, experiences, or companies...",
-                // Add more translations as needed
-            },
-            hi: {
-                title: "वैश्विक सॉफ्टवेयर गुणवत्ता और परियोजना सलाहकार",
-                search: "कौशल, अनुभव, या कंपनियां खोजें...",
-                // Add more translations
-            },
-            gu: {
-                title: "ગ્લોબલ સોફ્ટવેર ક્વોલિટી અને પ્રોજેક્ટ કન્સલ્ટન્ટ",
-                search: "કૌશલ્ય, અનુભવ, અથવા કંપનીઓ શોધો...",
-                // Add more translations
-            }
-        };
+        // Create and render experience cards
+        function renderExperiences(filteredExperiences = experiences) {
+            const container = document.getElementById('experienceContainer');
+            container.innerHTML = '';
 
-        function changeLanguage(lang) {
-            // Update active button
-            document.querySelectorAll('.language-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.onclick.toString().includes(lang)) {
-                    btn.classList.add('active');
-                }
+            filteredExperiences.forEach(exp => {
+                const card = document.createElement('div');
+                card.className = 'experience-card';
+                
+                card.innerHTML = `
+                    <h3>${escapeHtml(exp.title)}</h3>
+                    <div class="experience-period">
+                        <i class="far fa-calendar-alt"></i> ${escapeHtml(exp.period)}
+                    </div>
+                    <p>${escapeHtml(exp.description)}</p>
+                    <div class="skills-container">
+                        ${exp.skills.map(skill => `<span class="skill-tag">${escapeHtml(skill)}</span>`).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Search functionality
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const searchContent = debounce((searchTerm) => {
+            const normalizedSearchTerm = searchTerm.toLowerCase().trim();
+            
+            if (!normalizedSearchTerm) {
+                renderExperiences();
+                return;
+            }
+
+            const filteredExperiences = experiences.filter(exp => {
+                return exp.title.toLowerCase().includes(normalizedSearchTerm) ||
+                       exp.company.toLowerCase().includes(normalizedSearchTerm) ||
+                       exp.description.toLowerCase().includes(normalizedSearchTerm) ||
+                       exp.skills.some(skill => skill.toLowerCase().includes(normalizedSearchTerm));
             });
 
-            // Update content
-            document.querySelector('.profile-info p').textContent = translations[lang].title;
-            document.querySelector('#searchInput').placeholder = translations[lang].search;
-            // Add more content updates as needed
-        }
+            renderExperiences(filteredExperiences);
+        }, 300);
 
-        // Initialize theme from localStorage
+        // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-                document.querySelector('.theme-toggle i').classList.replace('fa-moon', 'fa-sun');
-            }
-        });
+            renderExperiences();
+            
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchContent(e.target.value);
+            });
 
-        // Previous JavaScript code remains the same
-        // ... (keep all the previous JavaScript) ...
+            // Add basic XSS protection
+            searchInput.addEventListener('invalid', (e) => {
+                e.preventDefault();
+            });
+        });
     </script>
 </body>
 </html>
