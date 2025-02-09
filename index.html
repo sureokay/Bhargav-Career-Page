@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhargav Desai - CV Search Tool</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Bhargav Desai's CV Search Tool</h1>
+    <p>Type your query below to search relevant details about Bhargav's skills, experience, and education.</p>
+  </header>
+
+  <main>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Ask something about Bhargav's CV...">
+      <button id="search-button">Search</button>
+    </div>
+    <div id="results-container"></div>
+  </main>
+
+  <footer>
+    <p>Made with &#10084; by Bhargav Desai</p>
+  </footer>
+
+  <script>
+    // Sample data extracted from the CVs
+    const cvData = [
+      { id: 1, title: "Contact Info", content: "Nadiad, Gujarat, India. Email: desai.bhargav@gmail.com. Phone: +91 9265118955." },
+      { id: 2, title: "Skills", content: "Application Development, Manual Testing, API Testing, Test Automation, Agile Practices, Project Management." },
+      { id: 3, title: "Summary", content: "Results-driven QA professional with extensive experience in software testing and project management." },
+      { id: 4, title: "Experience", content: "Remote Software QA Consultant at Self Employed (2020-Present). CTO at Mangalam Placements (2020-2021). QA Engineer at Skyward Techno Solutions (2019-2021)." },
+      { id: 5, title: "Education", content: "Masters in Computer Application from Sardar Patel University, Gujarat, India (2005)." }
+    ];
+
+    // Initialize Lunr.js
+    const idx = lunr(function () {
+      this.field('title');
+      this.field('content');
+      this.ref('id');
+
+      cvData.forEach(function (doc) {
+        this.add(doc);
+      }, this);
+    });
+
+    // Search function
+    document.getElementById('search-button').addEventListener('click', function () {
+      const query = document.getElementById('search-input').value;
+      const results = idx.search(query);
+
+      const resultsContainer = document.getElementById('results-container');
+      resultsContainer.innerHTML = '';
+
+      if (results.length > 0) {
+        results.forEach(result => {
+          const item = cvData.find(doc => doc.id === parseInt(result.ref));
+          const resultElement = document.createElement('div');
+          resultElement.classList.add('result-item');
+          resultElement.innerHTML = `<h3>${item.title}</h3><p>${item.content}</p>`;
+          resultsContainer.appendChild(resultElement);
+        });
+      } else {
+        resultsContainer.innerHTML = '<p>No matching results found.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
