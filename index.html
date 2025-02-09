@@ -1,86 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bhargav Desai - CV Search Tool</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhargav Desai - Professional Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #ecf0f1;
+            --section-bg: rgba(44, 62, 80, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('/api/placeholder/1920/1080') center/cover no-repeat fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--section-bg);
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+
+        .profile-info {
+            margin-bottom: 2rem;
+        }
+
+        .profile-info h1 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .section {
+            background: var(--section-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .skill-tag {
+            background: var(--secondary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .experience-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .experience-item h3 {
+            color: var(--accent-color);
+        }
+
+        .experience-item .duration {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-container input {
+            padding: 0.8rem;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .contact-details {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to Bhargav Desai's CV Search Tool</h1>
-    <p>Type your query below to search relevant details about Bhargav's skills, experience, and education.</p>
-  </header>
+    <div class="container">
+        <header>
+            <div class="profile-info">
+                <h1>Bhargav Desai</h1>
+                <p>Global Software Quality and Project Consultant</p>
+            </div>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Nadiad, Gujarat, India</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+91 9265118955</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>desai.bhargav@gmail.com</span>
+                </div>
+            </div>
+        </header>
 
-  <main>
-    <div class="search-container">
-      <input type="text" id="search-input" placeholder="Ask something about Bhargav's CV...">
-      <button id="search-button">Search</button>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search within portfolio..." onkeyup="searchContent()">
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2>Core Skills</h2>
+                <div class="skills">
+                    <span class="skill-tag">Application Development</span>
+                    <span class="skill-tag">User Experience Enhancement</span>
+                    <span class="skill-tag">Technological Innovation</span>
+                    <span class="skill-tag">Manual Testing</span>
+                    <span class="skill-tag">API Testing</span>
+                    <span class="skill-tag">Test Automation</span>
+                    <span class="skill-tag">Project Management</span>
+                    <span class="skill-tag">Agile Practices</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Professional Summary</h2>
+                <p>A seasoned QA professional with over eighteen years of experience in software testing and project management. Expertise spans web and mobile app testing, encompassing project management and test design. Excel in test execution, defect tracking, and process enhancement, prioritizing top-notch software products aligned with user and stakeholder needs.</p>
+            </div>
+
+            <div class="section">
+                <h2>Recent Experience</h2>
+                <div class="experience-item">
+                    <h3>Remote Software Quality Assurance Consultant</h3>
+                    <div class="duration">November 2020 - Present</div>
+                    <p>Providing remote QA consulting services globally, managing projects with JIRA, Zephyr, Slack, and more.</p>
+                </div>
+                <div class="experience-item">
+                    <h3>Chief Technology Officer</h3>
+                    <div class="duration">November 2020 - July 2021</div>
+                    <p>Led development and testing of web and mobile applications, implementing innovative features and enhancing user experiences.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="results-container"></div>
-  </main>
 
-  <footer>
-    <p>Made with &#10084; by Bhargav Desai</p>
-  </footer>
+    <script>
+        function searchContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
 
-  <script>
-    // Sample data extracted from the CVs
-    const cvData = [
-      { id: 1, title: "Contact Info", content: "Nadiad, Gujarat, India. Email: desai.bhargav@gmail.com. Phone: +91 9265118955." },
-      { id: 2, title: "Skills", content: "Application Development, Manual Testing, API Testing, Test Automation, Agile Practices, Project Management." },
-      { id: 3, title: "Summary", content: "Results-driven QA professional with extensive experience in software testing and project management." },
-      { id: 4, title: "Experience", content: "Remote Software QA Consultant at Self Employed (2020-Present). CTO at Mangalam Placements (2020-2021). QA Engineer at Skyward Techno Solutions (2019-2021)." },
-      { id: 5, title: "Education", content: "Masters in Computer Application from Sardar Patel University, Gujarat, India (2005)." }
-    ];
+        // Add smooth scroll effect for better UX
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+            });
 
-    // Initialize Lunr.js
-    const idx = lunr(function () {
-      this.field('title');
-      this.field('content');
-      this.ref('id');
-
-      cvData.forEach(function (doc) {
-        this.add(doc);
-      }, this);
-    });
-
-    // Debounced Search function
-    let debounceTimer;
-    document.getElementById('search-input').addEventListener('input', function () {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => performSearch(this.value), 300);
-    });
-
-    document.getElementById('search-button').addEventListener('click', function () {
-      performSearch(document.getElementById('search-input').value);
-    });
-
-    function performSearch(query) {
-      const results = idx.search(query);
-      const resultsContainer = document.getElementById('results-container');
-      resultsContainer.innerHTML = '';
-
-      if (results.length > 0) {
-        results.forEach(result => {
-          const item = cvData.find(doc => doc.id === parseInt(result.ref));
-          const resultElement = document.createElement('div');
-          resultElement.classList.add('result-item');
-          resultElement.innerHTML = `<h3>${item.title}</h3><p>${highlightTerms(item.content, query)}</p>`;
-          resultsContainer.appendChild(resultElement);
+            setTimeout(() => {
+                sections.forEach((section, index) => {
+                    setTimeout(() => {
+                        section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 300);
         });
-      } else {
-        resultsContainer.innerHTML = '<p>No matching results found.</p>';
-      }
-    }
-
-    // Highlight search terms in results
-    function highlightTerms(content, query) {
-      if (!query) return content;
-      const regex = new RegExp(`(${query})`, 'gi');
-      return content.replace(regex, '<mark>$1</mark>');
-    }
-  </script>
+    </script>
 </body>
 </html>
