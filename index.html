@@ -3,355 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https://*; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline';">
-    <title>Bhargav Desai - QA Professional Portfolio</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #1a237e;
-            --secondary-color: #0d47a1;
-            --accent-color: #1565c0;
-            --text-color: #e3f2fd;
-            --section-bg: rgba(13, 71, 161, 0.9);
-            --hover-color: #1976d2;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            text-align: center;
-            padding: 3rem;
-            background: var(--section-bg);
-            margin-bottom: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-info {
-            margin-bottom: 2rem;
-        }
-
-        .profile-info h1 {
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .contact-details {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            transition: transform 0.3s ease;
-        }
-
-        .contact-item:hover {
-            transform: translateY(-2px);
-        }
-
-        .linkedin-profile {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: #0077b5;
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            margin-top: 1rem;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .linkedin-profile:hover {
-            transform: translateY(-2px);
-            background: #005885;
-        }
-
-        .search-container {
-            margin: 2rem auto;
-            max-width: 600px;
-            position: relative;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-container input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .search-container input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .experience-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .experience-card {
-            background: var(--section-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .experience-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .experience-card h3 {
-            color: #fff;
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-
-        .experience-period {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 1rem;
-        }
-
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .skill-tag {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.4rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .skill-tag:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .profile-info h1 {
-                font-size: 2rem;
-            }
-
-            .contact-details {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .experience-card {
-                margin-bottom: 1rem;
-            }
-        }
-    </style>
+    <title>Bhargav Desai - QA Consultant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <div class="profile-info">
-                <h1>Bhargav Desai</h1>
-                <p>Global Software Quality and Project Consultant</p>
-                <div class="contact-details">
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Nadiad, Gujarat, India</span>
-                    </div>
+<body class="bg-white transition-colors duration-200">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-800">Bhargav Desai</h1>
                 </div>
-                <a href="https://www.linkedin.com/in/bhargav-desai-43b0ab149/" target="_blank" rel="noopener noreferrer" class="linkedin-profile">
-                    <i class="fab fa-linkedin"></i>
-                    <span>LinkedIn Profile</span>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Language Selector -->
+                    <select id="language-selector" class="bg-gray-100 text-gray-800 rounded-md px-2 py-1">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                    </select>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100">
+                        <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 px-4 bg-blue-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4" data-i18n="hero.title">Software Quality Assurance Consultant</h2>
+                <p class="text-lg text-gray-600" data-i18n="hero.subtitle">18+ Years of Experience in Software Testing & Quality Assurance</p>
+            </div>
+            <div class="text-center">
+                <p class="text-gray-600 max-w-2xl mx-auto" data-i18n="hero.description">
+                    Specialized in web and mobile app testing, project management, and process enhancement, 
+                    ensuring delivery of high-quality software products aligned with user and stakeholder needs.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="services.title">Services</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <h4 class="font-semibold text-lg mb-2" data-i18n="services.manual.title">Manual Testing</h4>
+                    <p data-i18n="services.manual.description">Comprehensive functional, regression, and integration testing services for web and mobile applications.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <h4 class="font-semibold text-lg mb-2" data-i18n="services.automation.title">Test Automation</h4>
+                    <p data-i18n="services.automation.description">Selenium WebDriver automation with BDD framework implementation using Capybara, Cucumber, and Ruby.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <h4 class="font-semibold text-lg mb-2" data-i18n="services.project.title">Project Management</h4>
+                    <p data-i18n="services.project.description">Expert management of QA projects using JIRA, Zephyr, Confluence, and other modern tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="py-12 px-4 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="experience.title">Experience Highlights</h3>
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Remote QA Consultant (2020 - Present)</h4>
+                    <p class="text-gray-600">Providing global consulting services in software quality assurance</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Chief Technology Officer</h4>
+                    <p class="text-gray-600">Led development and testing of innovative web and mobile applications</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="contact.title">Contact</h3>
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
+                <a href="https://calendly.com/desai-bhargav" target="_blank" 
+                   class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">
+                    Schedule a Meeting
+                </a>
+                <a href="https://www.linkedin.com/in/bhargav-desai-43b0ab149" target="_blank"
+                   class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">
+                    Connect on LinkedIn
                 </a>
             </div>
-        </header>
-
-        <div class="search-container">
-            <input 
-                type="text" 
-                id="searchInput" 
-                placeholder="Search skills, experiences, or companies..." 
-                autocomplete="off"
-                aria-label="Search"
-            >
+            <div class="mt-8 text-center text-gray-600">
+                <p>📍 Nadiad, Gujarat, India</p>
+            </div>
         </div>
-
-        <div class="experience-grid" id="experienceContainer">
-            <!-- Experiences will be dynamically added here -->
-        </div>
-    </div>
+    </section>
 
     <script>
-        // Experience data structure
-        const experiences = [
-            {
-                title: "Remote Software Quality Assurance Consultant",
-                company: "Self Employed",
-                period: "November 2020 - Present",
-                description: "Providing remote QA consulting services to clients worldwide.",
-                skills: ["JIRA", "Zephyr", "Slack", "Confluence", "Google Suite", "eCommerce Testing", "Web Application Testing"]
-            },
-            {
-                title: "Chief Technology Officer",
-                company: "Mangalam Placements Pvt Ltd",
-                period: "November 2020 - July 2021",
-                description: "Led development and testing of web and mobile applications, implementing innovative features.",
-                skills: ["Leadership", "Mobile Testing", "Web Testing", "User Experience", "Team Management", "Strategic Planning"]
-            },
-            {
-                title: "Senior Software Quality Assurance Engineer",
-                company: "Skyward Techno Solutions Pvt. Ltd",
-                period: "November 2019 - February 2021",
-                description: "Oversaw mobile application testing and led test case planning and execution.",
-                skills: ["Mobile Testing", "Test Planning", "Quality Metrics", "Process Improvement", "JIRA Integration"]
-            },
-            {
-                title: "Freelance Expert",
-                company: "Freelancer",
-                period: "March 2011 - November 2019",
-                description: "Conducted functional, regression, integration, and automation testing using Selenium.",
-                skills: ["Selenium", "BDD", "Cucumber", "Ruby", "JavaScript", "Sikuli", "Nokogiri"]
-            },
-            {
-                title: "Software QA Engineer",
-                company: "Musikaar",
-                period: "March 2010 - February 2011",
-                description: "Developed test cases and managed virtual infrastructure testing.",
-                skills: ["Test Case Development", "Virtual Infrastructure", "BAT Reports", "ESXi Servers"]
-            },
-            {
-                title: "Software Test Engineer",
-                company: "Indusa",
-                period: "September 2008 - February 2010",
-                description: "Configured testing procedures and managed testing methodologies.",
-                skills: ["SENDMAIL", "POSTFIX", "CLEARQUEST", "Agile Methodology", "Configuration Management"]
+        // Theme handling without localStorage
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        let isDark = false;
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            if (isDark) {
+                body.classList.add('dark');
+                body.style.backgroundColor = '#1a202c';
+                body.style.color = '#fff';
+            } else {
+                body.classList.remove('dark');
+                body.style.backgroundColor = '#fff';
+                body.style.color = '#000';
             }
-        ];
-
-        // Safely escape HTML to prevent XSS
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        // Create and render experience cards
-        function renderExperiences(filteredExperiences = experiences) {
-            const container = document.getElementById('experienceContainer');
-            container.innerHTML = '';
-
-            filteredExperiences.forEach(exp => {
-                const card = document.createElement('div');
-                card.className = 'experience-card';
-                
-                card.innerHTML = `
-                    <h3>${escapeHtml(exp.title)}</h3>
-                    <div class="experience-period">
-                        <i class="far fa-calendar-alt"></i> ${escapeHtml(exp.period)}
-                    </div>
-                    <p>${escapeHtml(exp.description)}</p>
-                    <div class="skills-container">
-                        ${exp.skills.map(skill => `<span class="skill-tag">${escapeHtml(skill)}</span>`).join('')}
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-
-        // Search functionality
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        const searchContent = debounce((searchTerm) => {
-            const normalizedSearchTerm = searchTerm.toLowerCase().trim();
-            
-            if (!normalizedSearchTerm) {
-                renderExperiences();
-                return;
-            }
-
-            const filteredExperiences = experiences.filter(exp => {
-                return exp.title.toLowerCase().includes(normalizedSearchTerm) ||
-                       exp.company.toLowerCase().includes(normalizedSearchTerm) ||
-                       exp.description.toLowerCase().includes(normalizedSearchTerm) ||
-                       exp.skills.some(skill => skill.toLowerCase().includes(normalizedSearchTerm));
-            });
-
-            renderExperiences(filteredExperiences);
-        }, 300);
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            renderExperiences();
-            
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', (e) => {
-                searchContent(e.target.value);
-            });
-
-            // Add basic XSS protection
-            searchInput.addEventListener('invalid', (e) => {
-                e.preventDefault();
-            });
         });
+
+        // Language translations
+        const translations = {
+            en: {
+                "hero.title": "Software Quality Assurance Consultant",
+                "hero.subtitle": "18+ Years of Experience in Software Testing & Quality Assurance",
+                "hero.description": "Specialized in web and mobile app testing, project management, and process enhancement, ensuring delivery of high-quality software products aligned with user and stakeholder needs.",
+                "services.title": "Services",
+                "services.manual.title": "Manual Testing",
+                "services.manual.description": "Comprehensive functional, regression, and integration testing services for web and mobile applications.",
+                "services.automation.title": "Test Automation",
+                "services.automation.description": "Selenium WebDriver automation with BDD framework implementation using Capybara, Cucumber, and Ruby.",
+                "services.project.title": "Project Management",
+                "services.project.description": "Expert management of QA projects using JIRA, Zephyr, Confluence, and other modern tools.",
+                "experience.title": "Experience Highlights",
+                "contact.title": "Contact"
+            },
+            hi: {
+                "hero.title": "सॉफ्टवेयर गुणवत्ता आश्वासन सलाहकार",
+                "hero.subtitle": "सॉफ्टवेयर टेस्टिंग और गुणवत्ता आश्वासन में 18+ वर्षों का अनुभव",
+                "hero.description": "वेब और मोबाइल ऐप टेस्टिंग, प्रोजेक्ट मैनेजमेंट और प्रक्रिया सुधार में विशेषज्ञता",
+                "services.title": "सेवाएं",
+                "services.manual.title": "मैनुअल टेस्टिंग",
+                "services.manual.description": "वेब और मोबाइल एप्लिकेशन के लिए व्यापक कार्यात्मक, रिग्रेशन और एकीकरण परीक्षण सेवाएं।",
+                "services.automation.title": "टेस्ट ऑटोमेशन",
+                "services.automation.description": "सेलेनियम वेबड्राइवर ऑटोमेशन और बीडीडी फ्रेमवर्क का कार्यान्वयन",
+                "services.project.title": "प्रोजेक्ट मैनेजमेंट",
+                "services.project.description": "जीरा, ज़ेफ़िर, कॉन्फ्लुएंस का उपयोग करके क्यूए प्रोजेक्ट्स का विशेषज्ञ प्रबंधन",
+                "experience.title": "अनुभव की विशेषताएं",
+                "contact.title": "संपर्क"
+            }
+        };
+
+        const languageSelector = document.getElementById('language-selector');
+        languageSelector.addEventListener('change', (e) => {
+            const lang = e.target.value;
+            updateLanguage(lang);
+        });
+
+        function updateLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
     </script>
 </body>
 </html>
