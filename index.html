@@ -6,24 +6,24 @@
     <title>Bhargav Desai - QA Consultant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 </head>
-<body class="bg-white transition-colors duration-200">
+<body class="bg-blue-50 transition-colors duration-200">
     <!-- Navigation -->
-    <nav class="fixed w-full bg-white shadow-lg z-50">
+    <nav class="fixed w-full bg-blue-100 shadow-lg z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-gray-800">Bhargav Desai</h1>
+                    <h1 class="text-xl font-bold text-gray-800" data-i18n="name">Bhargav Desai</h1>
                 </div>
                 
                 <div class="flex items-center space-x-4">
                     <!-- Language Selector -->
-                    <select id="language-selector" class="bg-gray-100 text-gray-800 rounded-md px-2 py-1">
+                    <select id="language-selector" class="bg-blue-200 text-gray-800 rounded-md px-2 py-1">
                         <option value="en">English</option>
                         <option value="hi">हिंदी</option>
                     </select>
                     
                     <!-- Dark Mode Toggle -->
-                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100">
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-blue-200">
                         <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                         </svg>
@@ -33,8 +33,26 @@
         </div>
     </nav>
 
+    <!-- Contact Banner -->
+    <div class="bg-blue-600 text-white pt-16">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex flex-wrap justify-between items-center">
+                <div class="flex space-x-6">
+                    <a href="https://calendly.com/desai-bhargav" target="_blank" 
+                       class="flex items-center hover:text-blue-200">
+                        <span class="mr-2">📅</span> Schedule a Meeting
+                    </a>
+                    <a href="https://www.linkedin.com/in/bhargav-desai-43b0ab149" target="_blank"
+                       class="flex items-center hover:text-blue-200">
+                        <span class="mr-2">💼</span> LinkedIn Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="pt-24 pb-12 px-4 bg-blue-50">
+    <section class="py-12 px-4 bg-blue-100">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-8">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4" data-i18n="hero.title">Software Quality Assurance Consultant</h2>
@@ -50,19 +68,19 @@
     </section>
 
     <!-- Services Section -->
-    <section class="py-12 px-4">
+    <section class="py-12 px-4 bg-blue-50">
         <div class="max-w-7xl mx-auto">
             <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="services.title">Services</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="p-6 bg-white rounded-lg shadow-md">
+                <div class="p-6 bg-blue-100 rounded-lg shadow-md">
                     <h4 class="font-semibold text-lg mb-2" data-i18n="services.manual.title">Manual Testing</h4>
                     <p data-i18n="services.manual.description">Comprehensive functional, regression, and integration testing services for web and mobile applications.</p>
                 </div>
-                <div class="p-6 bg-white rounded-lg shadow-md">
+                <div class="p-6 bg-blue-100 rounded-lg shadow-md">
                     <h4 class="font-semibold text-lg mb-2" data-i18n="services.automation.title">Test Automation</h4>
                     <p data-i18n="services.automation.description">Selenium WebDriver automation with BDD framework implementation using Capybara, Cucumber, and Ruby.</p>
                 </div>
-                <div class="p-6 bg-white rounded-lg shadow-md">
+                <div class="p-6 bg-blue-100 rounded-lg shadow-md">
                     <h4 class="font-semibold text-lg mb-2" data-i18n="services.project.title">Project Management</h4>
                     <p data-i18n="services.project.description">Expert management of QA projects using JIRA, Zephyr, Confluence, and other modern tools.</p>
                 </div>
@@ -71,44 +89,69 @@
     </section>
 
     <!-- Experience Section -->
-    <section class="py-12 px-4 bg-gray-50">
+    <section class="py-12 px-4 bg-blue-100">
         <div class="max-w-7xl mx-auto">
-            <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="experience.title">Experience Highlights</h3>
+            <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="experience.title">Professional Experience</h3>
             <div class="space-y-6">
-                <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
                     <h4 class="font-semibold">Remote QA Consultant (2020 - Present)</h4>
-                    <p class="text-gray-600">Providing global consulting services in software quality assurance</p>
+                    <ul class="mt-2 space-y-2 text-gray-600">
+                        <li>• Providing remote QA consulting services to global clients</li>
+                        <li>• Managing projects using JIRA, Zephyr, Slack, Confluence</li>
+                        <li>• Evaluating web-based eCommerce applications and marketplace features</li>
+                    </ul>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h4 class="font-semibold">Chief Technology Officer</h4>
-                    <p class="text-gray-600">Led development and testing of innovative web and mobile applications</p>
+                
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Chief Technology Officer - Mangalam Placements (2020 - 2021)</h4>
+                    <ul class="mt-2 space-y-2 text-gray-600">
+                        <li>• Led development and testing of web and mobile applications</li>
+                        <li>• Implemented features to streamline candidate application process</li>
+                        <li>• Orchestrated cross-functional teams for user experience enhancement</li>
+                    </ul>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section class="py-12 px-4">
-        <div class="max-w-7xl mx-auto">
-            <h3 class="text-2xl font-bold text-gray-900 mb-8" data-i18n="contact.title">Contact</h3>
-            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
-                <a href="https://calendly.com/desai-bhargav" target="_blank" 
-                   class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">
-                    Schedule a Meeting
-                </a>
-                <a href="https://www.linkedin.com/in/bhargav-desai-43b0ab149" target="_blank"
-                   class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700">
-                    Connect on LinkedIn
-                </a>
-            </div>
-            <div class="mt-8 text-center text-gray-600">
-                <p>📍 Nadiad, Gujarat, India</p>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Senior SQA Engineer - Skyward Techno Solutions (2019 - 2021)</h4>
+                    <ul class="mt-2 space-y-2 text-gray-600">
+                        <li>• Oversaw all aspects of mobile application testing</li>
+                        <li>• Led test case planning, design, and execution</li>
+                        <li>• Managed test metrics and process improvements</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Freelance Expert (2011 - 2019)</h4>
+                    <ul class="mt-2 space-y-2 text-gray-600">
+                        <li>• Conducted functional, regression, and automation testing</li>
+                        <li>• Implemented BDD with Selenium WebDriver</li>
+                        <li>• Utilized various bug tracking tools including JIRA and Bugzilla</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Software QA Engineer - Musikaar (2010 - 2011)</h4>
+                    <ul class="mt-2 space-y-2 text-gray-600">
+                        <li>• Developed comprehensive test cases for BAT reports</li>
+                        <li>• Managed virtual infrastructure testing using ESXi servers</li>
+                        <li>• Led testing strategies and metrics analysis</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                    <h4 class="font-semibold">Software Test Engineer - Indusa (2008 - 2010)</h4>
+                    <ul class="mt-2 space-y-2 text-gray-600">
+                        <li>• Created test cases using SENDMAIL and POSTFIX</li>
+                        <li>• Implemented Agile methodology in testing processes</li>
+                        <li>• Led debugging and configuration enhancements</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
     <script>
-        // Theme handling without localStorage
+        // Theme handling
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         let isDark = false;
@@ -116,19 +159,26 @@
         themeToggle.addEventListener('click', () => {
             isDark = !isDark;
             if (isDark) {
-                body.classList.add('dark');
                 body.style.backgroundColor = '#1a202c';
-                body.style.color = '#fff';
+                document.querySelectorAll('.bg-blue-50').forEach(el => el.style.backgroundColor = '#2d3748');
+                document.querySelectorAll('.bg-blue-100').forEach(el => el.style.backgroundColor = '#2d3748');
+                document.querySelectorAll('.text-gray-600').forEach(el => el.style.color = '#cbd5e0');
+                document.querySelectorAll('.text-gray-800').forEach(el => el.style.color = '#fff');
+                document.querySelectorAll('.text-gray-900').forEach(el => el.style.color = '#fff');
             } else {
-                body.classList.remove('dark');
-                body.style.backgroundColor = '#fff';
-                body.style.color = '#000';
+                body.style.backgroundColor = '#ebf8ff';
+                document.querySelectorAll('.bg-blue-50').forEach(el => el.style.backgroundColor = '#ebf8ff');
+                document.querySelectorAll('.bg-blue-100').forEach(el => el.style.backgroundColor = '#bee3f8');
+                document.querySelectorAll('.text-gray-600').forEach(el => el.style.color = '#4a5568');
+                document.querySelectorAll('.text-gray-800').forEach(el => el.style.color = '#2d3748');
+                document.querySelectorAll('.text-gray-900').forEach(el => el.style.color = '#1a202c');
             }
         });
 
         // Language translations
         const translations = {
             en: {
+                "name": "Bhargav Desai",
                 "hero.title": "Software Quality Assurance Consultant",
                 "hero.subtitle": "18+ Years of Experience in Software Testing & Quality Assurance",
                 "hero.description": "Specialized in web and mobile app testing, project management, and process enhancement, ensuring delivery of high-quality software products aligned with user and stakeholder needs.",
@@ -139,10 +189,10 @@
                 "services.automation.description": "Selenium WebDriver automation with BDD framework implementation using Capybara, Cucumber, and Ruby.",
                 "services.project.title": "Project Management",
                 "services.project.description": "Expert management of QA projects using JIRA, Zephyr, Confluence, and other modern tools.",
-                "experience.title": "Experience Highlights",
-                "contact.title": "Contact"
+                "experience.title": "Professional Experience"
             },
             hi: {
+                "name": "भार्गव देसाई",
                 "hero.title": "सॉफ्टवेयर गुणवत्ता आश्वासन सलाहकार",
                 "hero.subtitle": "सॉफ्टवेयर टेस्टिंग और गुणवत्ता आश्वासन में 18+ वर्षों का अनुभव",
                 "hero.description": "वेब और मोबाइल ऐप टेस्टिंग, प्रोजेक्ट मैनेजमेंट और प्रक्रिया सुधार में विशेषज्ञता",
@@ -153,8 +203,7 @@
                 "services.automation.description": "सेलेनियम वेबड्राइवर ऑटोमेशन और बीडीडी फ्रेमवर्क का कार्यान्वयन",
                 "services.project.title": "प्रोजेक्ट मैनेजमेंट",
                 "services.project.description": "जीरा, ज़ेफ़िर, कॉन्फ्लुएंस का उपयोग करके क्यूए प्रोजेक्ट्स का विशेषज्ञ प्रबंधन",
-                "experience.title": "अनुभव की विशेषताएं",
-                "contact.title": "संपर्क"
+                "experience.title": "व्यावसायिक अनुभव"
             }
         };
 
