@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cost Estimator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .material-row, .expense-row {
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+        .currency-symbol {
+            font-weight: bold;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Project Cost Estimator</h1>
+        
+        <form id="estimatorForm" class="needs-validation" novalidate>
+            <!-- Currency Selection -->
+            <div class="mb-4">
+                <select id="currencySelect" class="form-select">
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="INR">INR (₹)</option>
+                </select>
+            </div>
+
+            <!-- Project Details -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Project Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="projectName" required>
+                        <label>Project Name</label>
+                    </div>
+                    <div class="form-floating">
+                        <textarea class="form-control" id="projectDescription" style="height: 100px"></textarea>
+                        <label>Description</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="projectCategory" required>
+                                    <option value="">Select category...</option>
+                                    <option value="software">Software Development</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="construction">Construction</option>
+                                    <option value="consulting">Consulting</option>
+                                </select>
+                                <label>Category</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" id="projectDuration" required min="1">
+                                <label>Duration (weeks)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Labor Costs -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Labor Costs</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" id="teamMembers" required min="1">
+                                <label>Team Members</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" id="hourlyRate" required min="0">
+                                <label>Hourly Rate</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating">
+                        <input type="number" class="form-control" id="hoursPerWeek" required min="1" max="168">
+                        <label>Hours per Week</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Material Costs -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Material Costs</h5>
+                    <button type="button" class="btn btn-primary btn-sm" id="addMaterial">Add Material</button>
+                </div>
+                <div class="card-body">
+                    <div id="materialsList">
+                        <!-- Dynamic material rows will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Expenses -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Other Expenses</h5>
+                    <button type="button" class="btn btn-primary btn-sm" id="addExpense">Add Expense</button>
+                </div>
+                <div class="card-body">
+                    <div id="expensesList">
+                        <!-- Dynamic expense rows will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Cost -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Total Cost</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Labor Cost:</span>
+                                <span id="laborCost">0.00</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Material Cost:</span>
+                                <span id="materialCost">0.00</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-between">
+                                <span>Other Expenses:</span>
+                                <span id="otherCost">0.00</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total Cost:</span>
+                                <span id="totalCost">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2 justify-content-center">
+                <button type="submit" class="btn btn-primary">Calculate</button>
+                <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                <button type="button" class="btn btn-info" id="loadBtn">Load</button>
+                <button type="button" class="btn btn-secondary" id="printBtn">Print</button>
+                <button type="reset" class="btn btn-danger">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('estimatorForm');
+            const currencySelect = document.getElementById('currencySelect');
+            const materialsContainer = document.getElementById('materialsList');
+            const expensesContainer = document.getElementById('expensesList');
+            
+            // Currency symbols
+            const currencySymbols = {
+                USD: '$',
+                EUR: '€',
+                GBP: '£',
+                INR: '₹'
+            };
+
+            // Add material row
+            document.getElementById('addMaterial').addEventListener('click', () => {
+                const row = document.createElement('div');
+                row.className = 'material-row row g-3 mb-3';
+                row.innerHTML = `
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" placeholder="Material name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" placeholder="Cost per unit" required min="0" step="0.01">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" placeholder="Quantity" required min="1">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="this.closest('.material-row').remove(); calculateTotal();">Remove</button>
+                    </div>
+                `;
+                materialsContainer.appendChild(row);
+            });
+
+            // Add expense row
+            document.getElementById('addExpense').addEventListener('click', () => {
+                const row = document.createElement('div');
+                row.className = 'expense-row row g-3 mb-3';
+                row.innerHTML = `
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Expense description" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" placeholder="Cost" required min="0" step="0.01">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="this.closest('.expense-row').remove(); calculateTotal();">Remove</button>
+                    </div>
+                `;
+                expensesContainer.appendChild(row);
+            });
+
+            // Calculate total cost
+            function calculateTotal() {
+                if (!form.checkValidity()) {
+                    return;
+                }
+
+                const currency = currencySymbols[currencySelect.value];
+                
+                // Calculate labor cost
+                const teamMembers = Number(document.getElementById('teamMembers').value);
+                const hourlyRate = Number(document.getElementById('hourlyRate').value);
+                const hoursPerWeek = Number(document.getElementById('hoursPerWeek').value);
+                const duration = Number(document.getElementById('projectDuration').value);
+                const laborCost = teamMembers * hourlyRate * hoursPerWeek * duration;
+
+                // Calculate materials cost
+                let materialCost = 0;
+                document.querySelectorAll('.material-row').forEach(row => {
+                    const cost = Number(row.querySelector('input[placeholder="Cost per unit"]').value);
+                    const quantity = Number(row.querySelector('input[placeholder="Quantity"]').value);
+                    materialCost += cost * quantity;
+                });
+
+                // Calculate other expenses
+                let otherCost = 0;
+                document.querySelectorAll('.expense-row').forEach(row => {
+                    otherCost += Number(row.querySelector('input[placeholder="Cost"]').value);
+                });
+
+                // Update display
+                document.getElementById('laborCost').textContent = `${currency}${laborCost.toFixed(2)}`;
+                document.getElementById('materialCost').textContent = `${currency}${materialCost.toFixed(2)}`;
+                document.getElementById('otherCost').textContent = `${currency}${otherCost.toFixed(2)}`;
+                document.getElementById('totalCost').textContent = `${currency}${(laborCost + materialCost + otherCost).toFixed(2)}`;
+            }
+
+            // Form validation and submission
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                if (!form.checkValidity()) {
+                    event.stopPropagation();
+                    form.classList.add('was-validated');
+                    return;
+                }
+                calculateTotal();
+            });
+
+            // Save estimation
+            document.getElementById('saveBtn').addEventListener('click', () => {
+                const formData = {
+                    projectName: document.getElementById('projectName').value,
+                    projectDescription: document.getElementById('projectDescription').value,
+                    projectCategory: document.getElementById('projectCategory').value,
+                    projectDuration: document.getElementById('projectDuration').value,
+                    teamMembers: document.getElementById('teamMembers').value,
+                    hourlyRate: document.getElementById('hourlyRate').value,
+                    hoursPerWeek: document.getElementById('hoursPerWeek').value,
+                    currency: currencySelect.value
+                };
+                localStorage.setItem('costEstimation', JSON.stringify(formData));
+                alert('Estimation saved successfully!');
+            });
+
+            // Load estimation
+            document.getElementById('loadBtn').addEventListener('click', () => {
+                const savedData = localStorage.getItem('costEstimation');
+                if (savedData) {
+                    const formData = JSON.parse(savedData);
+                    Object.keys(formData).forEach(key => {
+                        if (document.getElementById(key)) {
+                            document.getElementById(key).value = formData[key];
+                        }
+                    });
+                    calculateTotal();
+                    alert('Estimation loaded successfully!');
+                } else {
+                    alert('No saved estimation found!');
+                }
+            });
+
+            // Print functionality
+            document.getElementById('printBtn').addEventListener('click', () => {
+                window.print();
+            });
+
+            // Update calculations when currency changes
+            currencySelect.addEventListener('change', calculateTotal);
+        });
+    </script>
+</body>
+</html>
