@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue-Focused Web Dev Prompts</title>
+    <style>
+        /* Previous styles remain the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a.active {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .search-section {
+            background: #3498db;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .current-category {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .prompt-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .prompt-category {
+            color: #3498db;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .prompt-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .prompts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <nav>
+                <div class="logo" onclick="filterPrompts('all')">DevPrompts</div>
+                <div class="nav-links">
+                    <a onclick="filterPrompts('E-commerce')" id="nav-ecommerce">E-commerce</a>
+                    <a onclick="filterPrompts('Freelancing')" id="nav-freelancing">Freelancing</a>
+                    <a onclick="filterPrompts('SaaS')" id="nav-saas">SaaS</a>
+                    <a onclick="filterPrompts('Monetization')" id="nav-monetization">Monetization</a>
+                    <a onclick="filterPrompts('SEO')" id="nav-seo">SEO</a>
+                    <a onclick="filterPrompts('Marketing')" id="nav-marketing">Marketing</a>
+                    <a onclick="filterPrompts('Security')" id="nav-security">Security</a>
+                    <a onclick="filterPrompts('Content')" id="nav-content">Content</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search prompts..." id="searchInput">
+        </div>
+    </section>
+
+    <main>
+        <h2 class="current-category" id="currentCategory">All Prompts</h2>
+        <div class="prompts-grid" id="promptsGrid">
+            <!-- Prompts will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <script>
+        // Sample prompts data
+        const prompts = [
+            {
+                category: 'E-commerce',
+                title: 'Product Page Optimization',
+                description: 'Create a high-converting product page template with social proof and urgency elements'
+            },
+            {
+                category: 'SaaS',
+                title: 'Subscription Landing Page',
+                description: 'Design a compelling landing page for SaaS subscription services'
+            },
+            {
+                category: 'SEO',
+                title: 'Technical SEO Setup',
+                description: 'Implement essential technical SEO elements for better search visibility'
+            },
+            {
+    category: 'Article',
+    title: 'Long-Form Technical Article (1000 words)',
+    description: 'Generate a comprehensive, technically accurate article with real-world examples, industry statistics, and practical implementation steps. Include current trends and best practices.'
+},
+{
+    category: 'Article',
+    title: 'Quick Guide (500 words)',
+    description: 'Create a concise, actionable guide with clear steps, bullet points, and specific examples. Focus on practical implementation without theoretical background.'
+},
+{
+    category: 'List',
+    title: 'Top 10 Industry Insights',
+    description: 'Generate a detailed list of 10 industry insights, each with 2-3 supporting examples and practical applications. Include relevant statistics and current trends.'
+},
+{
+    category: 'Tutorial',
+    title: 'Step-by-Step Tutorial (800 words)',
+    description: 'Create a detailed tutorial with numbered steps, code snippets, and troubleshooting tips. Include expected outcomes for each step and common pitfalls to avoid.'
+},
+{
+    category: 'Overview',
+    title: 'Executive Summary (300 words)',
+    description: 'Generate a concise overview targeting decision-makers, with key points, business impact, and actionable recommendations.'
+},
+{
+    category: 'Comparison',
+    title: 'Product Comparison Analysis',
+    description: 'Create a detailed comparison with pros, cons, and specific use cases. Include feature matrix and practical recommendations based on different scenarios.'
+},
+{
+    category: 'Case Study',
+    title: 'Industry Case Study (1200 words)',
+    description: 'Generate a structured case study with background, challenge, solution, and results sections. Include specific metrics and outcomes.'
+},
+{
+    category: 'List',
+    title: 'Best Practices Checklist',
+    description: 'Create a comprehensive checklist with categorized items, each including a brief explanation and practical example of implementation.'
+},
+{
+    category: 'Guide',
+    title: 'Beginner\'s Guide (600 words)',
+    description: 'Generate an accessible guide with foundational concepts, practical examples, and common terminology explained in simple terms.'
+},
+{
+    category: 'FAQ',
+    title: 'Expert FAQ Compilation',
+    description: 'Create a list of 15 advanced FAQs with detailed answers, each including real-world examples and practical solutions.'
+},
+{
+    category: 'Analysis',
+    title: 'Trend Analysis Report (700 words)',
+    description: 'Generate an analysis of current industry trends with supporting data, practical implications, and future predictions.'
+},
+{
+    category: 'How-To',
+    title: 'Problem-Solution Guide',
+    description: 'Create a structured guide addressing common problems with step-by-step solutions, troubleshooting tips, and prevention strategies.'
+},
+{
+    category: 'Reference',
+    title: 'Technical Reference Sheet',
+    description: 'Generate a concise reference guide with definitions, examples, and practical applications for key technical concepts.'
+},
+{
+    category: 'List',
+    title: 'Resource Compilation',
+    description: 'Create a curated list of resources with brief descriptions and specific use cases for each recommended item.'
+},
+{
+    category: 'Guide',
+    title: 'Implementation Roadmap (900 words)',
+    description: 'Generate a detailed roadmap with phases, milestones, and specific actions required for successful implementation.'
+},
+{
+    category: 'Tips',
+    title: 'Expert Tips Collection',
+    description: 'Create a collection of 20 advanced tips, each with practical examples and specific scenarios where they apply.'
+},
+{
+    category: 'Article',
+    title: 'Industry Deep Dive (1500 words)',
+    description: 'Generate a comprehensive analysis with expert insights, current trends, case studies, and practical applications in the industry.'
+},
+{
+    category: 'Checklist',
+    title: 'Project Launch Checklist',
+    description: 'Create a detailed pre-launch checklist with sections for different aspects, including validation steps and success criteria.'
+},
+{
+    category: 'Guide',
+    title: 'Optimization Guide (400 words)',
+    description: 'Generate a focused guide on optimization strategies with before/after examples and measurable improvement metrics.'
+},
+{
+    category: 'Reference',
+    title: 'Quick Reference Cards',
+    description: 'Create a set of reference cards with key concepts, formulas, or commands, each with practical usage examples.'
+},
+            {
+    category: 'E-commerce',
+    title: 'Cart Abandonment Recovery',
+    description: 'Implement an effective cart recovery system with exit-intent popups, email sequences, and personalized discount offers'
+},
+{
+    category: 'E-commerce',
+    title: 'Dynamic Pricing Engine',
+    description: 'Create a sophisticated pricing system that adjusts based on demand, competitor prices, and customer behavior'
+},
+{
+    category: 'E-commerce',
+    title: 'Social Proof Integration',
+    description: 'Build a system to display real-time purchases, reviews, and customer activity to boost conversion rates'
+},
+{
+    category: 'SaaS',
+    title: 'Feature Usage Analytics',
+    description: 'Develop a dashboard to track and analyze user engagement with different features to optimize pricing tiers'
+},
+{
+    category: 'SaaS',
+    title: 'Upgrade Path Optimizer',
+    description: 'Design an intelligent system to identify and prompt users who are likely to upgrade based on their usage patterns'
+},
+{
+    category: 'Freelancing',
+    title: 'Project Cost Calculator',
+    description: 'Create an interactive calculator that helps freelancers accurately estimate project costs and timelines'
+},
+{
+    category: 'Freelancing',
+    title: 'Client Portal Dashboard',
+    description: 'Build a professional client portal with project progress tracking, file sharing, and automated reporting'
+},
+{
+    category: 'Monetization',
+    title: 'Subscription Revenue Predictor',
+    description: 'Develop a tool to forecast subscription revenue based on historical data and churn patterns'
+},
+{
+    category: 'Monetization',
+    title: 'Affiliate Program Manager',
+    description: 'Create a comprehensive system to track, manage, and optimize affiliate marketing campaigns'
+},
+{
+    category: 'SEO',
+    title: 'Content Gap Analyzer',
+    description: 'Build a tool that identifies potential content opportunities by analyzing competitor rankings and search trends'
+},
+{
+    category: 'SEO',
+    title: 'Schema Markup Generator',
+    description: 'Develop an automated system to generate and implement schema markup for better search visibility'
+},
+{
+    category: 'Marketing',
+    title: 'Email Sequence Optimizer',
+    description: 'Create an AI-powered system to optimize email marketing sequences based on engagement metrics'
+},
+{
+    category: 'Marketing',
+    title: 'Landing Page A/B Tester',
+    description: 'Build a sophisticated A/B testing platform specifically designed for optimizing landing page conversions'
+},
+{
+    category: 'Analytics',
+    title: 'Customer Journey Mapper',
+    description: 'Develop a visualization tool that tracks and analyzes customer touchpoints across multiple channels'
+},
+{
+    category: 'Analytics',
+    title: 'Revenue Attribution Model',
+    description: 'Create a system to accurately attribute revenue to different marketing channels and campaigns'
+},
+{
+    category: 'Content',
+    title: 'Plagiarism-Free Blog Generator',
+    description: 'Create an LLM system that generates unique blog content by incorporating real-time fact-checking and cross-referencing against existing web content'
+},
+{
+    category: 'Content',
+    title: 'Source Attribution Engine',
+    description: 'Develop a tool that automatically identifies and attributes sources when generating content, ensuring proper citation and originality'
+},
+{
+    category: 'Content',
+    title: 'Unique Content Verifier',
+    description: 'Build a system that checks generated content against multiple databases and search engines to ensure 100% uniqueness'
+},
+{
+    category: 'Content',
+    title: 'Style Consistency Checker',
+    description: 'Create an AI tool that maintains consistent brand voice and style while ensuring originality across all generated content'
+},
+{
+    category: 'Content',
+    title: 'Multi-Source Content Synthesizer',
+    description: 'Design a system that combines information from multiple verified sources to create original, fact-based content with proper citations'
+},
+{
+    category: 'Content',
+    title: 'Semantic Originality Checker',
+    description: 'Implement an advanced system that checks for semantic similarity rather than just exact matches to ensure truly unique content'
+},
+{
+    category: 'Content',
+    title: 'Industry-Specific Content Generator',
+    description: 'Build a specialized LLM system that generates unique content with industry-specific terminology and trends while maintaining originality'
+},
+{
+    category: 'Content',
+    title: 'Content Freshness Monitor',
+    description: 'Create a tool that ensures generated content includes recent developments and trending topics while maintaining originality'
+},
+{
+    category: 'Content',
+    title: 'AI Content Disclosure System',
+    description: 'Develop a transparent system that properly discloses AI-generated content while ensuring its uniqueness and value'
+},
+{
+    category: 'Content',
+    title: 'Research-Based Content Generator',
+    description: 'Build an LLM system that generates original content by incorporating latest research papers and academic sources with proper attribution'
+},
+{
+    category: 'Content',
+    title: 'Multilingual Originality Checker',
+    description: 'Create a system that verifies content originality across multiple languages and prevents cross-language plagiarism'
+},
+{
+    category: 'Content',
+    title: 'Content Version Controller',
+    description: 'Implement a system that tracks content versions and ensures each new generation is substantially different from previous versions'
+},
+{
+    category: 'Content',
+    title: 'Fact-Verification Engine',
+    description: 'Design an AI system that automatically verifies facts and claims in generated content against reliable sources'
+},
+{
+    category: 'Content',
+    title: 'Content Uniqueness Scorer',
+    description: 'Create a scoring system that rates generated content based on originality, factual accuracy, and value addition'
+},
+{
+    category: 'Content',
+    title: 'Dynamic Content Refresher',
+    description: 'Build a tool that automatically updates existing content with new information while maintaining originality and consistency'
+},
+{
+    category: 'Automation',
+    title: 'Client Onboarding System',
+    description: 'Design an automated onboarding workflow that collects necessary information and sets up new clients'
+},
+{
+    category: 'Automation',
+    title: 'Task Prioritization Engine',
+    description: 'Build an AI-powered system that prioritizes tasks based on revenue impact and resource constraints'
+},
+{
+    category: 'Security',
+    title: 'Payment Fraud Detection',
+    description: 'Implement an advanced fraud detection system using machine learning to prevent fraudulent transactions'
+},
+{
+    category: 'Security',
+    title: 'Compliance Checker',
+    description: 'Create an automated tool to verify website compliance with GDPR, CCPA, and other privacy regulations'
+},
+{
+    category: 'Detailed',
+    title: 'Comprehensive Article Generator',
+    description: 'Generate a 1000-word article about [topic]. Include current industry data, provide 3 real-world examples, and structure with clear headings. Ensure unique analysis by explaining concepts in your own words and adding original insights. Avoid generic definitions and incorporate specific, practical applications.'
+},
+{
+    category: 'Detailed',
+    title: 'Expert Analysis Generator',
+    description: 'Analyze [topic] in 800 words. Break down complex aspects into understandable sections, provide unique perspectives, and include practical implications. Synthesize information to create original insights rather than restating common knowledge. Support claims with recent examples and industry trends.'
+},
+{
+    category: 'Concise',
+    title: 'Quick Guide Creator',
+    description: 'Create a 500-word guide about [topic]. Focus on actionable steps, use original examples, and explain each point with practical scenarios. Avoid generic advice and instead provide specific, detailed recommendations based on real-world applications.'
+},
+{
+    category: 'List',
+    title: 'Unique Points Generator',
+    description: 'List 10 unique insights about [topic]. For each point, provide an original example not commonly found in standard articles. Include practical applications and specific scenarios where each insight proves valuable. Explain why each point matters in today\'s context.'
+},
+{
+    category: 'Tutorial',
+    title: 'Practical Implementation Guide',
+    description: 'Create a step-by-step tutorial for [topic] with 600 words. Include unique approaches, potential challenges and solutions, and real-world applications. Focus on practical implementation details often overlooked in standard guides.'
+},
+{
+    category: 'Comparison',
+    title: 'Original Comparison Analysis',
+    description: 'Compare [topic A] and [topic B] in 700 words. Go beyond obvious differences and provide unique insights into specific use cases. Include original analysis based on practical experience and current industry context.'
+},
+{
+    category: 'Technical',
+    title: 'Deep Technical Breakdown',
+    description: 'Provide a technical analysis of [topic] in 900 words. Focus on advanced concepts, include original code examples or implementations, and explain complex aspects with unique analogies. Avoid basic definitions and focus on expert-level insights.'
+},
+{
+    category: 'Summary',
+    title: 'Executive Brief Creator',
+    description: 'Create a 300-word executive summary of [topic]. Highlight key impacts, provide original strategic insights, and focus on business implications. Include unique recommendations based on current market conditions.'
+},
+{
+    category: 'Strategy',
+    title: 'Strategic Framework Generator',
+    description: 'Develop a strategic framework for [topic] in 800 words. Include original methodology, practical implementation steps, and unique success metrics. Focus on creating an actionable plan with specific, detailed recommendations.'
+},
+{
+    category: 'Examples',
+    title: 'Case Example Generator',
+    description: 'Generate 5 detailed, original examples of [topic] in action. Each example should include unique scenarios, specific outcomes, and practical lessons learned. Focus on non-obvious applications and unexpected benefits.'
+},
+{
+    category: 'Research',
+    title: 'Research Summary Creator',
+    description: 'Create a 1200-word research-based analysis of [topic]. Synthesize information into original insights, provide unique interpretations of data, and include practical applications. Focus on generating fresh perspectives rather than restating existing findings.'
+},
+{
+    category: 'Solution',
+    title: 'Problem Solution Generator',
+    description: 'Address [specific problem] with a 600-word solution guide. Include unique approaches, original troubleshooting steps, and practical implementation advice. Focus on providing solutions not commonly found in standard resources.'
+},
+{
+    category: 'Industry',
+    title: 'Industry Impact Analysis',
+    description: 'Analyze how [topic] impacts [specific industry] in 800 words. Provide original insights into industry-specific applications, unique challenges, and innovative solutions. Include practical recommendations based on current market conditions.'
+},
+{
+    category: 'Trends',
+    title: 'Trend Analysis Generator',
+    description: 'Create a 700-word analysis of current trends in [topic]. Focus on identifying emerging patterns, providing original predictions, and offering unique insights into future developments. Include practical implications for businesses.'
+},
+{
+    category: 'How-To',
+    title: 'Advanced Guide Generator',
+    description: 'Create an advanced how-to guide for [topic] in 1000 words. Focus on expert-level insights, include unique tips and tricks, and provide original solutions to common challenges. Avoid basic concepts and focus on advanced applications.'
+},
+{
+    category: 'Infrastructure',
+    title: 'Scale-Ready Architecture',
+    description: 'Design a scalable infrastructure setup that can handle rapid growth in traffic and transactions'
+}
+            // ... (previous prompts)
+        ];
+
+        let currentCategory = 'all';
+        let searchTerm = '';
+
+        // Function to update navigation active states
+        function updateNavigation(category) {
+            // Remove all active classes
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to current category
+            if (category !== 'all') {
+                document.getElementById(`nav-${category.toLowerCase()}`).classList.add('active');
+            }
+        }
+
+        // Function to filter prompts by category and search term
+        function filterPrompts(category) {
+            currentCategory = category;
+            const categoryText = category === 'all' ? 'All Prompts' : `${category} Prompts`;
+            document.getElementById('currentCategory').textContent = categoryText;
+            
+            updateNavigation(category);
+            
+            let filteredPrompts = prompts;
+            
+            // Apply category filter
+            if (category !== 'all') {
+                filteredPrompts = prompts.filter(prompt => 
+                    prompt.category.toLowerCase() === category.toLowerCase()
+                );
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredPrompts = filteredPrompts.filter(prompt =>
+                    prompt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    prompt.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    prompt.category.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            renderPrompts(filteredPrompts);
+        }
+
+        // Function to render prompts
+        function renderPrompts(promptsToRender) {
+            const grid = document.getElementById('promptsGrid');
+            if (promptsToRender.length === 0) {
+                grid.innerHTML = '<p>No prompts found matching your criteria.</p>';
+                return;
+            }
+            
+            grid.innerHTML = promptsToRender.map(prompt => `
+                <div class="prompt-card">
+                    <div class="prompt-category">${prompt.category}</div>
+                    <h2 class="prompt-title">${prompt.title}</h2>
+                    <p>${prompt.description}</p>
+                </div>
+            `).join('');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            filterPrompts(currentCategory);
+        });
+
+        // Initial render
+        filterPrompts('all');
+    </script>
+</body>
+</html>
