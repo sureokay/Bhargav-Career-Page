@@ -34,6 +34,16 @@
             margin-bottom: 1rem;
         }
 
+        .disclaimer {
+            background-color: #fcf8e3;
+            border: 1px solid #faebcc;
+            color: #8a6d3b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
         .content-input {
             width: 100%;
             min-height: 300px;
@@ -141,13 +151,29 @@
             color: #2c3e50;
             margin-bottom: 0.5rem;
         }
+
+        .method-info {
+            background: #f1f1f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .method-info h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Content Analysis Tool</h1>
-            <p>Check your content for originality, factual accuracy, and value addition</p>
+            <p>Evaluate content for originality, factual accuracy, and value</p>
+        </div>
+
+        <div class="disclaimer">
+            <strong>DISCLAIMER:</strong> This tool is for demonstration purposes only and provides simulated results. It does not perform actual plagiarism detection or factual verification. For academic, professional, or commercial use, please use established plagiarism detection services like Turnitin, Grammarly, or Copyscape. Results provided here should not be used for making definitive judgments about content originality or quality. Users are responsible for ensuring their content meets applicable standards and requirements. We assume no liability for any decisions made based on these simulated results.
         </div>
 
         <textarea 
@@ -186,6 +212,17 @@
                     <div class="analysis-title">Detailed Analysis</div>
                     <div id="analysisDetails"></div>
                 </div>
+                
+                <div class="method-info">
+                    <h3>How This Works</h3>
+                    <p>This demonstration simulates the analysis process used by plagiarism detection tools:</p>
+                    <ul>
+                        <li>Content is analyzed for structural patterns and phrase uniqueness</li>
+                        <li>The system evaluates writing style and complexity markers</li>
+                        <li>Simulated comparison against common content patterns</li>
+                    </ul>
+                    <p><strong>Note:</strong> For actual content validation, please use professional plagiarism detection services with access to comprehensive databases and advanced algorithms.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -198,7 +235,8 @@
 
         // Update word count
         contentInput.addEventListener('input', () => {
-            const words = contentInput.value.trim().split(/\s+/).length;
+            const text = contentInput.value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
             const isValid = words <= 5000 && words > 0;
             
             wordCount.textContent = `${words}/5000 words`;
@@ -219,7 +257,7 @@
             analyzeBtn.disabled = true;
             analyzeBtn.textContent = 'Analyzing...';
             
-            // Simulate analysis (replace with actual analysis in production)
+            // Simulate analysis (with delay to represent processing time)
             setTimeout(() => {
                 const analysis = analyzeContent(content);
                 displayResults(analysis);
@@ -231,27 +269,58 @@
         });
 
         function analyzeContent(content) {
-            // Simulate content analysis
-            // In a real implementation, this would include actual plagiarism detection,
-            // factual verification, and value analysis algorithms
-            
+            // This simulates the analysis approach used by plagiarism tools
             const words = content.trim().split(/\s+/).length;
             
-            // Sample analysis metrics
-            const uniquePhrases = new Set(content.toLowerCase().match(/\b\w+\s\w+\s\w+\b/g) || []).size;
-            const sentenceVariety = new Set(content.match(/[.!?]+/g) || []).size;
-            const complexityScore = content.length / (words || 1);
+            // Analyze text patterns and structure
+            const sentences = content.split(/[.!?]+\s+/).length;
+            const avgWordsPerSentence = words / (sentences || 1);
+            
+            // Analyze phrase uniqueness (simulated)
+            const phrases = content.toLowerCase().match(/\b\w+\s\w+\s\w+\b/g) || [];
+            const uniquePhrases = new Set(phrases).size;
+            const phraseUniquenessRatio = uniquePhrases / (phrases.length || 1);
+            
+            // Calculate simulated scores
+            const originality = calculateOriginalityScore(phraseUniquenessRatio, avgWordsPerSentence);
+            const accuracy = 65 + (phraseUniquenessRatio * 20) + (Math.random() * 10);
+            const valueScore = calculateValueScore(words, sentences, uniquePhrases);
             
             return {
-                originality: Math.min(85 + (uniquePhrases / words) * 100, 100),
-                accuracy: 75 + Math.random() * 15,
-                value: 70 + (complexityScore * 10),
+                originality,
+                accuracy,
+                value: valueScore,
                 details: {
                     uniquePhrases,
-                    sentenceVariety,
-                    complexityScore
+                    sentences,
+                    avgWordsPerSentence: avgWordsPerSentence.toFixed(1),
+                    phraseUniquenessRatio: (phraseUniquenessRatio * 100).toFixed(1)
                 }
             };
+        }
+
+        function calculateOriginalityScore(uniquenessRatio, sentenceComplexity) {
+            // Simulate originality scoring with factors similar to plagiarism checkers
+            let base = 60 + (uniquenessRatio * 30);
+            
+            // Adjust based on sentence complexity
+            if (sentenceComplexity > 20) {
+                base += 5;
+            } else if (sentenceComplexity < 8) {
+                base -= 5;
+            }
+            
+            // Add some variance
+            base += (Math.random() * 10) - 5;
+            
+            return Math.min(Math.max(base, 0), 100);
+        }
+
+        function calculateValueScore(words, sentences, uniquePhrases) {
+            // Simulate value scoring based on content richness
+            const contentDensity = uniquePhrases / (words || 1);
+            const base = 60 + (contentDensity * 800) + (sentences / (words || 1) * 100);
+            return Math.min(Math.max(base, 0), 100);
         }
 
         function displayResults(analysis) {
@@ -269,17 +338,18 @@
             
             // Update details
             document.getElementById('originalityDetails').textContent = 
-                `Based on unique phrase analysis and content structure`;
+                `Based on phrase uniqueness and writing patterns`;
             document.getElementById('accuracyDetails').textContent = 
-                `Verified against common knowledge patterns`;
+                `Simulated evaluation of content coherence and structure`;
             document.getElementById('valueDetails').textContent = 
-                `Based on content depth and complexity`;
+                `Based on content density and information richness`;
             
             // Display detailed analysis
             document.getElementById('analysisDetails').innerHTML = `
-                <p>• Content includes ${analysis.details.uniquePhrases} unique phrases</p>
-                <p>• Sentence variety score: ${analysis.details.sentenceVariety}</p>
-                <p>• Content complexity rating: ${analysis.details.complexityScore.toFixed(2)}</p>
+                <p>• Identified ${analysis.details.uniquePhrases} unique phrases</p>
+                <p>• Content contains ${analysis.details.sentences} sentences</p>
+                <p>• Average words per sentence: ${analysis.details.avgWordsPerSentence}</p>
+                <p>• Phrase uniqueness rating: ${analysis.details.phraseUniquenessRatio}%</p>
             `;
         }
 
