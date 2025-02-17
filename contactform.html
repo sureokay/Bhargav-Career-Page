@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - Website Requirements Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background: #f8fafc;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2563eb;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            background: #2563eb;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Website Requirements Form</h1>
+        <form id="requirementsForm" onsubmit="handleSubmit(event)">
+            <!-- Contact Information -->
+            <div class="form-group">
+                <label for="businessName">Business/Organization Name *</label>
+                <input type="text" id="businessName" name="businessName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contactName">Contact Person Name *</label>
+                <input type="text" id="contactName" name="contactName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <!-- Website Requirements -->
+            <div class="form-group">
+                <label for="websiteType">Type of Website Needed *</label>
+                <select id="websiteType" name="websiteType" required>
+                    <option value="">Select Website Type</option>
+                    <option value="business">Business Website</option>
+                    <option value="ecommerce">E-commerce Store</option>
+                    <option value="portfolio">Portfolio</option>
+                    <option value="blog">Blog</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Required Features *</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="contact" name="features" value="contact">
+                        <label for="contact">Contact Form</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="gallery" name="features" value="gallery">
+                        <label for="gallery">Image Gallery</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="blog" name="features" value="blog">
+                        <label for="blog">Blog Section</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="social" name="features" value="social">
+                        <label for="social">Social Media Integration</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="analytics" name="features" value="analytics">
+                        <label for="analytics">Analytics Integration</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="timeline">Expected Timeline *</label>
+                <select id="timeline" name="timeline" required>
+                    <option value="">Select Timeline</option>
+                    <option value="urgent">ASAP (1-2 weeks)</option>
+                    <option value="normal">Standard (2-4 weeks)</option>
+                    <option value="relaxed">Flexible (4+ weeks)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="budget">Budget Range *</label>
+                <select id="budget" name="budget" required>
+                    <option value="">Select Budget Range</option>
+                    <option value="basic">Basic ($500-$1000)</option>
+                    <option value="standard">Standard ($1000-$2500)</option>
+                    <option value="premium">Premium ($2500-$5000)</option>
+                    <option value="custom">Custom (Above $5000)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Additional Requirements/Description *</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Requirements</button>
+        </form>
+
+        <div id="successMessage" class="success-message">
+            Thank you for submitting your requirements! We will contact you within 48 hours to discuss your project.
+        </div>
+    </div>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Add hidden recipient email
+            data.recipientEmail = 'contact.bhargav.desai@gmail.com';
+            
+            // Here you would typically send the data to your server
+            // For this example, we'll just show the success message
+            document.getElementById('requirementsForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // You would need to implement the actual email sending functionality
+            // on your server side using the data object
+            
+            // Log the data (for demonstration)
+            console.log('Form submitted:', data);
+        }
+    </script>
+</body>
+</html>
