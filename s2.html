@@ -4,7 +4,7 @@
     <link rel="icon" type="image/x-icon" href="/data/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebCraft Pro - Professional Website Creation</title>
+    <title>WebCraft Pro - Services</title>
     <style>
       * {
         margin: 0;
@@ -192,6 +192,43 @@
           grid-template-columns: 1fr;
         }
       }
+      /* ... (Your existing CSS styles from the home page) ... */
+      /* Add any services-specific styles here if needed */
+      .services-page {
+        padding: 4rem 0; /* Add some padding to the services section */
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(300px, 1fr)
+        ); /* Responsive grid */
+        gap: 2rem;
+      }
+
+      .service-item {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 2rem; /* Add padding inside each service item */
+      }
+
+      .service-item h3 {
+        color: #2563eb;
+        margin-bottom: 1rem;
+      }
+
+      .service-item p {
+        margin-bottom: 1rem;
+      }
+      .inquiry-section {
+        text-align: center;
+        margin-top: 3rem; /* Add some spacing above the inquiry section */
+      }
+
+      .inquiry-section h2 {
+        margin-bottom: 1rem;
+      }
     </style>
   </head>
   <body>
@@ -204,115 +241,77 @@
           WebCraft Pro
         </div>
         <div class="nav-links">
-          <a href="/s2.html">Services</a>
+          <a href="/wb.html">Home</a>
+          <a href="#services">Services</a>
           <a href="/p3.html">Portfolio</a>
           <a href="/about.html">About</a>
           <a href="/acontact.html">Contact</a>
           <!-- <a href="#blog">Blog</a>
-          <a href="#testimonials">Testimonials</a> -->
+                <a href="#testimonials">Testimonials</a> -->
         </div>
       </div>
     </nav>
 
-    <section class="hero">
+    <section class="services-page">
       <div class="container">
-        <h1>Get a Professional Website, Built for Your Business</h1>
-        <p>
-          Transform your online presence with our custom website creation
-          service. Fast, affordable, and tailored to your unique business needs.
-        </p>
-        <a href="/acontact.html" class="btn btn-primary"
-          >Get a Free Consultation</a
-        >
-      </div>
-    </section>
-
-    <section class="portfolio">
-      <div class="container">
-        <h2 class="section-title">Website Examples</h2>
-        <div class="portfolio-grid">
-          <div class="portfolio-item">
-            <img
-              src="data/restaurant-website-mockup.jpg"
-              alt="Restaurant Website Example"
-            />
-            <div class="portfolio-content">
-              <h3>Restaurant Website Example</h3>
-              <p>
-                Modern, mobile-friendly design with online ordering capabilities
-                and reservation system.
-              </p>
-            </div>
-          </div>
-          <div class="portfolio-item">
-            <img
-              src="data/professional-website-mockup.jpg"
-              alt="Portfolio Website Example"
-            />
-            <div class="portfolio-content">
-              <h3>Professional Portfolio Example</h3>
-              <p>
-                Elegant portfolio website showcasing work samples and integrated
-                contact forms.
-              </p>
-            </div>
-          </div>
-          <div class="portfolio-item">
-            <img
-              src="data/ecommerce-mockup.jpg"
-              alt="E-commerce Website Example"
-            />
-            <div class="portfolio-content">
-              <h3>E-commerce Store Example</h3>
-              <p>
-                Full-featured online store with product catalog and secure
-                checkout process.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="benefits">
-      <div class="container">
-        <h2 class="section-title">Why Choose Us</h2>
-        <div class="benefits-grid">
-          <div class="benefit-item">
-            <h3>Quick Turnaround</h3>
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+          <div class="service-item">
+            <h3>Website Design & Development</h3>
             <p>
-              Get your professional website up and running in days, not weeks.
+              Crafting visually stunning and user-friendly websites tailored to
+              your brand and business objectives. We handle everything from
+              design to development, ensuring a seamless online presence.
             </p>
           </div>
-          <div class="benefit-item">
-            <h3>Cost-Effective</h3>
+          <div class="service-item">
+            <h3>E-commerce Solutions</h3>
             <p>
-              Competitive pricing with flexible payment options to suit your
-              budget.
+              Building robust and scalable e-commerce platforms that drive sales
+              and enhance customer experience. We integrate secure payment
+              gateways, manage product catalogs, and optimize for conversions.
             </p>
           </div>
-          <div class="benefit-item">
-            <h3>Custom Design</h3>
-            <p>Unique designs tailored to your brand and business needs.</p>
-          </div>
-          <div class="benefit-item">
-            <h3>Modern Technology</h3>
+          <div class="service-item">
+            <h3>Web Application Development</h3>
             <p>
-              Built with the latest web technologies for optimal performance.
+              Developing custom web applications that streamline your operations
+              and improve productivity. We specialize in creating innovative
+              solutions that address your unique business challenges.
+            </p>
+          </div>
+          <div class="service-item">
+            <h3>SEO & Digital Marketing</h3>
+            <p>
+              Boosting your online visibility and attracting targeted traffic
+              through effective SEO and digital marketing strategies. We conduct
+              keyword research, optimize content, and manage campaigns to
+              maximize your reach.
+            </p>
+          </div>
+          <div class="service-item">
+            <h3>Website Maintenance & Support</h3>
+            <p>
+              Ensuring your website remains secure, up-to-date, and performs
+              optimally with our ongoing maintenance and support services. We
+              handle technical issues, updates, and security monitoring so you
+              can focus on your business.
+            </p>
+          </div>
+          <div class="service-item">
+            <h3>Branding & Design</h3>
+            <p>
+              Creating a cohesive brand identity that resonates with your target
+              audience. We design logos, visual guidelines, and marketing
+              materials that communicate your brand message effectively.
             </p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="cta">
-      <div class="container">
-        <h2>Start Your Website Project Today</h2>
-        <p>
-          Transform your online presence with a custom-built website that drives
-          results.
-        </p>
-        <a href="/acontact.html" class="btn btn-primary">Get Started</a>
+        <div class="inquiry-section">
+          <h2>Ready to Get Started?</h2>
+          <p>Contact us today for a free consultation.</p>
+          <a href="/acontact.html" class="btn btn-primary">Make an Inquiry</a>
+        </div>
       </div>
     </section>
   </body>

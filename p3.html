@@ -4,7 +4,7 @@
     <link rel="icon" type="image/x-icon" href="/data/favicon.ico" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebCraft Pro - Professional Website Creation</title>
+    <title>WebCraft Pro - Portfolio</title>
     <style>
       * {
         margin: 0;
@@ -192,8 +192,96 @@
           grid-template-columns: 1fr;
         }
       }
+
+      .portfolio-page {
+        padding: 4rem 0;
+        /* Use the same background as the hero section from your homepage */
+        background: linear-gradient(
+          to right,
+          white,
+          white
+        ); /* Or whatever your hero background is */
+        color: white; /* Ensure text is visible against the background */
+      }
+
+      .portfolio-page .section-title {
+        color: white; /* Ensure title is visible */
+      }
+
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding-top: 2rem; /* Add some space below the introductory text */
+      }
+
+      .portfolio-item {
+        background: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .portfolio-item img {
+        width: 100%;
+        height: 275px;
+        object-fit: cover;
+      }
+
+      .portfolio-content {
+        padding: 1.5rem;
+      }
+
+      .portfolio-content h3 {
+        margin-bottom: 1rem;
+        color: black;
+      }
+
+      .portfolio-content p {
+        color: black;
+      }
+
+      .portfolio-intro {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      /* Styles for sections after "Why Choose Us" */
+      .benefits {
+        padding: 4rem 0;
+      }
+
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .benefit-item {
+        padding: 1.5rem;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .benefit-item h3 {
+        margin-bottom: 1rem;
+        color: #2563eb;
+      }
+
+      .cta {
+        background: #2563eb;
+        color: white;
+        padding: 4rem 0;
+        text-align: center;
+      }
+
+      .cta h2 {
+        margin-bottom: 1.5rem;
+      }
     </style>
   </head>
+
   <body>
     <nav class="navbar">
       <div class="container nav-content">
@@ -204,32 +292,33 @@
           WebCraft Pro
         </div>
         <div class="nav-links">
+          <a href="/wb.html">Home</a>
           <a href="/s2.html">Services</a>
-          <a href="/p3.html">Portfolio</a>
+          <a href="/p1.html">Portfolio</a>
           <a href="/about.html">About</a>
           <a href="/acontact.html">Contact</a>
-          <!-- <a href="#blog">Blog</a>
-          <a href="#testimonials">Testimonials</a> -->
+          <!-- <a href="/blog.html">Blog</a>
+                <a href="/testimonials.html">Testimonials</a> -->
         </div>
       </div>
     </nav>
 
     <section class="hero">
       <div class="container">
-        <h1>Get a Professional Website, Built for Your Business</h1>
-        <p>
-          Transform your online presence with our custom website creation
-          service. Fast, affordable, and tailored to your unique business needs.
-        </p>
-        <a href="/acontact.html" class="btn btn-primary"
-          >Get a Free Consultation</a
-        >
+        <h2 class="section-title">Our Portfolio</h2>
+
+        <div class="portfolio-intro">
+          <p>
+            We're excited to showcase our work soon! Stay tuned as we build
+            amazing websites for our clients. In the meantime, check out the
+            examples below to get an idea of what we can create.
+          </p>
+        </div>
       </div>
     </section>
 
-    <section class="portfolio">
+    <section class="portfolio-page">
       <div class="container">
-        <h2 class="section-title">Website Examples</h2>
         <div class="portfolio-grid">
           <div class="portfolio-item">
             <img
