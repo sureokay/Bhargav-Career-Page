@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Bhargav Desai showcasing software testing, automation, and project management projects.">
+    <meta name="keywords" content="QA Consultant, Software Testing, Automation, Project Management, Bhargav Desai">
+    <meta name="author" content="Bhargav Desai">
+    <title>Portfolio - Bhargav Desai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+</head>
+<body class="bg-blue-50 transition-colors duration-200">
+<nav class="fixed w-full bg-blue-100 shadow-lg z-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <h1 class="text-xl font-bold text-gray-800">Bhargav Desai</h1>
+            <a href="/" class="hover:text-blue-600">Home</a>
+            <button id="theme-toggle" class="p-2 rounded-md hover:bg-blue-200">
+                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<section class="pt-24 py-12 px-4 bg-blue-100">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-4xl font-bold text-center mb-8">Portfolio</h2>
+        <p class="text-center text-gray-700">
+            A collection of projects showcasing skills in software testing, automation, and project management.
+        </p>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="p-6 bg-blue-50 rounded-lg shadow-md">
+                <img src="/data/project1.png" alt="Project 1" class="w-full h-48 object-cover mb-4 rounded">
+                <h4 class="font-semibold text-lg">Plants Galore UK</h4>
+                <p class="text-gray-600">Performed cross-browser and cross-device testing for PlantsGalore UK, an e-commerce platform for purchasing plants online, ensuring website responsiveness and seamless user experience. Identified, documented, and reported functional and UI issues. Conducted weekly security checks to maintain data integrity and compliance with security best practices.</p>
+            </div>
+            <div class="p-6 bg-blue-50 rounded-lg shadow-md">
+                <img src="/data/project2.png" alt="Project 2" class="w-full h-48 object-cover mb-4 rounded">
+                <h4 class="font-semibold text-lg">Qafielms</h4>
+                <p class="text-gray-600">Performed comprehensive testing of Qafie, an LMS portal, including feature validation, bug reporting, and regression testing. Conducted weekly security checks to ensure data integrity and compliance. Developed and automated load testing scripts with detailed performance reports, enhancing system reliability and identifying performance bottlenecks.</p>
+            </div>
+            <div class="p-6 bg-blue-50 rounded-lg shadow-md">
+                <img src="/data/project3.png" alt="Project 1" class="w-full h-48 object-cover mb-4 rounded">
+                <h4 class="font-semibold text-lg">Preeti Catering</h4>
+                <p class="text-gray-600">Tested Preeti Catering, a website for Catering and Event Management Specialists, for cross-browser and cross-device responsiveness, ensuring consistent functionality across platforms. Identified and reported functionality-related issues. Performed biweekly security checks to detect vulnerabilities and mitigate potential threats, enhancing website security and reliability.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    let isDark = false;
+
+    themeToggle.addEventListener('click', () => {
+        isDark = !isDark;
+        if (isDark) {
+            body.style.backgroundColor = '#1a202c';
+            document.querySelectorAll('.bg-blue-50').forEach(el => el.style.backgroundColor = '#2d3748');
+            document.querySelectorAll('.text-gray-600').forEach(el => el.style.color = '#cbd5e0');
+            document.querySelectorAll('.text-gray-800').forEach(el => el.style.color = '#fff');
+        } else {
+            body.style.backgroundColor = '#ebf8ff';
+            document.querySelectorAll('.bg-blue-50').forEach(el => el.style.backgroundColor = '#ebf8ff');
+            document.querySelectorAll('.text-gray-600').forEach(el => el.style.color = '#4a5568');
+            document.querySelectorAll('.text-gray-800').forEach(el => el.style.color = '#2d3748');
+        }
+    });
+</script>
+</body>
+</html>
