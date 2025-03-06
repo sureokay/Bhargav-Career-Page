@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta http-equiv="X-Frame-Options" content="DENY">
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -319,13 +320,28 @@
               class="w-full object-cover mb-4 rounded"
               loading="lazy"
             />
-            <h4 class="font-semibold text-lg">CA Locator</h4>
+            <h4
+              class="font-semibold text-lg flex justify-between items-center relative"
+            >
+              CA Locator
+              <span
+                class="headline-share-icon cursor-pointer text-blue-500 hover:text-blue-700"
+                onclick="toggleShareOptions()"
+                >🔗</span
+              >
+              <div class="share-options hidden" id="shareOptions">
+                <button onclick="shareOnFacebook()">Facebook</button>
+                <button onclick="shareOnTwitter()">Twitter</button>
+                <button onclick="shareOnLinkedIn()">LinkedIn</button>
+                <button onclick="shareOnWhatsApp()">WhatsApp</button>
+              </div>
+            </h4>
             <p class="text-gray-600">
               <li>
-                Geolocation Accuracy Testing - Verify that distance
-                calculations between users and CAs are precise and that the
-                radius filter works correctly to show only results within the
-                specified distance.
+                Geolocation Accuracy Testing - Verify that distance calculations
+                between users and CAs are precise and that the radius filter
+                works correctly to show only results within the specified
+                distance.
               </li>
               <li>
                 Search Functionality Testing - Test both search modes (Find
@@ -351,6 +367,91 @@
               </li>
             </p>
           </div>
+
+          <script>
+            const shareUrl = window.location.href;
+            const shareText = "Check out my experience on this project!";
+
+            function toggleShareOptions() {
+              const options = document.getElementById("shareOptions");
+              options.classList.toggle("hidden");
+            }
+
+            function shareOnFacebook() {
+              window.open(
+                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                  shareUrl
+                )}`,
+                "_blank"
+              );
+            }
+
+            function shareOnTwitter() {
+              window.open(
+                `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                  shareUrl
+                )}&text=${encodeURIComponent(shareText)}`,
+                "_blank"
+              );
+            }
+
+            function shareOnLinkedIn() {
+              window.open(
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                  shareUrl
+                )}`,
+                "_blank"
+              );
+            }
+
+            function shareOnWhatsApp() {
+              const message = `${shareText} ${shareUrl}`;
+              window.open(
+                `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                  message
+                )}`,
+                "_blank"
+              );
+            }
+          </script>
+
+          <style>
+            .headline-share-icon {
+              font-size: 18px;
+              margin-left: 10px;
+              position: relative;
+              z-index: 20;
+            }
+            .share-options {
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              position: absolute;
+              background: white;
+              border: 1px solid #ccc;
+              padding: 10px;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+              z-index: 10;
+              right: 0;
+              top: 30px; /* Positioned right below the share icon */
+            }
+            .hidden {
+              display: none;
+            }
+            .share-options button {
+              background-color: #007bff;
+              color: white;
+              border: none;
+              padding: 5px 10px;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background-color 0.3s;
+            }
+            .share-options button:hover {
+              background-color: #0056b3;
+            }
+          </style>
         </div>
       </div>
     </section>
