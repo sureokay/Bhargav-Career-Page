@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Frame-Options" content="DENY" />
     <!-- Google tag (gtag.js) -->
     <script
       async
@@ -456,68 +456,88 @@
       </div>
     </section>
 
-        <!-- Testing Tools Comparison Section -->
-        <section class="py-12 px-4 bg-white">
-          <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-6">Testing Tools Comparison</h2>
-            <div class="overflow-x-auto">
-              <table class="min-w-full border-collapse border border-gray-300 bg-white">
-                <thead>
-                  <tr class="bg-blue-600 text-white">
-                    <th class="p-3 border">Combination</th>
-                    <th class="p-3 border">Best For</th>
-                    <th class="p-3 border">Pros</th>
-                    <th class="p-3 border">Cons</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="border">
-                    <td class="p-3 border font-bold">WebDriverIO + Appium</td>
-                    <td class="p-3 border">Web + Mobile + Native Apps</td>
-                    <td class="p-3 border">
-                      ✅ Single framework for all testing needs<br />
-                      ✅ Better JS/TS integration<br />
-                      ✅ Built-in Appium support<br />
-                      ✅ Works well with cloud services
-                    </td>
-                    <td class="p-3 border">
-                      ❌ Requires Node.js setup<br />
-                      ❌ Might have a learning curve for Appium
-                    </td>
-                  </tr>
-                  <tr class="border">
-                    <td class="p-3 border font-bold">TestNG + Selenium + Appium</td>
-                    <td class="p-3 border">Web + Mobile + Native Apps</td>
-                    <td class="p-3 border">
-                      ✅ Strong Java ecosystem<br />
-                      ✅ Good for enterprise use<br />
-                      ✅ TestNG supports parallel execution well
-                    </td>
-                    <td class="p-3 border">
-                      ❌ Requires managing Selenium/Appium separately<br />
-                      ❌ More setup complexity<br />
-                      ❌ Java-only
-                    </td>
-                  </tr>
-                  <tr class="border">
-                    <td class="p-3 border font-bold">Playwright + Appium</td>
-                    <td class="p-3 border">Web + Hybrid Apps (Not for Native)</td>
-                    <td class="p-3 border">
-                      ✅ Best for fast web automation<br />
-                      ✅ Great debugging tools<br />
-                      ✅ Supports modern web testing well
-                    </td>
-                    <td class="p-3 border">
-                      ❌ <b>Cannot</b> test native apps<br />
-                      ❌ Requires Appium for mobile<br />
-                      ❌ Not built for full mobile testing
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+    <!-- Testing Tools Comparison (Compact Accordion UI) -->
+    <section class="py-12 px-4 bg-white">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-6">
+          Testing Tools Comparison
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="border border-gray-300 rounded-lg overflow-hidden">
+            <button
+              class="w-full text-left px-4 py-3 bg-blue-600 text-white font-bold"
+              onclick="toggleAccordion('qa1')"
+            >
+              WebDriverIO + Appium
+            </button>
+            <div id="qa1" class="hidden p-4 bg-gray-100">
+              <p><b>Best For:</b> Web + Mobile + Native Apps</p>
+              <p>
+                <b>Pros:</b><br />✅ Single framework for all testing needs<br />✅
+                Better JS/TS integration<br />✅ Built-in Appium support<br />✅
+                Works well with cloud services
+              </p>
+              <p>
+                <b>Cons:</b><br />❌ Requires Node.js setup<br />❌ Might have a
+                learning curve for Appium
+              </p>
             </div>
           </div>
-        </section>
+          <div class="border border-gray-300 rounded-lg overflow-hidden">
+            <button
+              class="w-full text-left px-4 py-3 bg-blue-600 text-white font-bold"
+              onclick="toggleAccordion('qa2')"
+            >
+              TestNG + Selenium + Appium
+            </button>
+            <div id="qa2" class="hidden p-4 bg-gray-100">
+              <p><b>Best For:</b> Web + Mobile + Native Apps</p>
+              <p>
+                <b>Pros:</b><br />✅ Strong Java ecosystem<br />✅ Good for
+                enterprise use<br />✅ TestNG supports parallel execution well
+              </p>
+              <p>
+                <b>Cons:</b><br />❌ Requires managing Selenium/Appium
+                separately<br />❌ More setup complexity<br />❌ Java-only
+              </p>
+            </div>
+          </div>
+          <div class="border border-gray-300 rounded-lg overflow-hidden">
+            <button
+              class="w-full text-left px-4 py-3 bg-blue-600 text-white font-bold"
+              onclick="toggleAccordion('qa3')"
+            >
+              Playwright + Appium
+            </button>
+            <div id="qa3" class="hidden p-4 bg-gray-100">
+              <p><b>Best For:</b> Web + Hybrid Apps (Not for Native)</p>
+              <p>
+                <b>Pros:</b><br />✅ Best for fast web automation<br />✅ Great
+                debugging tools<br />✅ Supports modern web testing well
+              </p>
+              <p>
+                <b>Cons:</b><br />❌ <b>Cannot</b> test native apps<br />❌
+                Requires Appium for mobile<br />❌ Not built for full mobile
+                testing
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-gray-700 mt-4">
+          Choosing the right automation tool depends on your project's needs, technology stack, and scalability requirements. 
+          WebDriverIO + Appium is great for full-stack JavaScript users, TestNG + Selenium + Appium suits Java-based teams, 
+          and Playwright + Appium is ideal for modern web automation. Evaluate based on ecosystem support, ease of setup, 
+          and cross-platform capabilities to optimize your automation strategy.
+        </p>
+      </div>
+    </section>
+
+    <script>
+      function toggleAccordion(id) {
+        const element = document.getElementById(id);
+        element.classList.toggle("hidden");
+      }
+    </script>
 
     <!-- Quick Inquiry Section -->
     <section class="py-8 px-4 bg-blue-100 text-center">
