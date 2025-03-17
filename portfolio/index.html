@@ -4,19 +4,24 @@
     <!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/474a4e6e4e6d38a9436fc4d0/script.js"></script> <!-- End cookieyes banner -->
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-300CVM138M"
-    ></script>
+    <script id="ga-script" async src="https://www.googletagmanager.com/gtag/js?id=G-300CVM138M" type="text/plain" data-cookiecategory="analytics"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag("js", new Date());
-
-      gtag("config", "G-300CVM138M");
-    </script>
+    
+      function loadGoogleAnalytics() {
+        gtag("js", new Date());
+        gtag("config", "G-300CVM138M", { 'anonymize_ip': true });
+      }
+    
+      document.addEventListener("DOMContentLoaded", function () {
+        if (document.cookie.includes("cookieyes-consent=accept")) {
+          loadGoogleAnalytics();
+        }
+      });
+    </script>    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
@@ -621,6 +626,16 @@
           Schedule a Call
         </a>
       </div>
+      <button onclick="disableGoogleAnalytics()" class="text-sm text-gray-500 underline">
+        Disable Google Analytics
+      </button>
+      
+      <script>
+        function disableGoogleAnalytics() {
+          document.cookie = "cookieyes-consent=deny; path=/; max-age=31536000";
+          alert("Google Analytics has been disabled.");
+        }
+      </script>      
     </section>
 
     <script>
@@ -827,5 +842,6 @@
         bottom: 5px !important;
       }
     </style>
-  </body>
+
+</body>
 </html>
