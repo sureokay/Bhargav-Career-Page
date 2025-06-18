@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Status Codes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #f0f0f0, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -3px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+        }
+
+        .codes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .code-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .code-card:nth-child(1) { animation-delay: 0.1s; }
+        .code-card:nth-child(2) { animation-delay: 0.2s; }
+        .code-card:nth-child(3) { animation-delay: 0.3s; }
+        .code-card:nth-child(4) { animation-delay: 0.4s; }
+        .code-card:nth-child(5) { animation-delay: 0.5s; }
+        .code-card:nth-child(6) { animation-delay: 0.6s; }
+        .code-card:nth-child(7) { animation-delay: 0.7s; }
+        .code-card:nth-child(8) { animation-delay: 0.8s; }
+        .code-card:nth-child(9) { animation-delay: 0.9s; }
+        .code-card:nth-child(10) { animation-delay: 1s; }
+
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .code-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-color), transparent, var(--accent-color));
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .code-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .code-card:hover::after {
+            opacity: 0.3;
+        }
+
+        .code-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .code-card:hover .code-icon {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .code-info {
+            flex: 1;
+        }
+
+        .code-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .code-category {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .code-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .code-description {
+            color: #555;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-example {
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.02));
+            border-radius: 12px;
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: #444;
+            border-left: 3px solid var(--accent-color);
+            position: relative;
+        }
+
+        .code-example::before {
+            content: 'Example';
+            position: absolute;
+            top: -8px;
+            left: 12px;
+            background: white;
+            color: var(--accent-color);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Category Colors */
+        .success { 
+            --accent-color: #10B981; 
+            --accent-light: #34D399;
+        }
+        .redirect { 
+            --accent-color: #F59E0B; 
+            --accent-light: #FBBF24;
+        }
+        .client-error { 
+            --accent-color: #EF4444; 
+            --accent-light: #F87171;
+        }
+        .server-error { 
+            --accent-color: #8B5CF6; 
+            --accent-light: #A78BFA;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2.8rem; }
+            .codes-container { 
+                grid-template-columns: 1fr; 
+                gap: 1.5rem;
+            }
+            .code-card { padding: 2rem; }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Top 10 HTTP Status Codes</h1>
+            <p class="subtitle">Most Commonly Used Status Codes</p>
+            <p class="description">Essential HTTP response codes every developer should know</p>
+        </div>
+
+        <div class="codes-container">
+            <!-- 200 OK - Success -->
+            <div class="code-card success">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">200</div>
+                        <div class="code-category">Success</div>
+                    </div>
+                </div>
+                <div class="code-title">OK</div>
+                <div class="code-description">The request succeeded. This is the standard response for successful HTTP requests and is the most common status code.</div>
+                <div class="code-example">GET /api/users → Returns user data successfully</div>
+            </div>
+
+            <!-- 404 Not Found - Client Error -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM13 17h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">404</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Not Found</div>
+                <div class="code-description">The server cannot find the requested resource. This is the most well-known error code among end users.</div>
+                <div class="code-example">GET /nonexistent-page → Page doesn't exist</div>
+            </div>
+
+            <!-- 500 Internal Server Error - Server Error -->
+            <div class="code-card server-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">500</div>
+                        <div class="code-category">Server Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Internal Server Error</div>
+                <div class="code-description">The server encountered an unexpected condition that prevented it from fulfilling the request.</div>
+                <div class="code-example">Database connection error or unhandled exception</div>
+            </div>
+
+            <!-- 401 Unauthorized - Client Error -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">401</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Unauthorized</div>
+                <div class="code-description">The client must authenticate itself to get the requested response. Authentication is required and has failed.</div>
+                <div class="code-example">Missing or invalid authentication token</div>
+            </div>
+
+            <!-- 403 Forbidden - Client Error -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            <path d="M11 7h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">403</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Forbidden</div>
+                <div class="code-description">The client does not have access rights to the content. Server understands the request but refuses to authorize it.</div>
+                <div class="code-example">User lacks permission to access admin panel</div>
+            </div>
+
+            <!-- 301 Moved Permanently - Redirect -->
+            <div class="code-card redirect">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">301</div>
+                        <div class="code-category">Redirect</div>
+                    </div>
+                </div>
+                <div class="code-title">Moved Permanently</div>
+                <div class="code-description">The URL of the requested resource has been changed permanently. Search engines will update their indexes.</div>
+                <div class="code-example">old-domain.com → new-domain.com</div>
+            </div>
+
+            <!-- 400 Bad Request - Client Error -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">400</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Bad Request</div>
+                <div class="code-description">The server cannot process the request due to a client error, such as malformed request syntax or invalid parameters.</div>
+                <div class="code-example">Invalid JSON format or missing required fields</div>
+            </div>
+
+            <!-- 302 Found - Redirect -->
+            <div class="code-card redirect">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z"/>
+                            <circle cx="18" cy="6" r="3" fill="rgba(255,255,255,0.8)"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">302</div>
+                        <div class="code-category">Redirect</div>
+                    </div>
+                </div>
+                <div class="code-title">Found (Temporary Redirect)</div>
+                <div class="code-description">The URI of the requested resource has been changed temporarily. Future requests should still use the original URI.</div>
+                <div class="code-example">Temporary redirect during maintenance</div>
+            </div>
+
+            <!-- 503 Service Unavailable - Server Error -->
+            <div class="code-card server-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                            <circle cx="18" cy="6" r="3" fill="#ff4444"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">503</div>
+                        <div class="code-category">Server Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Service Unavailable</div>
+                <div class="code-description">The server is not ready to handle the request, commonly due to maintenance or temporary overload.</div>
+                <div class="code-example">Server maintenance or high traffic overload</div>
+            </div>
+
+            <!-- 201 Created - Success -->
+            <div class="code-card success">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">201</div>
+                        <div class="code-category">Success</div>
+                    </div>
+                </div>
+                <div class="code-title">Created</div>
+                <div class="code-description">The request succeeded and a new resource was created as a result. This is typically sent after POST requests.</div>
+                <div class="code-example">POST /api/users → New user account created</div>
+            </div>
+
+            <!-- 202 Accepted -->
+            <div class="code-card success">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">202</div>
+                        <div class="code-category">Success</div>
+                    </div>
+                </div>
+                <div class="code-title">Accepted</div>
+                <div class="code-description">The request has been accepted for processing, but the processing has not been completed. Often used for asynchronous operations.</div>
+                <div class="code-example">POST /api/batch-process → Processing started, check status later</div>
+            </div>
+
+            <!-- 204 No Content -->
+            <div class="code-card success">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M19 13H5v-2h14v2z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">204</div>
+                        <div class="code-category">Success</div>
+                    </div>
+                </div>
+                <div class="code-title">No Content</div>
+                <div class="code-description">The server has successfully fulfilled the request and there is no additional content to send in the response payload body.</div>
+                <div class="code-example">DELETE /api/users/123 → User deleted, no content returned</div>
+            </div>
+
+            <!-- 206 Partial Content -->
+            <div class="code-card success">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">206</div>
+                        <div class="code-category">Success</div>
+                    </div>
+                </div>
+                <div class="code-title">Partial Content</div>
+                <div class="code-description">The server is delivering only part of the resource due to a range header sent by the client. Used for resumable downloads.</div>
+                <div class="code-example">GET /video.mp4 Range: bytes=200-1023 → Returns specified byte range</div>
+            </div>
+
+            <!-- 304 Not Modified -->
+            <div class="code-card redirection">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">304</div>
+                        <div class="code-category">Redirection</div>
+                    </div>
+                </div>
+                <div class="code-title">Not Modified</div>
+                <div class="code-description">The resource has not been modified since the version specified by the request headers. The client can use cached version.</div>
+                <div class="code-example">GET /api/data If-Modified-Since: Mon, 18 Jun 2025 → Use cached version</div>
+            </div>
+
+            <!-- 307 Temporary Redirect -->
+            <div class="code-card redirection">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">307</div>
+                        <div class="code-category">Redirection</div>
+                    </div>
+                </div>
+                <div class="code-title">Temporary Redirect</div>
+                <div class="code-description">The target resource resides temporarily at a different URI. The client should repeat the request with the same method.</div>
+                <div class="code-example">POST /old-endpoint → 307 redirect to /new-endpoint (keeps POST method)</div>
+            </div>
+
+            <!-- 308 Permanent Redirect -->
+            <div class="code-card redirection">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">308</div>
+                        <div class="code-category">Redirection</div>
+                    </div>
+                </div>
+                <div class="code-title">Permanent Redirect</div>
+                <div class="code-description">The target resource has been assigned a new permanent URI. Future requests should use the new URI and the same HTTP method.</div>
+                <div class="code-example">PUT /api/v1/users → 308 redirect to /api/v2/users (keeps PUT method)</div>
+            </div>
+
+            <!-- 402 Payment Required -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">402</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Payment Required</div>
+                <div class="code-description">Reserved for future use. Originally intended for digital payment systems, now often used to indicate that payment is required to access a resource.</div>
+                <div class="code-example">GET /premium-content → Payment required to access this content</div>
+            </div>
+
+            <!-- 405 Method Not Allowed -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">405</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Method Not Allowed</div>
+                <div class="code-description">The request method is known by the server but is not supported by the target resource. The server must include an Allow header.</div>
+                <div class="code-example">DELETE /api/users → Method not allowed, only GET, POST supported</div>
+            </div>
+
+            <!-- 406 Not Acceptable -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">406</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Not Acceptable</div>
+                <div class="code-description">The target resource does not have a current representation that would be acceptable to the user agent, according to the proactive negotiation header fields.</div>
+                <div class="code-example">GET /api/users Accept: application/xml → Only JSON available, not XML</div>
+            </div>
+
+            <!-- 408 Request Timeout -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M15,1H9V3H15M11,14H13V8H11M19,8A7,7 0 0,1 12,15A7,7 0 0,1 5,8A7,7 0 0,1 12,1A7,7 0 0,1 19,8M12,9A1,1 0 0,0 11,10V14A1,1 0 0,0 12,15A1,1 0 0,0 13,14V10A1,1 0 0,0 12,9Z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">408</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Request Timeout</div>
+                <div class="code-description">The server did not receive a complete request message within the time that it was prepared to wait. Client may repeat the request.</div>
+                <div class="code-example">POST /api/upload → Request took too long, connection timed out</div>
+            </div>
+
+            <!-- 409 Conflict -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">409</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Conflict</div>
+                <div class="code-description">The request could not be completed due to a conflict with the current state of the target resource. Often occurs with concurrent modifications.</div>
+                <div class="code-example">PUT /api/users/123 → Conflict: User was modified by another request</div>
+            </div>
+
+            <!-- 410 Gone -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">410</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Gone</div>
+                <div class="code-description">The target resource is no longer available at the origin server and this condition is likely to be permanent. Unlike 404, this implies the resource existed before.</div>
+                <div class="code-example">GET /api/deprecated-endpoint → Resource permanently removed</div>
+            </div>
+
+            <!-- 411 Length Required -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">411</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Length Required</div>
+                <div class="code-description">The server refuses to accept the request without a defined Content-Length header. The client may repeat the request with a valid Content-Length.</div>
+                <div class="code-example">POST /api/upload → Content-Length header required for this request</div>
+            </div>
+
+            <!-- 412 Precondition Failed -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">412</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Precondition Failed</div>
+                <div class="code-description">One or more conditions given in the request header fields evaluated to false when tested on the server. Used with conditional requests.</div>
+                <div class="code-example">PUT /api/users/123 If-Match: "abc123" → ETag doesn't match current version</div>
+            </div>
+
+            <!-- 413 Payload Too Large -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">413</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Payload Too Large</div>
+                <div class="code-description">The server is refusing to process a request because the request payload is larger than the server is willing or able to process.</div>
+                <div class="code-example">POST /api/upload → File size exceeds 10MB limit</div>
+            </div>
+
+            <!-- 414 URI Too Long -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">414</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">URI Too Long</div>
+                <div class="code-description">The server is refusing to service the request because the request-target is longer than the server is willing to interpret.</div>
+                <div class="code-example">GET /api/search?q=very-long-query... → URL exceeds maximum length</div>
+            </div>
+
+            <!-- 415 Unsupported Media Type -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">415</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Unsupported Media Type</div>
+                <div class="code-description">The server does not support the media format of the requested data, so the server is rejecting the request.</div>
+                <div class="code-example">POST /api/data Content-Type: text/csv → Only JSON supported, not CSV</div>
+            </div>
+
+            <!-- 418 I'm a teapot -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M4,19H20V21H4V19M20,3H4V5H20V3M11,6H13A6,6 0 0,1 19,12A2,2 0 0,1 17,14H12L11,15V17H9V8A2,2 0 0,1 11,6Z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">418</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">I'm a teapot</div>
+                <div class="code-description">This code was defined in RFC 2324 as an April Fools' joke. The server refuses the attempt to brew coffee with a teapot. Sometimes used humorously by APIs.</div>
+                <div class="code-example">POST /brew-coffee → I'm a teapot, cannot brew coffee!</div>
+            </div>
+
+            <!-- 422 Unprocessable Entity -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">422</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Unprocessable Entity</div>
+                <div class="code-description">The server understands the content type and syntax of the request, but was unable to process the contained instructions due to semantic errors.</div>
+                <div class="code-example">POST /api/users {"email": "invalid-email"} → Valid JSON, invalid email format</div>
+            </div>
+
+            <!-- 429 Too Many Requests -->
+            <div class="code-card client-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">429</div>
+                        <div class="code-category">Client Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Too Many Requests</div>
+                <div class="code-description">The user has sent too many requests in a given amount of time. Rate limiting is in effect. Often includes a Retry-After header.</div>
+                <div class="code-example">GET /api/users → Rate limit exceeded: 100 requests per hour</div>
+            </div>
+
+            <!-- 501 Not Implemented -->
+            <div class="code-card server-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">501</div>
+                        <div class="code-category">Server Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Not Implemented</div>
+                <div class="code-description">The server does not support the functionality required to fulfill the request. This is the appropriate response when the server does not recognize the request method.</div>
+                <div class="code-example">PATCH /api/users → PATCH method not implemented on this server</div>
+            </div>
+
+            <!-- 502 Bad Gateway -->
+            <div class="code-card server-error">
+                <div class="code-header">
+                    <div class="code-icon">
+                        <svg width="35" height="35" viewBox="0 0 24 24" fill="white">
+                            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="code-info">
+                        <div class="code-number">502</div>
+                        <div class="code-category">Server Error</div>
+                    </div>
+                </div>
+                <div class="code-title">Bad Gateway</div>
+                <div class="code-description">The server, while acting as a gateway or proxy, received an invalid response from an inbound server it accessed while attempting to fulfill the request.</div>
+                <div class="code-example">GET /api/external-data → Upstream server returned invalid response</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
