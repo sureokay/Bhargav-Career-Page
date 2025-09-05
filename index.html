@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/474a4e6e4e6d38a9436fc4d0/script.js"></script> <!-- End cookieyes banner -->
+    <!-- Start cookieyes banner -->
+    <script
+      id="cookieyes"
+      type="text/javascript"
+      src="https://cdn-cookieyes.com/client_data/474a4e6e4e6d38a9436fc4d0/script.js"
+    ></script>
+    <!-- End cookieyes banner -->
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <!-- Google tag (gtag.js) -->
-    <script id="ga-script" async src="https://www.googletagmanager.com/gtag/js?id=G-300CVM138M" type="text/plain" data-cookiecategory="analytics"></script>
+    <script
+      id="ga-script"
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-300CVM138M"
+      type="text/plain"
+      data-cookiecategory="analytics"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
-    
+
       function loadGoogleAnalytics() {
         gtag("js", new Date());
-        gtag("config", "G-300CVM138M", { 'anonymize_ip': true });
+        gtag("config", "G-300CVM138M", { anonymize_ip: true });
       }
-    
+
       document.addEventListener("DOMContentLoaded", function () {
         if (document.cookie.includes("cookieyes-consent=accept")) {
           loadGoogleAnalytics();
@@ -99,6 +111,14 @@
     <!-- Hero Section -->
     <section class="py-12 px-4 bg-blue-100">
       <div class="max-w-7xl mx-auto">
+        <div class="flex justify-center mb-6">
+          <img
+            src="https://bdesai.vercel.app/data/profile.jpg"
+            alt="Bhargav Desai Profile"
+            class="w-32 h-32 rounded-full shadow-lg border-4 border-white"
+          />
+        </div>
+
         <div class="text-center mb-8">
           <h2
             class="text-4xl font-bold text-gray-900 mb-4"
@@ -107,7 +127,7 @@
             Software Quality Assurance Consultant
           </h2>
           <p class="text-lg text-gray-600" data-i18n="hero.subtitle">
-            18+ Years of Experience in Software Testing & Quality Assurance
+            19+ Years of Experience in Software Testing & Quality Assurance
           </p>
         </div>
         <div class="text-center">
@@ -293,13 +313,17 @@
           </div>
         </div>
         <div class="flex justify-center mt-4">
-          <button onclick="disableGoogleAnalytics()" class="text-sm text-gray-500 underline">
+          <button
+            onclick="disableGoogleAnalytics()"
+            class="text-sm text-gray-500 underline"
+          >
             Disable Google Analytics
           </button>
         </div>
         <script>
           function disableGoogleAnalytics() {
-            document.cookie = "cookieyes-consent=deny; path=/; max-age=31536000";
+            document.cookie =
+              "cookieyes-consent=deny; path=/; max-age=31536000";
             alert("Google Analytics has been disabled.");
           }
         </script>
@@ -581,6 +605,6 @@
         right: 100px !important; /* Adjust spacing as needed */
         bottom: 5px !important;
       }
-    </style>    
+    </style>
   </body>
 </html>
