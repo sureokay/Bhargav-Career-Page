@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced EMI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 20px;
+            }
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 2px;
+            margin-right: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #2563eb;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+        }
+
+        .highlight .result-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .highlight .result-value {
+            color: white;
+        }
+
+        .savings-card {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .savings-card .result-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .savings-card .result-value {
+            color: white;
+        }
+
+        .comparison-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px dashed #e2e8f0;
+        }
+
+        .comparison-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-card h4 {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .comparison-card .value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .input-hint {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Advanced EMI Calculator</h1>
+            <p>Calculate EMI, prepayments, and optimize your loan repayment strategy</p>
+        </div>
+
+        <div class="content">
+            <div class="form-section">
+                <h2 class="section-title">Loan Details</h2>
+                
+                <div class="form-group">
+                    <label for="loanAmount">Loan Amount (₹)</label>
+                    <input type="number" id="loanAmount" placeholder="Enter loan amount">
+                    <div class="input-hint">Principal loan amount you want to borrow</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="interestRate">Annual Interest Rate (%)</label>
+                    <input type="number" id="interestRate" step="0.01" placeholder="Enter interest rate">
+                    <div class="input-hint">Annual interest rate (e.g., 8.5 for 8.5%)</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loanTenure">Loan Tenure (Months)</label>
+                    <input type="number" id="loanTenure" placeholder="Enter tenure in months">
+                    <div class="input-hint">Total number of months to repay</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prepayment">Extra Prepayment Amount (₹)</label>
+                    <input type="number" id="prepayment" placeholder="Enter extra amount beyond regular EMI">
+                    <div class="input-hint"><strong>IMPORTANT:</strong> This is EXTRA amount ON TOP OF your regular EMI for that month</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prepaymentMonth">Prepayment Month</label>
+                    <input type="number" id="prepaymentMonth" placeholder="In which month? (e.g., 1 for first month)">
+                    <div class="input-hint">Month when you'll pay: Regular EMI + Extra Prepayment Amount</div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculateEMI()">Calculate EMI & Savings</button>
+                
+                <div id="errorMessage"></div>
+            </div>
+
+            <div class="results-section">
+                <h2 class="section-title">Results & Analysis</h2>
+                <div id="results">
+                    <div style="text-align: center; color: #6b7280; padding: 40px;">
+                        <p>Enter loan details and click calculate to see results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateEMI() {
+            // Clear previous errors
+            document.getElementById('errorMessage').innerHTML = '';
+            
+            // Get input values
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            const tenureMonths = parseInt(document.getElementById('loanTenure').value);
+            const prepaymentAmount = parseFloat(document.getElementById('prepayment').value) || 0;
+            const prepaymentMonth = parseInt(document.getElementById('prepaymentMonth').value) || 1;
+
+            // Validation
+            if (!loanAmount || !annualRate || !tenureMonths) {
+                showError('Please fill in all required fields (Loan Amount, Interest Rate, and Tenure)');
+                return;
+            }
+
+            if (loanAmount <= 0 || annualRate <= 0 || tenureMonths <= 0) {
+                showError('All values must be greater than zero');
+                return;
+            }
+
+            if (prepaymentAmount > 0 && (prepaymentMonth < 1 || prepaymentMonth > tenureMonths)) {
+                showError('Prepayment month must be between 1 and the loan tenure');
+                return;
+            }
+
+            // Calculate EMI
+            const monthlyRate = annualRate / (12 * 100);
+            const emi = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / 
+                       (Math.pow(1 + monthlyRate, tenureMonths) - 1);
+
+            // Calculate total amount without prepayment
+            const totalAmountOriginal = emi * tenureMonths;
+            const totalInterestOriginal = totalAmountOriginal - loanAmount;
+
+            let results = {
+                emi: emi,
+                totalAmount: totalAmountOriginal,
+                totalInterest: totalInterestOriginal,
+                remainingBalance: loanAmount,
+                adjustedTenure: tenureMonths,
+                adjustedTotalAmount: totalAmountOriginal,
+                adjustedTotalInterest: totalInterestOriginal,
+                savings: 0,
+                tenureReduction: 0
+            };
+
+            // Calculate with prepayment if provided
+            if (prepaymentAmount > 0) {
+                const prepaymentResults = calculateWithPrepayment(
+                    loanAmount, monthlyRate, emi, tenureMonths, 
+                    prepaymentAmount, prepaymentMonth
+                );
+                results = { ...results, ...prepaymentResults };
+            }
+
+            displayResults(results);
+        }
+
+        function calculateWithPrepayment(principal, monthlyRate, emi, tenure, prepayment, prepaymentMonth) {
+            let remainingBalance = principal;
+            let month = 1;
+            let totalPaid = 0;
+            let totalInterest = 0;
+            let prepaymentApplied = false;
+
+            // Calculate month by month until loan is paid off
+            while (remainingBalance > 0.01 && month <= tenure * 2) { // Safety limit
+                const interestPayment = remainingBalance * monthlyRate;
+                let principalPayment = Math.min(emi - interestPayment, remainingBalance);
+                
+                // Apply prepayment in specified month
+                if (month === prepaymentMonth && !prepaymentApplied) {
+                    const actualPrepayment = Math.min(prepayment, remainingBalance);
+                    remainingBalance -= actualPrepayment;
+                    totalPaid += actualPrepayment;
+                    prepaymentApplied = true;
+                    
+                    // If prepayment covers the remaining balance completely
+                    if (remainingBalance <= 0.01) {
+                        totalInterest += interestPayment;
+                        break;
+                    }
+                    
+                    // Recalculate interest and principal for remaining balance after prepayment
+                    const newInterestPayment = remainingBalance * monthlyRate;
+                    principalPayment = Math.min(emi - newInterestPayment, remainingBalance);
+                    totalInterest += newInterestPayment;
+                } else {
+                    totalInterest += interestPayment;
+                }
+                
+                remainingBalance -= principalPayment;
+                totalPaid += emi;
+
+                if (remainingBalance <= 0.01) {
+                    break;
+                }
+                month++;
+            }
+
+            const adjustedTenure = month;
+            const tenureReduction = Math.max(0, tenure - adjustedTenure);
+            const originalTotal = emi * tenure;
+            const savings = originalTotal - totalPaid;
+
+            // Calculate remaining balance after prepayment (for display purposes)
+            let balanceAfterPrepayment = principal;
+            let tempMonth = 1;
+            
+            while (tempMonth <= prepaymentMonth && balanceAfterPrepayment > 0.01) {
+                const tempInterest = balanceAfterPrepayment * monthlyRate;
+                const tempPrincipal = Math.min(emi - tempInterest, balanceAfterPrepayment);
+                balanceAfterPrepayment -= tempPrincipal;
+                
+                if (tempMonth === prepaymentMonth) {
+                    balanceAfterPrepayment = Math.max(0, balanceAfterPrepayment - prepayment);
+                }
+                tempMonth++;
+            }
+
+            return {
+                remainingBalance: Math.max(0, balanceAfterPrepayment),
+                adjustedTenure: adjustedTenure,
+                adjustedTotalAmount: totalPaid,
+                adjustedTotalInterest: totalInterest,
+                savings: savings,
+                tenureReduction: tenureReduction
+            };
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('en-IN', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.round(num));
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            const originalTenureMonths = parseInt(document.getElementById('loanTenure').value);
+            
+            resultsDiv.innerHTML = `
+                <div class="result-card highlight">
+                    <div class="result-label">Monthly EMI</div>
+                    <div class="result-value">₹${formatNumber(results.emi)}</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Original Total Amount</div>
+                    <div class="result-value">₹${formatNumber(results.totalAmount)}</div>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-label">Original Total Interest</div>
+                    <div class="result-value">₹${formatNumber(results.totalInterest)}</div>
+                </div>
+
+                ${results.savings > 0 ? `
+                    <div class="comparison-section">
+                        <div class="comparison-title">💡 Impact of Prepayment</div>
+                        
+                        <div class="result-card savings-card">
+                            <div class="result-label">Total Interest Savings</div>
+                            <div class="result-value">₹${formatNumber(results.savings)}</div>
+                        </div>
+
+                        <div class="result-card highlight">
+                            <div class="result-label">Months Saved (Early Completion)</div>
+                            <div class="result-value">${formatMonthsSaved(results.tenureReduction)}</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9;">
+                                You'll complete payment ${results.tenureReduction} months earlier than planned!
+                            </div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-label">New Loan Tenure</div>
+                            <div class="result-value">${formatTenure(results.adjustedTenure)}</div>
+                            <div style="font-size: 0.9rem; color: #6b7280; margin-top: 5px;">
+                                Instead of ${formatTenure(originalTenureMonths)}
+                            </div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-label">Remaining Balance After Prepayment</div>
+                            <div class="result-value">₹${formatNumber(results.remainingBalance)}</div>
+                            <div style="font-size: 0.9rem; color: #6b7280; margin-top: 5px;">
+                                Balance after month ${document.getElementById('prepaymentMonth').value} prepayment
+                            </div>
+                        </div>
+
+                        <div class="comparison-grid">
+                            <div class="comparison-card">
+                                <h4>Original Plan</h4>
+                                <div class="value">₹${formatNumber(results.totalAmount)}</div>
+                                <div style="font-size: 0.8rem; color: #6b7280; margin-top: 4px;">
+                                    ${formatTenure(originalTenureMonths)}
+                                </div>
+                            </div>
+                            <div class="comparison-card" style="background: #f0f9ff; border: 2px solid #0ea5e9;">
+                                <h4>With Prepayment</h4>
+                                <div class="value" style="color: #0369a1;">₹${formatNumber(results.adjustedTotalAmount)}</div>
+                                <div style="font-size: 0.8rem; color: #0369a1; margin-top: 4px;">
+                                    ${formatTenure(results.adjustedTenure)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-card" style="background: linear-gradient(135deg, #059669, #047857); color: white;">
+                            <div class="result-label" style="color: rgba(255, 255, 255, 0.9);">Payment Breakdown for Month ${document.getElementById('prepaymentMonth').value}</div>
+                            <div class="result-value" style="color: white; font-size: 1.1rem;">
+                                Regular EMI: ₹${formatNumber(results.emi)}<br>
+                                + Extra Payment: ₹${formatNumber(parseFloat(document.getElementById('prepayment').value) || 0)}<br>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.3); margin: 8px 0; padding-top: 8px;">
+                                Total Paid: ₹${formatNumber(results.emi + (parseFloat(document.getElementById('prepayment').value) || 0))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-card" style="background: linear-gradient(135deg, #059669, #047857); color: white;">
+                            <div class="result-label" style="color: rgba(255, 255, 255, 0.9);">Advance Payment Benefit</div>
+                            <div class="result-value" style="color: white;">
+                                You're effectively ${results.tenureReduction} months ahead of schedule!
+                            </div>
+                            <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9;">
+                                By paying ₹${formatNumber(parseFloat(document.getElementById('prepayment').value) || 0)} EXTRA, 
+                                you save ₹${formatNumber(results.savings)} in interest and finish 
+                                ${formatMonthsSaved(results.tenureReduction)} early.
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function formatTenure(months) {
+            const years = Math.floor(months / 12);
+            const remainingMonths = months % 12;
+            const days = Math.round(remainingMonths * 30); // Approximate days
+            
+            let result = '';
+            if (years > 0) {
+                result += `${years} year${years > 1 ? 's' : ''} `;
+            }
+            if (remainingMonths > 0) {
+                result += `${remainingMonths} month${remainingMonths > 1 ? 's' : ''} `;
+            }
+            if (days > 0 && remainingMonths === 0) {
+                result += `${days} day${days > 1 ? 's' : ''}`;
+            }
+            
+            return result.trim() || '0 days';
+        }
+
+        function formatMonthsSaved(monthsSaved) {
+            if (monthsSaved <= 0) return '0 months';
+            
+            const years = Math.floor(monthsSaved / 12);
+            const months = monthsSaved % 12;
+            
+            let result = '';
+            if (years > 0) {
+                result += `${years} year${years > 1 ? 's' : ''}`;
+            }
+            if (months > 0) {
+                if (result) result += ' ';
+                result += `${months} month${months > 1 ? 's' : ''}`;
+            }
+            
+            return result;
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').innerHTML = `
+                <div class="error-message">${message}</div>
+            `;
+        }
+
+        // Add some demo values for quick testing
+        window.addEventListener('load', function() {
+            document.getElementById('loanAmount').value = '500000';
+            document.getElementById('interestRate').value = '8.5';
+            document.getElementById('loanTenure').value = '60';
+        });
+    </script>
+</body>
+</html>
