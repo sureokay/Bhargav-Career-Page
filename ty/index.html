@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Your Free PDF - AI in Software Testing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: #27ae60;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .pdf-viewer {
+            margin: 30px 0;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 18px;
+            margin: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.4);
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px 0;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✓</div>
+        <h1>Thank You! 🎉</h1>
+        <p>Your information has been received successfully.</p>
+        
+        <h2 style="color: #667eea; margin-bottom: 20px;">Your PDF is Ready!</h2>
+        
+        <div class="info-box">
+            <p><strong>💡 Quick Tips:</strong></p>
+            <p>• The PDF is displayed below - you can read it directly</p>
+            <p>• Click the download button to save it to your device</p>
+            <p>• Your browser's PDF viewer also has a download option (top right)</p>
+        </div>
+        
+        <a href="/data/AI-Testing-Complete-Guide.pdf" class="download-btn" download>
+            📥 Download PDF
+        </a>
+        
+        <div class="pdf-viewer" id="pdfContainer">
+            <div class="loading" id="loader"></div>
+            <iframe id="pdfFrame" src="" style="display:none;"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION - Replace with your actual PDF URL
+        const PDF_URL = 'YOUR_PDF_URL_HERE';
+        
+        // Load PDF when page loads
+        window.addEventListener('load', function() {
+            const iframe = document.getElementById('pdfFrame');
+            const loader = document.getElementById('loader');
+            
+            // Set PDF source
+            iframe.src = PDF_URL;
+            
+            // Show iframe when loaded
+            iframe.onload = function() {
+                loader.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+            
+            // Fallback if iframe doesn't load
+            setTimeout(function() {
+                if (iframe.style.display === 'none') {
+                    loader.style.display = 'none';
+                    iframe.style.display = 'block';
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
