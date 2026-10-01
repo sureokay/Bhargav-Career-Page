@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gyan Point Classes – Coaching for Class 8 to 12, Vadodara</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#FFE14D; --ink:#121212; --paper:#FFFFFF; --pink:#FF7AB6; --mint:#7BE0B4; --sky:#7CC4FF; --shadow:#121212;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1A1A1A;--ink:#F5F5F0;--paper:#262626;--shadow:#FFE14D}}
+:root[data-theme="dark"]{--bg:#1A1A1A;--ink:#F5F5F0;--paper:#262626;--shadow:#FFE14D}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 "Space Grotesk",system-ui,sans-serif}
+h1,h2,h3{font-family:"Archivo Black","Space Grotesk",Impact,sans-serif;font-weight:400;line-height:1;margin:0;letter-spacing:-.01em}
+a{color:inherit}
+:focus-visible{outline:4px solid var(--pink);outline-offset:3px}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+.sample{background:var(--ink);color:var(--bg);text-align:center;font-size:14px;padding:6px 10px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:20px 0;gap:12px;flex-wrap:wrap}
+.logo{font:400 24px "Archivo Black",Impact,sans-serif;text-decoration:none;border:3px solid var(--ink);background:var(--paper);padding:4px 12px;box-shadow:4px 4px 0 var(--shadow)}
+nav{display:flex;gap:18px;font-weight:700}
+nav a{text-decoration:none}
+nav a:hover{text-decoration:underline;text-decoration-thickness:3px}
+.hero{padding:36px 0 64px;display:grid;grid-template-columns:1.5fr 1fr;gap:34px;align-items:center}
+.hero h1{font-size:clamp(42px,8.5vw,92px)}
+.hero p{font-size:19px;max-width:44ch;margin:22px 0 28px}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);font:700 17px "Space Grotesk",sans-serif;padding:14px 26px;border:3px solid var(--ink);text-decoration:none;cursor:pointer;box-shadow:5px 5px 0 var(--pink);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--pink)}
+.btn.alt{background:var(--paper);color:var(--ink);box-shadow:5px 5px 0 var(--shadow);margin-left:12px}
+.btn.alt:hover{box-shadow:2px 2px 0 var(--shadow)}
+.stats{display:grid;gap:14px}
+.stat{background:var(--paper);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--shadow);padding:16px 20px}
+.stat:nth-child(1){background:var(--mint);color:#121212}
+.stat:nth-child(2){background:var(--sky);color:#121212}
+.stat:nth-child(3){background:var(--pink);color:#121212}
+.stat b{display:block;font:400 38px "Archivo Black",Impact,sans-serif;line-height:1}
+section{padding:54px 0}
+section h2{font-size:clamp(32px,5vw,50px);margin-bottom:10px}
+.sub{max-width:56ch;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px}
+.course{background:var(--paper);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--shadow);padding:22px;display:flex;flex-direction:column}
+.course h3{font-size:25px;margin-bottom:6px}
+.tag{align-self:flex-start;font-weight:700;font-size:14px;border:2px solid var(--ink);padding:1px 10px;margin-bottom:12px}
+.course:nth-child(1) .tag{background:var(--mint);color:#121212}
+.course:nth-child(2) .tag{background:var(--sky);color:#121212}
+.course:nth-child(3) .tag{background:var(--pink);color:#121212}
+.course ul{margin:8px 0 16px;padding-left:20px}
+.course .fee{margin-top:auto;font-weight:700;border-top:3px solid var(--ink);padding-top:12px;display:flex;justify-content:space-between}
+.how{background:var(--ink);color:var(--bg)}
+.how ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;counter-reset:s}
+.how li{counter-increment:s;border:3px solid var(--bg);padding:20px}
+.how li:before{content:"Step " counter(s);display:block;font:400 22px "Archivo Black",Impact,sans-serif;margin-bottom:6px}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.card{background:var(--paper);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--shadow);padding:26px}
+.card h3{font-size:24px;margin-bottom:14px}
+.t{width:100%;border-collapse:collapse}
+.t td{padding:8px 0;border-bottom:2px solid var(--ink)}
+.t td:last-child{text-align:right;font-weight:700}
+label{display:block;font-weight:700;margin:0 0 14px}
+input,select{width:100%;margin-top:5px;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:3px solid var(--ink);border-radius:0}
+footer{padding:26px 0 40px;font-size:14px}
+@media(max-width:760px){
+  .hero,.visit,.how ol{grid-template-columns:1fr}
+  nav{gap:14px;font-size:15px}
+  .btn.alt{margin:14px 0 0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="sample">Sample demo website – all names, fees, results and contact details are placeholders</div>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#">Gyan Point</a>
+    <nav><a href="#batches">Batches</a><a href="#how">How it works</a><a href="#enquire">Enquire</a></nav>
+  </header>
+  <div class="hero">
+    <div>
+      <h1>Marks go up when doubts go down.</h1>
+      <p>Small-batch coaching for Class 8 to 12 in Vadodara. Maths, Science and Commerce, with weekly tests and a doubt-clearing hour every day.</p>
+      <a class="btn" href="#enquire">Book a free demo class</a><a class="btn alt" href="#batches">See batches</a>
+    </div>
+    <div class="stats" aria-label="Sample highlights">
+      <div class="stat"><b>15</b>students per batch, maximum</div>
+      <div class="stat"><b>Weekly</b>test with a written report</div>
+      <div class="stat"><b>1 hour</b>doubt session every day</div>
+    </div>
+  </div>
+</div>
+
+<section id="batches">
+  <div class="wrap">
+    <h2>Batches</h2>
+    <p class="sub">Pick a batch by class. All batches include study material and a monthly parent meeting.</p>
+    <div class="grid">
+      <div class="course"><span class="tag">Class 8 to 10</span><h3>Foundation</h3>
+        <ul><li>Maths and Science</li><li>Mon to Sat, 4 pm – 6 pm</li><li>Gujarati and English medium</li></ul>
+        <div class="fee"><span>Per month</span><span>₹1,500</span></div></div>
+      <div class="course"><span class="tag">Class 11 to 12 Commerce</span><h3>Commerce</h3>
+        <ul><li>Accounts, Economics, Statistics</li><li>Mon to Sat, 6 pm – 8 pm</li><li>Board paper practice every month</li></ul>
+        <div class="fee"><span>Per month</span><span>₹2,000</span></div></div>
+      <div class="course"><span class="tag">Class 11 to 12 Science</span><h3>Science</h3>
+        <ul><li>Physics, Chemistry, Maths</li><li>Mon to Sat, 7 am – 10 am</li><li>JEE and GUJCET basics included</li></ul>
+        <div class="fee"><span>Per month</span><span>₹3,000</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="how">
+  <div class="wrap">
+    <h2>How to join</h2>
+    <p class="sub">No fee until your child has attended a demo class.</p>
+    <ol>
+      <li>Send an enquiry on WhatsApp with the class and subject.</li>
+      <li>Attend a free demo class on the date we confirm.</li>
+      <li>Pay the first month's fee and receive the study material.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="enquire">
+  <div class="wrap">
+    <h2>Enquire now</h2>
+    <p class="sub">Fill in the form and it opens a WhatsApp message to us with the details. We reply the same day.</p>
+    <div class="visit">
+      <div class="card">
+        <h3>Contact and timings</h3>
+        <table class="t">
+          <tr><td>Office hours</td><td>10 am – 8 pm</td></tr>
+          <tr><td>Demo classes</td><td>Mon to Sat</td></tr>
+          <tr><td>Phone</td><td>+91 98765 43210</td></tr>
+        </table>
+        <p style="margin:16px 0 0">204, Siddhi Chambers, Alkapuri, Vadodara</p>
+      </div>
+      <div class="card">
+        <h3>Enquire on WhatsApp</h3>
+        <label>Parent's name<input id="n" autocomplete="name"></label>
+        <label>Student's class
+          <select id="c"><option>Class 8</option><option>Class 9</option><option>Class 10</option><option>Class 11 Commerce</option><option>Class 11 Science</option><option>Class 12 Commerce</option><option>Class 12 Science</option></select>
+        </label>
+        <label>Medium
+          <select id="m"><option>Gujarati</option><option>English</option></select>
+        </label>
+        <button class="btn" type="button" id="go">Send on WhatsApp</button>
+        <p id="err" role="alert" style="color:#B3261E;font-weight:700;margin:10px 0 0;min-height:1.4em"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer>© 2026 Gyan Point Classes, Vadodara. Sample website for demonstration.</footer></div>
+
+<script>
+document.getElementById('go').addEventListener('click',function(){
+  var n=document.getElementById('n').value.trim(),
+      c=document.getElementById('c').value,
+      m=document.getElementById('m').value,
+      e=document.getElementById('err');
+  if(!n){e.textContent='Enter the parent\u2019s name so we know who to reply to.';return}
+  e.textContent='';
+  var t='Hi, I am '+n+'. I would like a demo class for '+c+' ('+m+' medium).';
+  window.open('https://wa.me/919876543210?text='+encodeURIComponent(t),'_blank','noopener');
+});
+</script>
+</body>
+</html>
