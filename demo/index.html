@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Single Page Website Demos – Bhargav Desai</title>
+<meta name="description" content="Sample single page websites for small businesses: restaurants, barber shops, coaching classes, nurseries and luxury villas.">
+<style>
+:root{
+  --bg:#F5F6F8; --card:#FFFFFF; --ink:#16202E; --muted:#5B6678; --line:#DDE1E8; --accent:#1F5FD1; --accent-ink:#FFFFFF; --num:#E8EEFB;
+}
+@media (prefers-color-scheme:dark){:root{--bg:#0F141C;--card:#171E29;--ink:#EEF1F6;--muted:#9AA6B8;--line:#273141;--accent:#6EA0FF;--accent-ink:#0F141C;--num:#1F2A3E}}
+*,*:before,*:after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 60px}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0 0 10px}
+.intro{color:var(--muted);margin:0 0 30px}
+ol.demos{list-style:none;margin:0;padding:0;counter-reset:d}
+ol.demos li{counter-increment:d;display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+ol.demos li:before{content:counter(d);flex:none;width:38px;height:38px;border-radius:50%;background:var(--num);color:var(--accent);font-weight:700;display:grid;place-items:center}
+.info{flex:1;min-width:0}
+.info b{display:block;font-size:18px}
+.info span{color:var(--muted);font-size:15px}
+.open{flex:none;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:9px 18px;border-radius:999px}
+.open:hover{filter:brightness(1.1)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.note{margin-top:30px;color:var(--muted);font-size:14px}
+@media(max-width:520px){ol.demos li{flex-wrap:wrap}.open{width:100%;text-align:center}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Single page website demos</h1>
+  <p class="intro">Sample websites for small businesses. Open any demo on your phone or computer to see how your own website could look.</p>
+
+  <!--
+    HOW TO ADD A NEW DEMO:
+    1. Copy one whole <li> ... </li> block below.
+    2. Paste it where you want it in the list (numbers update by themselves).
+    3. Change the href file name, the title and the description.
+    HOW TO CHANGE A LINK: edit the href="..." value, for example href="dr1.html"
+    or a full address such as href="https://example.com/demo/dr1.html".
+  -->
+  <ol class="demos">
+
+    <li>
+      <div class="info"><b>Restaurant website</b><span>Single page demo restaurant website</span></div>
+      <a class="open" href="dr1.html">Open demo</a>
+    </li>
+
+    <li>
+      <div class="info"><b>Restaurant website, different look</b><span>Single page restaurant website with a different look, feel and layout</span></div>
+      <a class="open" href="dr2.html">Open demo</a>
+    </li>
+
+    <li>
+      <div class="info"><b>Barber shop website</b><span>Single page demo website for a barber shop</span></div>
+      <a class="open" href="db1.html">Open demo</a>
+    </li>
+
+    <li>
+      <div class="info"><b>Coaching class website</b><span>Single page website for a coaching institute</span></div>
+      <a class="open" href="dc1.html">Open demo</a>
+    </li>
+
+    <li>
+      <div class="info"><b>Plant nursery website</b><span>Single page website for a nursery selling plants</span></div>
+      <a class="open" href="dp1.html">Open demo</a>
+    </li>
+
+    <li>
+      <div class="info"><b>Luxury villa resort website</b><span>Single page attractive website for luxury villas</span></div>
+      <a class="open" href="dresort1.html">Open demo</a>
+    </li>
+
+  </ol>
+
+  <p class="note">These are sample websites for demonstration. All business names, prices and contact details shown in them are placeholders.</p>
+</div>
+</body>
+</html>
