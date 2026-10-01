@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hariyali Nursery – Plants for Home and Garden, Surat</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito+Sans:wght@400;600;800&display=swap">
+<style>
+:root{
+  --bg:#EEF5EC; --forest:#14412B; --lime:#B7E34B; --card:#FFFFFF; --ink:#172A20; --muted:#52695A; --line:#CFE0CB; --on-forest:#EEF5EC; --blob:#DDEDD6;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1D16;--forest:#0A2A1B;--card:#172A20;--ink:#E8F1E6;--muted:#9DB5A4;--line:#27402F;--blob:#1F3A2A}}
+:root[data-theme="dark"]{--bg:#0F1D16;--forest:#0A2A1B;--card:#172A20;--ink:#E8F1E6;--muted:#9DB5A4;--line:#27402F;--blob:#1F3A2A}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Young Serif",Georgia,serif;font-weight:400;line-height:1.1;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+.sample{background:var(--lime);color:#14412B;text-align:center;font-size:14px;font-weight:600;padding:6px 10px}
+.hero{background:var(--forest);color:var(--on-forest);border-radius:0 0 48px 48px;overflow:hidden}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font:400 24px "Young Serif",Georgia,serif;text-decoration:none}
+nav{display:flex;gap:20px;font-weight:600}
+nav a{text-decoration:none}
+nav a:hover{text-decoration:underline}
+.hh{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center;padding:30px 0 64px}
+.hh h1{font-size:clamp(42px,7.5vw,80px)}
+.hh p{font-size:19px;max-width:44ch;margin:20px 0 28px;opacity:.9}
+.btn{display:inline-block;background:var(--lime);color:#14412B;font:800 16px "Nunito Sans",sans-serif;padding:13px 26px;border-radius:999px;border:0;text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}
+.btn.line{background:transparent;color:inherit;border:2px solid currentColor;margin-left:8px}
+.leaves{font-size:clamp(70px,13vw,130px);line-height:1;text-align:center;letter-spacing:6px}
+.leaves span{display:inline-block}
+.leaves span:nth-child(2){transform:translateY(-14px)}
+.leaves span:nth-child(3){transform:translateY(10px)}
+section{padding:56px 0}
+section h2{font-size:clamp(30px,5vw,48px);margin-bottom:8px}
+.sub{color:var(--muted);max-width:56ch;margin:0 0 24px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.chip{font:600 15px "Nunito Sans",sans-serif;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:8px 18px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--forest);color:var(--on-forest);border-color:var(--forest)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
+.plant{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;display:flex;flex-direction:column}
+.plant[hidden]{display:none}
+.pic{background:var(--blob);border-radius:50% 50% 20px 20px;height:130px;display:grid;place-items:center;font-size:64px;margin-bottom:14px}
+.plant h3{font-size:21px;margin-bottom:2px}
+.plant small{color:var(--muted)}
+.care{display:flex;gap:14px;margin:10px 0 14px;font-size:14px;color:var(--muted)}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+.price{font:400 22px "Young Serif",Georgia,serif}
+.ask{font:700 14px "Nunito Sans",sans-serif;background:var(--forest);color:var(--on-forest);border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+.ask:hover{filter:brightness(1.2)}
+.perks{background:var(--blob)}
+.perks .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.perks h3{font-size:21px;margin-bottom:6px}
+.perks p{margin:0;color:var(--muted)}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px}
+.box h3{font-size:23px;margin-bottom:14px}
+.t{width:100%;border-collapse:collapse}
+.t td{padding:7px 0;border-bottom:1px solid var(--line)}
+.t td:last-child{text-align:right;font-weight:600}
+label{display:block;font-weight:600;margin:0 0 14px}
+input,select{width:100%;margin-top:5px;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px}
+footer{padding:20px 0 36px;color:var(--muted);font-size:14px}
+@media(max-width:760px){
+  .hh,.visit,.perks .wrap{grid-template-columns:1fr}
+  nav{gap:14px;font-size:15px}
+  .btn.line{margin:10px 0 0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="sample">Sample demo website – all names, plants, prices and contact details are placeholders</div>
+<div class="hero">
+  <div class="wrap">
+    <header class="top">
+      <a class="logo" href="#">Hariyali Nursery</a>
+      <nav><a href="#plants">Plants</a><a href="#perks">Why us</a><a href="#visit">Visit</a></nav>
+    </header>
+    <div class="hh">
+      <div>
+        <h1>Green things, grown here.</h1>
+        <p>Indoor plants, flowering shrubs, succulents and garden essentials, all raised in our own nursery in Surat. Walk in, or message us the plant you want.</p>
+        <a class="btn" href="#plants">Browse plants</a><a class="btn line" href="#visit">Visit the nursery</a>
+      </div>
+      <div class="leaves" aria-hidden="true"><span>🪴</span><span>🌿</span><span>🌵</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="plants">
+  <div class="wrap">
+    <h2>Plants in stock</h2>
+    <p class="sub">Prices are for plants in standard nursery pots. Tap "Ask" to check today's stock on WhatsApp.</p>
+    <div class="chips" id="chips" role="group" aria-label="Filter plants by type">
+      <button class="chip" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" data-f="indoor" aria-pressed="false">Indoor</button>
+      <button class="chip" data-f="outdoor" aria-pressed="false">Outdoor</button>
+      <button class="chip" data-f="flowering" aria-pressed="false">Flowering</button>
+      <button class="chip" data-f="succulent" aria-pressed="false">Succulents</button>
+    </div>
+    <div class="grid" id="grid">
+      <article class="plant" data-t="indoor"><div class="pic" aria-hidden="true">🪴</div><h3>Money plant</h3><small>Indoor · easy care</small><div class="care"><span>Light: low</span><span>Water: weekly</span></div><div class="foot"><span class="price">₹120</span><button class="ask" data-n="Money plant">Ask</button></div></article>
+      <article class="plant" data-t="indoor"><div class="pic" aria-hidden="true">🌿</div><h3>Snake plant</h3><small>Indoor · air purifying</small><div class="care"><span>Light: low</span><span>Water: fortnightly</span></div><div class="foot"><span class="price">₹250</span><button class="ask" data-n="Snake plant">Ask</button></div></article>
+      <article class="plant" data-t="outdoor flowering"><div class="pic" aria-hidden="true">🌺</div><h3>Hibiscus</h3><small>Outdoor · flowers all year</small><div class="care"><span>Light: full sun</span><span>Water: every 2 days</span></div><div class="foot"><span class="price">₹150</span><button class="ask" data-n="Hibiscus">Ask</button></div></article>
+      <article class="plant" data-t="outdoor flowering"><div class="pic" aria-hidden="true">🌹</div><h3>Rose, mixed colours</h3><small>Outdoor · grafted</small><div class="care"><span>Light: full sun</span><span>Water: daily</span></div><div class="foot"><span class="price">₹180</span><button class="ask" data-n="Rose plant">Ask</button></div></article>
+      <article class="plant" data-t="succulent indoor"><div class="pic" aria-hidden="true">🌵</div><h3>Cactus mix, set of 3</h3><small>Succulent · tabletop pots</small><div class="care"><span>Light: bright</span><span>Water: monthly</span></div><div class="foot"><span class="price">₹300</span><button class="ask" data-n="Cactus mix set of 3">Ask</button></div></article>
+      <article class="plant" data-t="outdoor"><div class="pic" aria-hidden="true">🌴</div><h3>Areca palm</h3><small>Outdoor or balcony</small><div class="care"><span>Light: bright shade</span><span>Water: 3 times a week</span></div><div class="foot"><span class="price">₹450</span><button class="ask" data-n="Areca palm">Ask</button></div></article>
+      <article class="plant" data-t="outdoor flowering"><div class="pic" aria-hidden="true">🌼</div><h3>Marigold tray</h3><small>Seasonal · tray of 12</small><div class="care"><span>Light: full sun</span><span>Water: daily</span></div><div class="foot"><span class="price">₹200</span><button class="ask" data-n="Marigold tray">Ask</button></div></article>
+      <article class="plant" data-t="succulent indoor"><div class="pic" aria-hidden="true">🌱</div><h3>Aloe vera</h3><small>Succulent · skin and hair use</small><div class="care"><span>Light: bright</span><span>Water: fortnightly</span></div><div class="foot"><span class="price">₹100</span><button class="ask" data-n="Aloe vera">Ask</button></div></article>
+    </div>
+  </div>
+</section>
+
+<section id="perks" class="perks">
+  <div class="wrap">
+    <div><h3>Home delivery</h3><p>Free within 8 km on orders above ₹800. Plants travel in protective sleeves.</p></div>
+    <div><h3>Plant care help</h3><p>Send us a photo of a sick plant on WhatsApp and we will tell you what it needs.</p></div>
+    <div><h3>Pots and soil</h3><p>Ceramic and plastic pots, potting mix, compost and organic fertiliser in store.</p></div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <h2>Visit or order</h2>
+    <p class="sub">Choose a plant, or write your own request, and it opens a WhatsApp message to us. We reply the same day.</p>
+    <div class="visit">
+      <div class="box">
+        <h3>Nursery hours</h3>
+        <table class="t">
+          <tr><td>Monday to Saturday</td><td>7 am – 7 pm</td></tr>
+          <tr><td>Sunday</td><td>7 am – 1 pm</td></tr>
+          <tr><td>Phone</td><td>+91 98765 43210</td></tr>
+        </table>
+        <p style="margin:16px 0 0">Plot 18, Green Road, Adajan, Surat</p>
+      </div>
+      <div class="box">
+        <h3>Order on WhatsApp</h3>
+        <label>Your name<input id="n" autocomplete="name"></label>
+        <label>Plant or product<input id="p" placeholder="For example: 2 hibiscus and a pot"></label>
+        <label>Pickup or delivery
+          <select id="m"><option>Pickup from nursery</option><option>Home delivery</option></select>
+        </label>
+        <button class="btn" type="button" id="go">Send on WhatsApp</button>
+        <p id="err" role="alert" style="color:#B3261E;font-weight:600;margin:10px 0 0;min-height:1.4em"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer>© 2026 Hariyali Nursery, Surat. Sample website for demonstration.</footer></div>
+
+<script>
+var chips=document.querySelectorAll('.chip'),plants=document.querySelectorAll('.plant');
+chips.forEach(function(c){c.addEventListener('click',function(){
+  chips.forEach(function(x){x.setAttribute('aria-pressed',x===c?'true':'false')});
+  var f=c.dataset.f;
+  plants.forEach(function(p){p.hidden=!(f==='all'||p.dataset.t.split(' ').indexOf(f)>-1)});
+})});
+document.querySelectorAll('.ask').forEach(function(b){b.addEventListener('click',function(){
+  document.getElementById('p').value=b.dataset.n;
+  document.getElementById('visit').scrollIntoView();
+  document.getElementById('n').focus({preventScroll:true});
+})});
+document.getElementById('go').addEventListener('click',function(){
+  var n=document.getElementById('n').value.trim(),
+      p=document.getElementById('p').value.trim(),
+      m=document.getElementById('m').value,
+      e=document.getElementById('err');
+  if(!n){e.textContent='Enter your name so we know who the order is for.';return}
+  if(!p){e.textContent='Tell us which plant or product you want.';return}
+  e.textContent='';
+  var t='Hi, I am '+n+'. I would like to order: '+p+'. '+m+'.';
+  window.open('https://wa.me/919876543210?text='+encodeURIComponent(t),'_blank','noopener');
+});
+</script>
+</body>
+</html>
