@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sharp Cut Barbers – Men's Grooming, Ahmedabad</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Work+Sans:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#F3F1EC; --ink:#17233F; --red:#C8332B; --blue:#1F3A7A; --card:#FFFFFF; --muted:#566079; --line:#D8D4C9;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101828;--ink:#F3F1EC;--red:#E5524A;--blue:#6E8FE0;--card:#18233A;--muted:#A9B3C8;--line:#2B3A57}}
+:root[data-theme="dark"]{--bg:#101828;--ink:#F3F1EC;--red:#E5524A;--blue:#6E8FE0;--card:#18233A;--muted:#A9B3C8;--line:#2B3A57}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Work Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Alfa Slab One",Georgia,serif;font-weight:400;line-height:1.1;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+.sample{background:var(--ink);color:var(--bg);text-align:center;font-size:14px;padding:6px 10px}
+.pole{height:16px;background:repeating-linear-gradient(-45deg,var(--red) 0 18px,#FFFFFF 18px 36px,var(--blue) 36px 54px,#FFFFFF 54px 72px)}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font:400 24px "Alfa Slab One",Georgia,serif;text-decoration:none}
+nav{display:flex;gap:20px;font-weight:500}
+nav a{text-decoration:none}
+nav a:hover{text-decoration:underline}
+.hero{padding:44px 0 70px;max-width:760px}
+.hero h1{font-size:clamp(46px,9vw,100px)}
+.hero p{font-size:19px;color:var(--muted);max-width:48ch;margin:22px 0 28px}
+.btn{display:inline-block;background:var(--red);color:#fff;font-weight:700;padding:14px 28px;border-radius:6px;text-decoration:none;border:0;font:700 17px "Work Sans",sans-serif;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--ink);margin-left:8px}
+section{padding:56px 0}
+section h2{font-size:clamp(32px,5vw,50px);margin-bottom:8px}
+.sub{color:var(--muted);margin:0 0 28px;max-width:56ch}
+.list{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 24px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.row b{font-size:18px}
+.row small{display:block;color:var(--muted);font-size:15px}
+.price{font:400 22px "Alfa Slab One",Georgia,serif;white-space:nowrap}
+.combo{margin-top:22px;border:2px dashed var(--red);border-radius:10px;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.combo b{font-size:19px}
+.why{background:var(--blue);color:#fff}
+.why .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.why h3{font-size:22px;margin-bottom:8px}
+.why p{margin:0;opacity:.9}
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:26px}
+.card h3{font-size:24px;margin-bottom:14px}
+.hours{width:100%;border-collapse:collapse}
+.hours td{padding:7px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-weight:500}
+label{display:block;font-weight:500;margin:0 0 14px}
+input,select{width:100%;margin-top:5px;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+footer{padding:26px 0 36px;color:var(--muted);font-size:14px}
+@media(max-width:760px){
+  .why .wrap,.visit{grid-template-columns:1fr}
+  nav{gap:14px;font-size:15px}
+  .btn.alt{margin:10px 0 0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="sample">Sample demo website – all names, prices and contact details are placeholders</div>
+<div class="pole" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#">Sharp Cut</a>
+    <nav><a href="#services">Services</a><a href="#why">About</a><a href="#book">Book</a></nav>
+  </header>
+  <div class="hero">
+    <h1>Clean cut. Straight edge. On time.</h1>
+    <p>Men's haircuts, beard trims and hot-towel shaves in Ahmedabad. Pick a slot and we start when you arrive, no waiting on a bench.</p>
+    <a class="btn" href="#book">Book a slot</a><a class="btn alt" href="#services">See prices</a>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <h2>Services and prices</h2>
+    <p class="sub">Every service includes a fresh towel and tools sterilised before each customer.</p>
+    <div class="list">
+      <div class="row"><span><b>Haircut</b><small>Scissor or machine, with wash and styling · 30 min</small></span><span class="price">₹200</span></div>
+      <div class="row"><span><b>Beard trim and shape</b><small>Line-up with straight razor · 20 min</small></span><span class="price">₹120</span></div>
+      <div class="row"><span><b>Hot-towel shave</b><small>Classic wet shave with aftershave balm · 25 min</small></span><span class="price">₹150</span></div>
+      <div class="row"><span><b>Head massage</b><small>Oil or cream · 15 min</small></span><span class="price">₹100</span></div>
+      <div class="row"><span><b>Hair colour and grey cover</b><small>Ammonia-free colour · 45 min</small></span><span class="price">from ₹400</span></div>
+    </div>
+    <div class="combo">
+      <span><b>Groom combo: haircut + beard trim</b><br>Save ₹40 compared to booking separately</span>
+      <span class="price">₹280</span>
+    </div>
+  </div>
+</section>
+
+<section id="why" class="why">
+  <div class="wrap">
+    <div><h3>Booked slots</h3><p>Choose a time and it is yours. Walk-ins are welcome when a chair is free.</p></div>
+    <div><h3>Clean tools</h3><p>Razors are single-use and combs and scissors are sterilised between customers.</p></div>
+    <div><h3>Same barber each visit</h3><p>Ask for your barber by name and we will remember how you like it cut.</p></div>
+  </div>
+</section>
+
+<section id="book">
+  <div class="wrap">
+    <h2>Book a slot</h2>
+    <p class="sub">Fill in the form and it opens a WhatsApp message to us with your details. We confirm the slot within 15 minutes during opening hours.</p>
+    <div class="visit">
+      <div class="card">
+        <h3>Opening hours</h3>
+        <table class="hours">
+          <tr><td>Monday to Saturday</td><td>10 am – 9 pm</td></tr>
+          <tr><td>Sunday</td><td>10 am – 2 pm</td></tr>
+          <tr><td>Tuesday</td><td>Closed</td></tr>
+        </table>
+        <p style="margin:16px 0 0">12, Shreeji Complex, near City Mall, Ahmedabad<br>Phone: +91 98765 43210</p>
+      </div>
+      <div class="card">
+        <h3>Book on WhatsApp</h3>
+        <label>Your name<input id="n" autocomplete="name"></label>
+        <label>Service
+          <select id="s"><option>Haircut</option><option>Beard trim and shape</option><option>Hot-towel shave</option><option>Groom combo (haircut + beard)</option><option>Hair colour</option></select>
+        </label>
+        <label>Date<input id="d" type="date"></label>
+        <label>Preferred time
+          <select id="t"><option>Morning (10 am – 1 pm)</option><option>Afternoon (1 pm – 5 pm)</option><option>Evening (5 pm – 9 pm)</option></select>
+        </label>
+        <button class="btn" type="button" id="go">Send on WhatsApp</button>
+        <p id="err" role="alert" style="color:#B3261E;margin:10px 0 0;min-height:1.4em"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="pole" aria-hidden="true"></div>
+<div class="wrap"><footer>© 2026 Sharp Cut Barbers, Ahmedabad. Sample website for demonstration.</footer></div>
+
+<script>
+document.getElementById('go').addEventListener('click',function(){
+  var n=document.getElementById('n').value.trim(),
+      s=document.getElementById('s').value,
+      d=document.getElementById('d').value,
+      t=document.getElementById('t').value,
+      e=document.getElementById('err');
+  if(!n){e.textContent='Enter your name so we can confirm your booking.';return}
+  if(!d){e.textContent='Choose a date for your visit.';return}
+  e.textContent='';
+  var msg='Hi, I am '+n+'. I would like to book: '+s+' on '+d+', '+t+'.';
+  window.open('https://wa.me/919876543210?text='+encodeURIComponent(msg),'_blank','noopener');
+});
+</script>
+</body>
+</html>
