@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Cove | Luxury Boutique Hotel & Tropical Resort</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        aura: {
+                            cyan: '#00F0FF',
+                            coral: '#FF4365',
+                            emerald: '#00E6A5',
+                            purple: '#2A0845',
+                            dark: '#0D0714',
+                            surface: '#180E29'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=display" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .neon-glow-cyan {
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+        }
+        .neon-glow-coral {
+            box-shadow: 0 0 25px rgba(255, 67, 101, 0.4);
+        }
+        .text-gradient-vibrant {
+            background: linear-gradient(135deg, #00F0FF 0%, #00E6A5 50%, #FF4365 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-vibrant-gradient {
+            background: linear-gradient(135deg, #FF4365 0%, #7928CA 50%, #00F0FF 100%);
+        }
+        .glass-card {
+            background: rgba(24, 14, 41, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0D0714; }
+        ::-webkit-scrollbar-thumb { background: #7928CA; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
+    </style>
+</head>
+<body class="bg-aura-dark text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-aura-coral selection:text-white">
+
+    <header class="fixed top-0 left-0 right-0 z-40 bg-aura-dark/80 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-aura-coral via-purple-600 to-aura-cyan p-0.5 shadow-lg group-hover:scale-105 transition-transform">
+                        <div class="w-full h-full bg-aura-dark rounded-[14px] flex items-center justify-center">
+                            <i class="fa-solid fa-water text-aura-cyan text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-xl tracking-tight text-white flex items-center gap-1.5">
+                            AURA COVE <span class="text-xs px-2 py-0.5 rounded-full bg-aura-coral/20 text-aura-coral border border-aura-coral/40 font-semibold">RESORT</span>
+                        </span>
+                        <span class="text-[10px] tracking-widest text-aura-cyan font-semibold uppercase">Boutique Luxury & Villas</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm uppercase tracking-wider font-bold">
+                    <a href="#villas" class="hover:text-aura-cyan transition-colors py-2">Villas & Suites</a>
+                    <a href="#experiences" class="hover:text-aura-cyan transition-colors py-2">Experiences</a>
+                    <a href="#amenities" class="hover:text-aura-cyan transition-colors py-2">Amenities</a>
+                    <a href="#reviews" class="hover:text-aura-cyan transition-colors py-2">Guest Reviews</a>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button onclick="openBookingModal()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-aura-coral to-purple-600 text-white font-bold text-xs uppercase tracking-wider hover:brightness-110 neon-glow-coral transition-all active:scale-95 flex items-center gap-2">
+                        <i class="fa-regular fa-calendar-check text-sm"></i> Book Your Stay
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation Toggle -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileNav()" class="p-2 text-white hover:text-aura-cyan focus:outline-none">
+                        <i id="mobile-icon" class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-aura-surface border-b border-white/10 px-6 py-6 space-y-4">
+            <a href="#villas" onclick="toggleMobileNav()" class="block font-bold text-sm text-zinc-200 hover:text-aura-cyan">VILLAS & SUITES</a>
+            <a href="#experiences" onclick="toggleMobileNav()" class="block font-bold text-sm text-zinc-200 hover:text-aura-cyan">EXPERIENCES</a>
+            <a href="#amenities" onclick="toggleMobileNav()" class="block font-bold text-sm text-zinc-200 hover:text-aura-cyan">AMENITIES</a>
+            <a href="#reviews" onclick="toggleMobileNav()" class="block font-bold text-sm text-zinc-200 hover:text-aura-cyan">GUEST REVIEWS</a>
+            <button onclick="toggleMobileNav(); openBookingModal()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-aura-coral to-purple-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg">
+                Book Your Stay Now
+            </button>
+        </div>
+    </header>
+
+    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden">
+        <!-- High Contrast Visual Background -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2000&q=80" 
+                 alt="Resort Overwater Villa" 
+                 class="w-full h-full object-cover opacity-40 filter brightness-90 scale-105"
+                 onerror="this.src='https://placehold.co/1920x1080/0d0714/00f0ff?text=Aura+Cove+Tropical+Haven'">
+            <div class="absolute inset-0 bg-gradient-to-t from-aura-dark via-aura-dark/60 to-aura-dark/90"></div>
+            <!-- Glow Spheres -->
+            <div class="absolute top-1/4 left-10 w-96 h-96 bg-aura-cyan/20 rounded-full filter blur-[120px] pointer-events-none"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-aura-coral/20 rounded-full filter blur-[120px] pointer-events-none"></div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-aura-cyan/30 mb-8 animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-aura-emerald"></span>
+                <span class="text-xs font-bold uppercase tracking-widest text-aura-cyan">Exclusive Island Sanctuary 2026</span>
+            </div>
+
+            <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                Where Vibrant Luxury <br>
+                <span class="text-gradient-vibrant italic">Meets Ocean Serenity</span>
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-base sm:text-lg text-slate-300 mb-10 font-medium leading-relaxed">
+                Immerse yourself in private oceanfront infinity pools, bespoke helicopter arrivals, and Michelin-inspired dining on private white-sand coves.
+            </p>
+
+            <!-- Quick Availability Bar -->
+            <div class="glass-card p-4 sm:p-6 rounded-3xl border border-white/15 max-w-4xl mx-auto text-left shadow-2xl neon-glow-cyan">
+                <form onsubmit="handleQuickSearch(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[11px] uppercase font-extrabold tracking-wider text-aura-cyan mb-1.5">Check-In</label>
+                        <input type="date" id="quick-checkin" required class="w-full bg-aura-dark/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase font-extrabold tracking-wider text-aura-cyan mb-1.5">Check-Out</label>
+                        <input type="date" id="quick-checkout" required class="w-full bg-aura-dark/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase font-extrabold tracking-wider text-aura-cyan mb-1.5">Guests & Room</label>
+                        <select id="quick-guests" class="w-full bg-aura-dark/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                            <option value="2">2 Adults - Overwater Villa</option>
+                            <option value="4">4 Guests - Jungle Suite</option>
+                            <option value="6">6+ Guests - Presidential Penthouse</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-aura-emerald to-aura-cyan text-aura-dark font-extrabold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Check Rates
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="villas" class="py-24 bg-aura-surface/60 relative border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-extrabold text-aura-cyan uppercase tracking-widest px-3 py-1 rounded-full bg-aura-cyan/10 border border-aura-cyan/20">Private Havens</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Our Luxury Accommodations</h2>
+                <p class="text-slate-400 text-sm">Engineered for absolute privacy, featuring floor-to-ceiling sea views and personal butler service.</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-12">
+                <button onclick="filterVillas('all')" class="villa-tab active px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-aura-cyan text-aura-dark shadow-md transition-all">All Stays</button>
+                <button onclick="filterVillas('ocean')" class="villa-tab px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-aura-dark text-slate-300 border border-white/10 hover:border-aura-cyan transition-all">Oceanfront Villas</button>
+                <button onclick="filterVillas('jungle')" class="villa-tab px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-aura-dark text-slate-300 border border-white/10 hover:border-aura-cyan transition-all">Jungle Suites</button>
+                <button onclick="filterVillas('penthouse')" class="villa-tab px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-aura-dark text-slate-300 border border-white/10 hover:border-aura-cyan transition-all">Penthouses</button>
+            </div>
+
+            <!-- Villa Cards Grid -->
+            <div id="villas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dynamically Populated via JS -->
+            </div>
+        </div>
+    </section>
+
+    <section id="experiences" class="py-24 bg-aura-dark relative border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-extrabold text-aura-coral uppercase tracking-widest px-3 py-1 rounded-full bg-aura-coral/10 border border-aura-coral/20">Unforgettable Journeys</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Curated Resort Experiences</h2>
+                <p class="text-slate-400 text-sm">Elevate every moment with our tailor-made island excursions and wellness treatments.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Experience 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-aura-cyan transition-all duration-300 group">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=600&q=80" alt="Private Yacht" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <span class="absolute top-3 left-3 bg-aura-dark/80 backdrop-blur-md text-aura-cyan text-[10px] font-bold px-2.5 py-1 rounded-md border border-aura-cyan/30">BEACHFRONT</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-lg font-bold text-white mb-2 group-hover:text-aura-cyan transition-colors">Sunset Yacht Charter</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Sail into the gold hour on our 60-foot luxury catamaran with free-flowing champagne & live saxophonist.</p>
+                        <button onclick="openBookingModal('Sunset Yacht Charter')" class="text-xs font-extrabold text-aura-cyan hover:underline flex items-center gap-1">
+                            Reserve Experience <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-aura-coral transition-all duration-300 group">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80" alt="Coral Spa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <span class="absolute top-3 left-3 bg-aura-dark/80 backdrop-blur-md text-aura-coral text-[10px] font-bold px-2.5 py-1 rounded-md border border-aura-coral/30">WELLNESS</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-lg font-bold text-white mb-2 group-hover:text-aura-coral transition-colors">Overwater Spa Rituals</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Glass-floor treatment rooms featuring deep-tissue hot stone therapy and organic sea mineral body wraps.</p>
+                        <button onclick="openBookingModal('Overwater Spa Rituals')" class="text-xs font-extrabold text-aura-coral hover:underline flex items-center gap-1">
+                            Reserve Experience <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-aura-emerald transition-all duration-300 group">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80" alt="Michelin Dining" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <span class="absolute top-3 left-3 bg-aura-dark/80 backdrop-blur-md text-aura-emerald text-[10px] font-bold px-2.5 py-1 rounded-md border border-aura-emerald/30">GASTRONOMY</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-lg font-bold text-white mb-2 group-hover:text-aura-emerald transition-colors">Underwater Tasting Menu</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">7-course seafood degustation 5 meters below ocean level surrounded by tropical marine life.</p>
+                        <button onclick="openBookingModal('Underwater Tasting Menu')" class="text-xs font-extrabold text-aura-emerald hover:underline flex items-center gap-1">
+                            Reserve Experience <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Experience 4 -->
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-aura-cyan transition-all duration-300 group">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Helicopter Transfer" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <span class="absolute top-3 left-3 bg-aura-dark/80 backdrop-blur-md text-aura-cyan text-[10px] font-bold px-2.5 py-1 rounded-md border border-aura-cyan/30">ARRIVALS</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-lg font-bold text-white mb-2 group-hover:text-aura-cyan transition-colors">VIP Helicopter Shuttle</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Bypass boat transfers with direct rooftop helipad landing and sky views over the coral reefs.</p>
+                        <button onclick="openBookingModal('VIP Helicopter Shuttle')" class="text-xs font-extrabold text-aura-cyan hover:underline flex items-center gap-1">
+                            Reserve Experience <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="amenities" class="py-24 bg-aura-surface/60 relative border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-xs font-extrabold text-aura-emerald uppercase tracking-widest px-3 py-1 rounded-full bg-aura-emerald/10 border border-aura-emerald/20">World-Class Facilities</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-extrabold text-white mt-4 mb-6 leading-tight">
+                        Designed For Indulgence & Absolute Ease
+                    </h2>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-8">
+                        Every sanctuary at Aura Cove includes round-the-clock personal concierge, infinity edge pools filled with desalinated sea mineral water, and sustainable power systems.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card p-4 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i class="fa-solid fa-infinity text-aura-cyan text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">Private Infinity Pools</h4>
+                                <p class="text-[10px] text-slate-400">Temperature Controlled</p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i class="fa-solid fa-[#00E6A5] fa-concierge-bell text-aura-emerald text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">24/7 Island Butler</h4>
+                                <p class="text-[10px] text-slate-400">Personal On-Call Staff</p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i class="fa-solid fa-wifi text-aura-coral text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">Gigabit Starlink</h4>
+                                <p class="text-[10px] text-slate-400">Seamless High Speed</p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i class="fa-solid fa-utensils text-aura-cyan text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-xs text-white">4 Michelin Dining</h4>
+                                <p class="text-[10px] text-slate-400">Organic Farm Sourced</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Visual Accent -->
+                <div class="relative">
+                    <div class="rounded-3xl overflow-hidden border border-white/15 shadow-2xl relative z-10">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=80" alt="Resort Pool" class="w-full h-[450px] object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 bg-aura-dark p-6 rounded-2xl border border-aura-cyan/40 shadow-xl z-20 hidden sm:block">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-aura-cyan/20 flex items-center justify-center text-aura-cyan">
+                                <i class="fa-solid fa-award text-2xl"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-extrabold text-white">#1 Tropical Resort 2026</h5>
+                                <p class="text-xs text-slate-400">Condé Nast Traveler Gold List</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-24 bg-aura-dark relative border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs font-extrabold text-aura-cyan uppercase tracking-widest px-3 py-1 rounded-full bg-aura-cyan/10 border border-aura-cyan/20">Verified Guest Reviews</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Stories Of Paradise</h2>
+                <div class="flex items-center justify-center gap-2 text-aura-emerald text-sm">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    <span class="text-white font-bold text-xs ml-2">4.98 Out of 5.0 (320+ Reviews)</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="glass-card p-8 rounded-2xl border border-white/10 hover:border-aura-cyan transition-all">
+                    <div class="flex items-center gap-1 text-aura-coral text-xs mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-slate-300 text-xs leading-relaxed italic mb-6">
+                        "The Overwater Villa surpassed all expectations! Waking up to sharks swimming underneath our glass floor balcony while our private butler served breakfast was pure magic."
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-aura-cyan to-aura-emerald text-aura-dark font-extrabold flex items-center justify-center text-xs">
+                            VC
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-white">Victoria Cross</h5>
+                            <p class="text-[10px] text-slate-400">Stayed in Sunset Ocean Villa</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="glass-card p-8 rounded-2xl border border-white/10 hover:border-aura-coral transition-all">
+                    <div class="flex items-center gap-1 text-aura-coral text-xs mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-slate-300 text-xs leading-relaxed italic mb-6">
+                        "Helicopter transfer from the main island was seamless. The underwater dining experience felt like another planet. Unmatched attention to luxury details."
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-aura-coral to-purple-600 text-white font-extrabold flex items-center justify-center text-xs">
+                            MK
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-white">Marcus & Elena K.</h5>
+                            <p class="text-[10px] text-slate-400">Honeymoon Stay</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="glass-card p-8 rounded-2xl border border-white/10 hover:border-aura-emerald transition-all">
+                    <div class="flex items-center gap-1 text-aura-coral text-xs mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-slate-300 text-xs leading-relaxed italic mb-6">
+                        "High-speed Starlink allowed me to handle executive meetings between ocean dives. Aura Cove combines productivity with world-class relaxation."
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-aura-emerald to-aura-cyan text-aura-dark font-extrabold flex items-center justify-center text-xs">
+                            DR
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-bold text-white">Dr. Aris Thorne</h5>
+                            <p class="text-[10px] text-slate-400">Presidential Penthouse Guest</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-aura-dark border-t border-white/10 pt-16 pb-12 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="space-y-4">
+                    <span class="font-serif font-extrabold text-2xl text-white tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-water text-aura-cyan"></i> AURA COVE
+                    </span>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        An ultra-luxury boutique island sanctuary offering bespoke oceanfront villas, curated sea expeditions, and Michelin dining.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-wider mb-4 text-xs">Navigation</h4>
+                    <ul class="space-y-2.5">
+                        <li><a href="#villas" class="hover:text-aura-cyan transition-colors">Villas & Suites</a></li>
+                        <li><a href="#experiences" class="hover:text-aura-cyan transition-colors">Yacht & Spa Journeys</a></li>
+                        <li><a href="#amenities" class="hover:text-aura-cyan transition-colors">Resort Amenities</a></li>
+                        <li><a href="#reviews" class="hover:text-aura-cyan transition-colors">Guest Testimonials</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-wider mb-4 text-xs">Contact Sanctuary</h4>
+                    <p class="mb-2"><i class="fa-solid fa-location-dot text-aura-cyan mr-2"></i> Aura Cove Private Atoll, Maldives</p>
+                    <p class="mb-2"><i class="fa-solid fa-phone text-aura-cyan mr-2"></i> +1 (800) 888-AURA</p>
+                    <p><i class="fa-solid fa-envelope text-aura-cyan mr-2"></i> concierge@auracoveresort.com</p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase tracking-wider mb-4 text-xs">VIP Island Circle</h4>
+                    <p class="text-slate-400 text-xs mb-3">Subscribe for unlisted villa availability & seasonal offers.</p>
+                    <form onsubmit="handleSubscribe(event)" class="space-y-2">
+                        <input type="email" required placeholder="Enter your email address" class="w-full bg-aura-surface border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-aura-cyan text-aura-dark font-extrabold uppercase text-xs hover:brightness-110">
+                            Join Club
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>© 2026 Aura Cove Resort & Villas. All rights reserved. Demo Website.</p>
+                <div class="flex space-x-6 text-base">
+                    <a href="#" class="hover:text-aura-cyan"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-aura-cyan"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-aura-cyan"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-aura-dark/80 backdrop-blur-md">
+        <div class="glass-card border border-white/20 rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]">
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <span class="text-[10px] font-extrabold uppercase tracking-widest text-aura-cyan px-3 py-1 bg-aura-cyan/10 rounded-full border border-aura-cyan/30">Instant Booking Calculator</span>
+                <h3 class="font-serif text-2xl font-extrabold text-white mt-2">Reserve Your Sanctuary</h3>
+            </div>
+
+            <form onsubmit="handleBookingSubmit(event)" class="space-y-5">
+                <!-- Stay Dates -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Check-In Date</label>
+                        <input type="date" id="book-checkin" required onchange="calculatePrice()" class="w-full bg-aura-dark border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Check-Out Date</label>
+                        <input type="date" id="book-checkout" required onchange="calculatePrice()" class="w-full bg-aura-dark border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Villa Selection -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Select Villa Accommodation</label>
+                    <select id="book-villa" onchange="calculatePrice()" class="w-full bg-aura-dark border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white focus:border-aura-cyan focus:outline-none">
+                        <option value="1250" data-name="Sunset Oceanfront Villa">Sunset Oceanfront Villa - $1,250 / night</option>
+                        <option value="980" data-name="Royal Jungle Canopy Suite">Royal Jungle Canopy Suite - $980 / night</option>
+                        <option value="2800" data-name="Presidential Coral Penthouse">Presidential Coral Penthouse - $2,800 / night</option>
+                    </select>
+                </div>
+
+                <!-- Add-on Extras -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-2">Bespoke Add-on Experiences</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center justify-between p-3 bg-aura-dark/60 rounded-xl border border-white/10 cursor-pointer hover:border-aura-cyan">
+                            <span class="text-xs text-slate-200"><input type="checkbox" id="addon-heli" value="450" onchange="calculatePrice()" class="mr-2 accent-aura-cyan"> VIP Helicopter Island Shuttle</span>
+                            <span class="text-xs font-bold text-aura-cyan">+$450</span>
+                        </label>
+                        <label class="flex items-center justify-between p-3 bg-aura-dark/60 rounded-xl border border-white/10 cursor-pointer hover:border-aura-coral">
+                            <span class="text-xs text-slate-200"><input type="checkbox" id="addon-chef" value="350" onchange="calculatePrice()" class="mr-2 accent-aura-coral"> Personal Michelin Chef (1 Evening)</span>
+                            <span class="text-xs font-bold text-aura-coral">+$350</span>
+                        </label>
+                        <label class="flex items-center justify-between p-3 bg-aura-dark/60 rounded-xl border border-white/10 cursor-pointer hover:border-aura-emerald">
+                            <span class="text-xs text-slate-200"><input type="checkbox" id="addon-spa" value="280" onchange="calculatePrice()" class="mr-2 accent-aura-emerald"> Couples Spa & Champagne Ritual</span>
+                            <span class="text-xs font-bold text-aura-emerald">+$280</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Live Price Calculation Breakdown -->
+                <div class="p-4 bg-aura-dark rounded-xl border border-aura-cyan/30 space-y-2 text-xs">
+                    <div class="flex justify-between text-slate-400">
+                        <span>Stay Duration:</span>
+                        <span id="calc-nights" class="text-white font-bold">1 Night(s)</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>Accommodation Rate:</span>
+                        <span id="calc-room-cost" class="text-white font-bold">$1,250.00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>Selected Experiences:</span>
+                        <span id="calc-addons" class="text-white font-bold">$0.00</span>
+                    </div>
+                    <div class="pt-2 border-t border-white/10 flex justify-between items-center text-sm font-extrabold">
+                        <span class="text-white">Estimated Total:</span>
+                        <span id="calc-total" class="text-aura-cyan text-lg">$1,250.00</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-aura-coral via-purple-600 to-aura-cyan text-white font-extrabold uppercase text-xs tracking-wider hover:brightness-110 shadow-lg">
+                    Confirm & Request Availability
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Villa Database
+        const villas = [
+            {
+                id: 1,
+                name: "Sunset Oceanfront Overwater Villa",
+                category: "ocean",
+                price: 1250,
+                guests: "2 Adults",
+                size: "180 m²",
+                image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+                features: ["Private Glass Floor", "Infinity Dip Pool", "Butler Service"]
+            },
+            {
+                id: 2,
+                name: "Royal Jungle Canopy Tree Suite",
+                category: "jungle",
+                price: 980,
+                guests: "2 - 4 Guests",
+                size: "220 m²",
+                image: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?auto=format&fit=crop&w=800&q=80",
+                features: ["Open-Air Bath", "Panoramas", "Private Plunge Pool"]
+            },
+            {
+                id: 3,
+                name: "Presidential Coral Beach Penthouse",
+                category: "penthouse",
+                price: 2800,
+                guests: "Up to 6 Guests",
+                size: "450 m²",
+                image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+                features: ["Rooftop Helipad", "Private Beach", "Dedicated Chef"]
+            }
+        ];
+
+        // Render Villa Cards
+        function renderVillas(filter = 'all') {
+            const grid = document.getElementById('villas-grid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? villas : villas.filter(v => v.category === filter);
+
+            filtered.forEach(v => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-3xl overflow-hidden border border-white/10 hover:border-aura-cyan transition-all duration-300 flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="${v.image}" alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <span class="absolute top-4 right-4 bg-aura-dark/90 backdrop-blur-md text-aura-cyan font-extrabold text-sm px-3.5 py-1 rounded-full border border-aura-cyan/30">
+                                $${v.price} <span class="text-[10px] font-normal text-slate-300">/ night</span>
+                            </span>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 text-slate-400 text-xs mb-3">
+                                <span><i class="fa-solid fa-user-group text-aura-cyan mr-1"></i> ${v.guests}</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-vector-square text-aura-cyan mr-1"></i> ${v.size}</span>
+                            </div>
+                            <h3 class="font-serif text-xl font-bold text-white mb-3 group-hover:text-aura-cyan transition-colors">${v.name}</h3>
+                            <div class="flex flex-wrap gap-1.5 mb-6">
+                                ${v.features.map(f => `<span class="text-[10px] bg-aura-dark/80 text-slate-300 border border-white/10 px-2.5 py-1 rounded-md">${f}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <button onclick="openBookingModal('${v.name}')" class="w-full py-3 rounded-xl bg-aura-dark border border-aura-cyan/40 hover:bg-aura-cyan hover:text-aura-dark text-aura-cyan font-extrabold text-xs uppercase tracking-wider transition-all shadow-md">
+                            Book Villa Now
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Villa Filter Tabs
+        function filterVillas(cat) {
+            document.querySelectorAll('.villa-tab').forEach(b => {
+                b.classList.remove('bg-aura-cyan', 'text-aura-dark');
+                b.classList.add('bg-aura-dark', 'text-slate-300');
+            });
+            event.target.classList.remove('bg-aura-dark', 'text-slate-300');
+            event.target.classList.add('bg-aura-cyan', 'text-aura-dark');
+            renderVillas(cat);
+        }
+
+        // Price Calculation Logic
+        function calculatePrice() {
+            const checkin = new Date(document.getElementById('book-checkin').value);
+            const checkout = new Date(document.getElementById('book-checkout').value);
+            const villaSelect = document.getElementById('book-villa');
+            const roomRate = parseFloat(villaSelect.value);
+
+            let nights = 1;
+            if (checkin && checkout && checkout > checkin) {
+                const diffTime = Math.abs(checkout - checkin);
+                nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+
+            let addonsTotal = 0;
+            if (document.getElementById('addon-heli').checked) addonsTotal += 450;
+            if (document.getElementById('addon-chef').checked) addonsTotal += 350;
+            if (document.getElementById('addon-spa').checked) addonsTotal += 280;
+
+            const roomCost = roomRate * nights;
+            const grandTotal = roomCost + addonsTotal;
+
+            document.getElementById('calc-nights').innerText = `${nights} Night(s)`;
+            document.getElementById('calc-room-cost').innerText = `$${roomCost.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('calc-addons').innerText = `$${addonsTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById('calc-total').innerText = `$${grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        }
+
+        // Modal Controls
+        function openBookingModal(presetVilla = '') {
+            const modal = document.getElementById('booking-modal');
+            modal.classList.remove('hidden');
+
+            // Set Default Dates (Today & Tomorrow)
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 2);
+
+            document.getElementById('book-checkin').value = today.toISOString().split('T')[0];
+            document.getElementById('book-checkout').value = tomorrow.toISOString().split('T')[0];
+
+            if (presetVilla) {
+                const select = document.getElementById('book-villa');
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].text.includes(presetVilla)) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            calculatePrice();
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+            alert("✨ Booking Inquiry Submitted! Our VIP Concierge team will contact you within 15 minutes to confirm details.");
+            closeBookingModal();
+        }
+
+        function handleQuickSearch(e) {
+            e.preventDefault();
+            openBookingModal();
+        }
+
+        function handleSubscribe(e) {
+            e.preventDefault();
+            alert("Welcome to the VIP Island Circle! You will receive exclusive preview links.");
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            renderVillas('all');
+            
+            // Set Quick Search Default Dates
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(nextWeek.getDate() + 3);
+
+            if(document.getElementById('quick-checkin')) {
+                document.getElementById('quick-checkin').value = today.toISOString().split('T')[0];
+                document.getElementById('quick-checkout').value = nextWeek.toISOString().split('T')[0];
+            }
+        }
+    </script>
+</body>
+</html>
