@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nifty 50 SWP Calculator</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1d1d1b;--mu:#6b6a64;--bd:#dedcd4;--ac:#1d5fd1;--ok:#17803d;--warn:#b26a00;--bad:#c62828;--okbg:#e5f4ea;--warnbg:#fdf0d9;--badbg:#fbe6e6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#212120;--tx:#ecebe6;--mu:#a09f98;--bd:#383835;--ac:#6ea2f5;--ok:#5fd08a;--warn:#f0b255;--bad:#ff8a80;--okbg:#17301f;--warnbg:#3a2d12;--badbg:#3a1a1a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161615;--card:#212120;--tx:#ecebe6;--mu:#a09f98;--bd:#383835;--ac:#6ea2f5;--ok:#5fd08a;--warn:#f0b255;--bad:#ff8a80;--okbg:#17301f;--warnbg:#3a2d12;--badbg:#3a1a1a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.4rem;margin:0 0 4px}h2{font-size:1.05rem;margin:0 0 10px}
+.sub{color:var(--mu);font-size:.9rem;margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+label{display:block;font-size:.85rem;font-weight:600}
+.hint{display:block;font-weight:400;color:var(--mu);font-size:.76rem;margin-top:2px}
+input[type=number]{width:100%;margin-top:4px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font-size:1rem}
+.chk{display:flex;gap:8px;align-items:center}.chk input{width:auto;margin:0}
+.verdict{padding:12px 14px;border-radius:10px;font-weight:600;margin-bottom:14px}
+.v-ok{background:var(--okbg);color:var(--ok)}.v-warn{background:var(--warnbg);color:var(--warn)}.v-bad{background:var(--badbg);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.stat{border:1px solid var(--bd);border-radius:10px;padding:10px}
+.stat b{display:block;font-size:1.15rem}.stat span{font-size:.76rem;color:var(--mu)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.84rem;min-width:520px}
+th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--bd)}th:first-child,td:first-child{text-align:left}
+th{color:var(--mu);font-weight:600}
+tr.hl td{background:var(--okbg)}
+svg{width:100%;height:auto;display:block}
+.notes li{margin-bottom:6px;font-size:.86rem}
+.small{font-size:.8rem;color:var(--mu)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Nifty 50 SWP Calculator</h1>
+<p class="sub">Lump-sum invested in a Nifty 50 index fund, with a fixed monthly withdrawal (Systematic Withdrawal Plan). Change any value; everything updates instantly. All amounts in ₹.</p>
+
+<div class="card">
+<h2>1. Your inputs</h2>
+<div class="grid">
+<label>Initial investment (₹)<input type="number" id="corpus" value="25000000" step="100000"><span class="hint">₹2.5 crore = 2,50,00,000</span></label>
+<label>Monthly withdrawal (₹)<input type="number" id="wd" value="200000" step="5000"><span class="hint">Taken at the end of each month, after that month's growth</span></label>
+<label>Duration (years)<input type="number" id="years" value="20" min="1" max="50"></label>
+<label>Expected index return (% / yr, pre-tax)<input type="number" id="ret" value="12" step="0.5"><span class="hint">Nifty 50 TRI 20-yr history is roughly 11–12.5%, not guaranteed</span></label>
+<label>Fund expense ratio (% / yr)<input type="number" id="er" value="0.2" step="0.05"><span class="hint">Deducted from the return; typical index funds 0.1–0.5%</span></label>
+<label>Inflation (% / yr)<input type="number" id="inf" value="5" step="0.5"><span class="hint">Used only to show today's-money value</span></label>
+<label>Yearly increase in withdrawal (%)<input type="number" id="step" value="0" step="1"><span class="hint">0 = fixed ₹ amount. 5 = raise it 5% each year to keep up with inflation</span></label>
+<label>LTCG tax rate (%)<input type="number" id="tax" value="12.5" step="0.5"><span class="hint">Equity funds held over 1 year; verify current law</span></label>
+<label>Tax-free gains per year (₹)<input type="number" id="ex" value="125000" step="5000"><span class="hint">Annual LTCG exemption, currently ₹1.25 lakh; verify</span></label>
+<label class="chk"><input type="checkbox" id="taxon" checked> Include capital gains tax</label>
+</div>
+<h2 style="margin-top:18px">Stress test: a bad start</h2>
+<div class="grid">
+<label>Return in the first N years (% / yr)<input type="number" id="sret" value="12" step="1"><span class="hint">Try 0 or -5 to see a weak start. Equal to the expected return = no stress</span></label>
+<label>Number of bad years (N)<input type="number" id="sn" value="0" min="0" max="20"><span class="hint">0 = no stress test. After these years, the expected return applies</span></label>
+</div>
+</div>
+
+<div class="card">
+<h2>2. Result</h2>
+<div id="verdict" class="verdict"></div>
+<div class="stats" id="stats"></div>
+</div>
+
+<div class="card">
+<h2>3. Break-even return</h2>
+<p id="be" style="margin:0"></p>
+<p class="small" style="margin-bottom:0">Break-even = the lowest steady yearly index return (before expense ratio and tax) at which the corpus after the chosen years is at least the amount you started with, using your other inputs.</p>
+</div>
+
+<div class="card">
+<h2>4. Corpus over time</h2>
+<div id="chart"></div>
+<p class="small" style="margin-bottom:0"><span style="color:var(--ac)">■</span> Nominal ₹ &nbsp; <span style="color:var(--warn)">■</span> In today's money (inflation-adjusted) &nbsp; <span style="color:var(--mu)">- -</span> Starting amount</p>
+</div>
+
+<div class="card">
+<h2>5. What if returns differ? (steady return each year)</h2>
+<div class="scroll"><table id="scen"></table></div>
+<p class="small" style="margin-bottom:0">Uses all your other inputs (withdrawal, tax, expense ratio, stress test). Highlighted row = closest to your chosen return.</p>
+</div>
+
+<div class="card">
+<h2>6. Year-by-year</h2>
+<div class="scroll"><table id="yr"></table></div>
+</div>
+
+<div class="card notes">
+<h2>How it is calculated, and its limits</h2>
+<ul>
+<li>Each month: corpus grows at the net monthly rate, then the withdrawal is taken. Net return = index return − expense ratio.</li>
+<li>Tax: for each withdrawal, the share that is a gain (current value minus amount invested) is tracked. At year end, tax = rate × (gains that year − exemption), paid out of the corpus. This is a simplified average-cost model, not a tax filing.</li>
+<li>Real, volatile markets do not return a steady figure. A bad early patch can drain the corpus even if the long-run average is fine, so use the stress test.</li>
+<li>Not included: exit loads, STT, surcharge/cess, other income, changes in tax law, or your actual fund's tracking error.</li>
+<li>This is a planning illustration, not financial or tax advice. Please consult a SEBI-registered investment advisor or CA.</li>
+</ul>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const num=id=>parseFloat($(id).value)||0;
+function inr(x){x=Math.round(x);const s=x<0?"-":"";x=Math.abs(x);
+ if(x>=1e7)return s+"₹"+(x/1e7).toFixed(2)+" cr";
+ if(x>=1e5)return s+"₹"+(x/1e5).toFixed(2)+" lakh";
+ return s+"₹"+x.toLocaleString("en-IN")}
+function full(x){return "₹"+Math.round(x).toLocaleString("en-IN")}
+function P(){return{c:num("corpus"),w:num("wd"),y:Math.max(1,Math.round(num("years"))),r:num("ret")/100,er:num("er")/100,inf:num("inf")/100,st:num("step")/100,t:num("tax")/100,ex:num("ex"),ton:$("taxon").checked,sr:num("sret")/100,sn:Math.round(num("sn"))}}
+function sim(p,steady){
+ let v=p.c,cost=p.c,w=p.w,rows=[],dep=null,tw=0,tt=0;
+ for(let y=0;y<p.y;y++){
+  const ann=(steady!==undefined?(y<p.sn?p.sr:steady):(y<p.sn?p.sr:p.r));
+  const net=Math.max(-0.99,ann-p.er),mr=Math.pow(1+net,1/12)-1;
+  const start=v;let gains=0,wy=0;
+  for(let m=0;m<12;m++){
+   if(v<=0)break;
+   v*=1+mr;
+   const take=Math.min(w,v);
+   const gf=v>0?Math.max(0,(v-cost)/v):0;
+   gains+=take*gf;cost-=take*(1-gf);v-=take;wy+=take;
+   if(v<=0.5&&dep===null){dep=y*12+m+1;v=0}
+  }
+  let tax=0;
+  if(p.ton&&v>0){tax=Math.max(0,gains-p.ex)*p.t;tax=Math.min(tax,v);v-=tax;cost=Math.min(cost,v)}
+  tw+=wy;tt+=tax;
+  rows.push({y:y+1,start,ret:ann,w:wy,tax,end:v,real:v/Math.pow(1+p.inf,y+1)});
+  w*=1+p.st;
+  if(v<=0&&dep===null)dep=(y+1)*12;
+ }
+ return{rows,end:v,dep,tw,tt}
+}
+function breakEven(p){
+ const f=r=>{const s=sim(p,r);return s.dep===null&&s.end>=p.c-1};
+ if(!f(0.5))return null;
+ let lo=0,hi=0.5;for(let i=0;i<40;i++){const m=(lo+hi)/2;f(m)?hi=m:lo=m}return hi}
+function chart(rows,p){
+ const W=760,H=300,L=62,B=28,T=10,R=10,n=rows.length;
+ const pts=[{y:0,n:p.c,r:p.c}].concat(rows.map(r=>({y:r.y,n:r.end,r:r.real})));
+ const mx=Math.max(p.c,...pts.map(a=>a.n))*1.05;
+ const X=y=>L+(W-L-R)*y/n,Y=v=>T+(H-T-B)*(1-v/mx);
+ let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Corpus over time">`;
+ for(let i=0;i<=4;i++){const v=mx*i/4,y=Y(v);s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--bd)"/><text x="${L-6}" y="${y+4}" text-anchor="end" font-size="11" fill="var(--mu)">${inr(v)}</text>`}
+ const step=Math.max(1,Math.ceil(n/10));
+ for(let y=0;y<=n;y+=step)s+=`<text x="${X(y)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--mu)">Y${y}</text>`;
+ s+=`<line x1="${L}" x2="${W-R}" y1="${Y(p.c)}" y2="${Y(p.c)}" stroke="var(--mu)" stroke-dasharray="5 4"/>`;
+ const line=(k,c)=>`<polyline fill="none" stroke="${c}" stroke-width="2.5" points="${pts.map(a=>X(a.y)+","+Y(a[k])).join(" ")}"/>`;
+ s+=line("r","var(--warn)")+line("n","var(--ac)")+"</svg>";
+ $("chart").innerHTML=s}
+function run(){
+ const p=P(),s=sim(p),last=s.rows[s.rows.length-1];
+ const v=$("verdict");
+ if(s.dep!==null){v.className="verdict v-bad";v.textContent=`Corpus runs out after about ${(s.dep/12).toFixed(1)} years (month ${s.dep}). You cannot sustain this withdrawal for ${p.y} years under these assumptions.`}
+ else if(s.end>=p.c-1){v.className="verdict v-ok";v.textContent=`Corpus survives and ends at ${inr(s.end)}, which is at or above the ${inr(p.c)} you started with (in nominal rupees).`}
+ else{v.className="verdict v-warn";v.textContent=`Corpus survives ${p.y} years but ends at ${inr(s.end)}, below the ${inr(p.c)} you started with.`}
+ const wr=p.w*12/p.c*100;
+ const st=[["Starting corpus",inr(p.c),full(p.c)],["Withdrawal rate (year 1)",wr.toFixed(1)+"% / yr",`${full(p.w*12)} per year`],["Corpus at end (nominal)",inr(s.end),full(s.end)],["Same amount in today's money",inr(last.real),`after ${p.inf*100}% yearly inflation`],["Total withdrawn",inr(s.tw),"before tax already paid from corpus"],["Total tax paid",inr(s.tt),p.ton?"from the corpus":"tax switched off"],["Net return used",((p.r-p.er)*100).toFixed(2)+"% / yr","index return − expense ratio"],["Money lasts",s.dep===null?`Full ${p.y} yrs`:(s.dep/12).toFixed(1)+" yrs",""]];
+ $("stats").innerHTML=st.map(a=>`<div class="stat"><span>${a[0]}</span><b>${a[1]}</b><span>${a[2]}</span></div>`).join("");
+ const be=breakEven(p);
+ $("be").innerHTML=be===null?"No steady return up to 50% a year keeps the corpus intact with these inputs.":`You need about <b>${(be*100).toFixed(2)}% a year</b> from the index, every year, to finish with at least ${inr(p.c)}. Your assumed return is <b>${(p.r*100).toFixed(2)}%</b>${p.r>=be?", which clears it":", which falls short"}.`;
+ chart(s.rows,p);
+ let h="<tr><th>Index return</th><th>Corpus at end</th><th>In today's money</th><th>Lasts</th></tr>";
+ let near=null,d=1e9;[6,7,8,9,10,11,12,13,14,15].forEach(r=>{if(Math.abs(r/100-p.r)<d){d=Math.abs(r/100-p.r);near=r}});
+ [6,7,8,9,10,11,12,13,14,15].forEach(r=>{const q=sim(p,r/100),l=q.rows[q.rows.length-1];
+  h+=`<tr${r===near?' class="hl"':""}><td>${r}%</td><td>${q.dep===null?inr(q.end):"₹0"}</td><td>${q.dep===null?inr(l.real):"₹0"}</td><td>${q.dep===null?"Full "+p.y+" yrs":"Runs out in "+(q.dep/12).toFixed(1)+" yrs"}</td></tr>`});
+ $("scen").innerHTML=h;
+ let t="<tr><th>Year</th><th>Starting</th><th>Return</th><th>Withdrawn</th><th>Tax</th><th>Ending</th><th>Today's money</th></tr>";
+ s.rows.forEach(r=>t+=`<tr><td>${r.y}</td><td>${inr(r.start)}</td><td>${(r.ret*100).toFixed(1)}%</td><td>${inr(r.w)}</td><td>${inr(r.tax)}</td><td>${inr(r.end)}</td><td>${inr(r.real)}</td></tr>`);
+ $("yr").innerHTML=t}
+document.querySelectorAll("input").forEach(e=>e.addEventListener("input",run));
+run();
+</script>
+</body>
+</html>
