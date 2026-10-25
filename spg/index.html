@@ -250,10 +250,10 @@ function show(sel,c,name){
 const GC='https://fungames.goatcounter.com/count';
 function track(path,title,ev){
  try{
-  if(location.protocol!=='https:'||navigator.doNotTrack==='1')return;
+  if(location.protocol!=='https:')return;
   const q=new URLSearchParams({p:path,t:title||path,rnd:Math.random().toString(36).slice(2)});
   if(ev)q.set('e','true');else if(document.referrer)q.set('r',document.referrer.slice(0,200));
-  new Image().src=GC+'?'+q;
+  const im=new Image();(window.gcRefs=window.gcRefs||[]).push(im);im.src=GC+'?'+q;
  }catch(e){}
 }
 /* ---------- Puzzle builder (same code + same seed = same puzzle, so a link can rebuild it) ---------- */
