@@ -18,12 +18,16 @@ button{font:inherit;padding:9px 16px;border:0;border-radius:8px;background:var(-
 button:hover{opacity:.9}
 .out canvas{max-width:100%;height:auto;border:1px solid var(--bd);border-radius:8px;display:block;margin-top:12px}
 .out button{margin-right:8px}
+[hidden]{display:none!important}
+.pl{display:flex;flex-wrap:wrap;gap:12px}
+.pl canvas{flex:1 1 300px;min-width:0;max-width:100%;height:auto;border:1px solid var(--bd);border-radius:8px;touch-action:manipulation;cursor:crosshair;background:#fff}
 #msg{color:var(--mut);margin:6px 0 0}
 </style></head>
 <body><main>
 <h1>Spot the 3 Differences – Cartoon Scenes</h1>
-<p class="s">All artwork is drawn by this page’s own code. Nothing is downloaded, no API key, free to host anywhere.</p>
+<p class="s">All artwork (mountains, trees, clouds, birds and more) is drawn by this page’s own code. Nothing is downloaded, no API key, free to host anywhere.</p>
 
+<div id="make">
 <section>
 <h2>1. Generate a new puzzle + answer</h2>
 <p class="s">Each press builds a fresh version of the scene (random colours and props), changes 3 things, and circles them in the answer image.</p>
@@ -33,6 +37,7 @@ button:hover{opacity:.9}
  <button id="gen">Generate puzzle</button>
 </div>
 <p id="gmsg" class="s"></p>
+<div id="shr" hidden><div class="row"><label style="flex:1;min-width:220px">Share link<input id="lnk" readonly></label><button id="cp">Share / copy link</button><button id="pl">Play it now</button></div><p class="s">Send friends only this link, not the answer image. The link must be opened from where you host this file online.</p></div>
 <div class="out" id="pz"></div><div class="out" id="an"></div>
 </section>
 
@@ -49,10 +54,21 @@ button:hover{opacity:.9}
 <p id="msg"></p>
 <div class="out" id="pz2"></div><div class="out" id="an2"></div>
 </section>
+</div>
+<section id="play" hidden>
+<h2 id="ptitle">Spot the differences</h2>
+<p class="s">Tap or click either picture to drop a red circle where you think a difference is (up to 3). Tap a circle again to remove it. Press Check when you are done.</p>
+<div class="row"><b>Time <span id="tm">0:00</span></b><b>Circles <span id="cnt2">0/3</span></b></div>
+<div class="pl"><canvas id="cl" width="640" height="480"></canvas><canvas id="cr" width="640" height="480"></canvas></div>
+<p id="pmsg" class="s"></p>
+<div class="row"><button id="un">Undo</button><button id="ca">Clear</button><button id="ck">Check my answers</button></div>
+<div id="res"></div>
+</section>
 </main>
 <script>
 const $=s=>document.querySelector(s);
-const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
+let rng=Math.random;const mul=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const rnd=(a,b)=>a+rng()*(b-a),pick=a=>a[Math.floor(rng()*a.length)];
 const W=640,H=480;
 /* ---- drawing helpers ---- */
 const E=(g,x,y,a,b,f)=>{g.beginPath();g.ellipse(x,y,a,b,0,0,7);g.fillStyle=f;g.fill()};
@@ -64,13 +80,31 @@ const SUN=(g,k)=>{for(let i=0;i<8;i++){g.save();g.rotate(i*.785);R(g,-3,-34,6,12
 /* item = changeable object: x,y centre, r radius, h hue range (null = fixed colour), f drawing fn */
 const I=(x,y,r,h,f)=>({x,y,r,h,f});
 const ANY=[0,360];
+const SK=(g,a,b,y=400)=>{const q=g.createLinearGradient(0,0,0,y);q.addColorStop(0,a);q.addColorStop(1,b);g.fillStyle=q;g.fillRect(0,0,W,H)};
+const CB=(g,x,y,s,c='#fff')=>{g.save();g.translate(x,y);g.scale(s,s);g.globalAlpha=.92;[[-24,6,17],[-6,-6,22],[16,-2,19],[34,7,14],[0,8,24]].forEach(([a,b,r])=>E(g,a,b,r,r*.8,c));g.restore()};
+const HL=(g,y,a,p,c,ph=0)=>{g.beginPath();g.moveTo(0,H);for(let x=0;x<=W;x+=8)g.lineTo(x,y+a*Math.sin(x/p+ph));g.lineTo(W,H);g.closePath();g.fillStyle=c;g.fill()};
+const TR=(g,x,y,s,c)=>{R(g,x-2*s,y-8*s,4*s,10*s,'#6b4a2b');E(g,x,y-16*s,10*s,11*s,c)};
+const PN=(g,x,y,s,c)=>{R(g,x-1.5*s,y-4*s,3*s,6*s,'#5a3d22');P(g,[[x,y-30*s],[x+10*s,y-4*s],[x-10*s,y-4*s]],c);P(g,[[x,y-40*s],[x+8*s,y-16*s],[x-8*s,y-16*s]],c)};
+const VB=(g,x,y,s)=>L(g,[[x-7*s,y],[x-3*s,y-4*s],[x,y],[x+3*s,y-4*s],[x+7*s,y]],'#333',2);
+const MT=(g,x,y,w,h,c,sn)=>{P(g,[[x-w,y],[x,y-h],[x+w,y]],c);if(sn)P(g,[[x,y-h],[x+w*.28,y-h*.7],[x+w*.1,y-h*.76],[x,y-h*.64],[x-w*.12,y-h*.76],[x-w*.28,y-h*.7]],'#fff')};
 
 /* ---- Scene 1: cat in the kitchen ---- */
 function bgCat(g){
- R(g,0,0,640,330,'#f7e6c8');R(g,0,330,640,150,'#c99a6b');
- for(let i=1;i<8;i++)R(g,i*90,336,3,144,'#b58558');R(g,0,326,640,10,'#a87a50');
+ R(g,0,0,640,330,'#f7e6c8');
+ g.globalAlpha=.35;for(let x=0;x<640;x+=40)R(g,x,0,18,326,'#efd3a6');g.globalAlpha=1;
+ R(g,0,0,640,14,'#e6c79a');
+ R(g,0,165,205,75,'#e9f2f5');for(let x=0;x<205;x+=25)R(g,x,165,2,75,'#c9dbe0');for(let y=165;y<240;y+=25)R(g,0,y,205,2,'#c9dbe0');
+ R(g,0,28,85,72,'#8c6a49');R(g,41,28,3,72,'#6e5236');E(g,36,70,3,6,'#e8c35a');E(g,49,70,3,6,'#e8c35a');
+ for(let r=0;r<3;r++)for(let c=0;c<11;c++)R(g,c*60,330+r*50,60,50,(r+c)%2?'#cfa273':'#c19163');
+ R(g,0,326,640,10,'#a87a50');
  R(g,0,245,200,135,'#7b5a3c');R(g,0,238,205,12,'#e8e8e8');R(g,15,265,80,100,'#8c6a49');R(g,105,265,80,100,'#8c6a49');
- R(g,436,81,158,140,'#fff');R(g,444,89,66,124,'#8fd0f0');R(g,518,89,68,124,'#8fd0f0');
+ E(g,84,300,3,6,'#e8c35a');E(g,116,300,3,6,'#e8c35a');
+ R(g,430,213,170,10,'#e9dcc8');
+ g.save();g.beginPath();g.rect(444,89,142,124);g.clip();
+ SK(g,'#7fcbf0','#d7f1ff',215);MT(g,540,185,70,50,'#9fb3c8',1);HL(g,178,5,20,'#8fd06a');
+ TR(g,458,190,.9,'#4f9a4a');TR(g,566,186,1.1,'#3f8a45');TR(g,582,190,.8,'#5aa05a');CB(g,470,112,.45);CB(g,556,104,.4);g.restore();
+ R(g,436,81,158,8,'#fff');R(g,436,213,158,8,'#fff');R(g,436,81,8,140,'#fff');R(g,586,81,8,140,'#fff');R(g,511,89,8,124,'#fff');
+ E(g,330,445,175,30,'#b5533c');E(g,330,445,145,22,'#d9835f');E(g,330,445,100,14,'#b5533c');
  L(g,[[385,410],[440,400],[445,350],[412,330]],'#e8903a',14);
  E(g,330,398,62,46,'#e8903a');E(g,300,436,18,10,'#f5b36b');E(g,360,436,18,10,'#f5b36b');
  for(const x of[300,330,360])L(g,[[x,372],[x+4,392]],'#c46f1d',5);
@@ -99,9 +133,18 @@ const catItems=[
 
 /* ---- Scene 2: farmer in his field ---- */
 function bgFarm(g){
- const q=g.createLinearGradient(0,0,0,330);q.addColorStop(0,'#7ec8f5');q.addColorStop(1,'#d8f0ff');g.fillStyle=q;g.fillRect(0,0,640,480);
- E(g,150,340,340,90,'#8fd06a');E(g,520,345,300,80,'#79c257');R(g,0,340,640,140,'#9bd66f');
+ SK(g,'#5fb8f5','#e0f4ff',340);E(g,560,70,70,70,'rgba(255,240,150,.35)');
+ [[80,60,1],[330,45,.8],[520,150,.7],[40,170,.6],[610,60,.7],[150,130,.6],[440,200,.5]].forEach(([x,y,s])=>CB(g,x,y,s));
+ [[140,50],[165,62],[120,66],[480,30],[500,40],[470,44]].forEach(([x,y])=>VB(g,x,y,1));
+ MT(g,90,305,150,120,'#8fa6c4',1);MT(g,250,305,140,90,'#a3b7d1',1);MT(g,430,305,170,130,'#8fa6c4',1);MT(g,590,305,120,80,'#a3b7d1',1);
+ HL(g,303,8,60,'#8dc87a');
+ for(let x=10;x<640;x+=26)TR(g,x,312+7*Math.sin(x/60),.8,x%52?'#5aa05a':'#4a8f4f');
+ P(g,[[490,305],[502,305],[499,262],[493,262]],'#e9e1d0');
+ [[480,248],[510,276],[509,248],[481,276]].forEach(([a,b])=>L(g,[[495,262],[a,b]],'#777',3));
+ HL(g,336,8,55,'#9bd66f',1);R(g,0,350,640,130,'#9bd66f');
  for(let i=0;i<7;i++)L(g,[[20+i*110,480],[230+i*30,352]],'#6fb24a',4);
+ for(let i=0;i<45;i++)E(g,(i*97)%640,365+(i*53)%110,2.5,2.5,i%2?'#fff':'#ffd23f');
+ for(let x=200;x<=640;x+=40)R(g,x,338,5,28,'#fff');R(g,200,344,440,4,'#fff');R(g,200,356,440,4,'#fff');
  R(g,30,205,150,125,'#c0392b');P(g,[[18,210],[105,150],[192,210]],'#8e2a20');R(g,75,255,60,75,'#f0e0c0');
  L(g,[[75,255],[135,330]],'#c0392b',4);L(g,[[135,255],[75,330]],'#c0392b',4);E(g,105,185,10,10,'#f0e0c0');
  R(g,308,311,44,40,'#2f5fa8');R(g,311,349,15,46,'#2f5fa8');R(g,334,349,15,46,'#2f5fa8');
@@ -127,10 +170,17 @@ const farmItems=[
 
 /* ---- Scene 3: aeroplane in the sky ---- */
 function bgPlane(g){
- const q=g.createLinearGradient(0,0,0,400);q.addColorStop(0,'#4aa8f0');q.addColorStop(1,'#cfeeff');g.fillStyle=q;g.fillRect(0,0,640,480);
- P(g,[[0,400],[110,305],[220,400]],'#7a8a99');P(g,[[110,305],[96,326],[110,320],[124,328]],'#fff');
- P(g,[[170,400],[300,320],[430,400]],'#8d9cab');P(g,[[300,320],[286,340],[300,334],[314,342]],'#fff');
- R(g,0,400,640,80,'#2f8fd0');E(g,75,410,60,14,'#d9c28a');
+ SK(g,'#3a9ae8','#d6f1ff',400);E(g,90,80,80,80,'rgba(255,245,170,.3)');
+ g.save();g.globalAlpha=.4;['#e33','#f93','#fd3','#4c4','#38f','#85c'].forEach((c,i)=>{g.beginPath();g.arc(470,410,150-i*7,Math.PI,2*Math.PI);g.strokeStyle=c;g.lineWidth=7;g.stroke()});g.restore();
+ [[40,40,1],[280,36,.8],[400,70,.7],[610,40,.7],[30,160,.7],[250,150,.6],[360,372,.9],[260,390,.8],[620,250,.6],[20,300,.6]].forEach(([x,y,s])=>CB(g,x,y,s));
+ [[230,80],[250,90],[210,92],[430,200],[445,210]].forEach(([x,y])=>VB(g,x,y,1));
+ MT(g,70,400,150,110,'#7a8a99',1);MT(g,250,400,150,90,'#8d9cab',1);MT(g,400,400,130,70,'#9fb0c0',1);MT(g,590,400,130,95,'#7a8a99',1);
+ for(let x=150;x<640;x+=20)PN(g,x,404,.7,'#3f7f4f');
+ R(g,0,400,640,80,'#2f8fd0');
+ for(let y=412;y<480;y+=14)for(let x=(y/14%2)*20;x<640;x+=40)L(g,[[x,y],[x+10,y-4],[x+20,y]],'rgba(255,255,255,.5)',2);
+ E(g,75,410,60,14,'#d9c28a');E(g,570,418,50,12,'#e4cf98');
+ L(g,[[570,418],[574,392],[580,380]],'#7a4a21',4);
+ [[-22,6],[-12,-8],[22,6],[12,-8]].forEach(([a,b])=>L(g,[[580,380],[580+a,380+b]],'#2e9a4a',4));
  P(g,[[435,245],[492,250],[492,264],[435,258]],'#d3d8df');E(g,320,245,150,34,'#f4f4f4');
  P(g,[[290,252],[350,252],[392,322],[332,322]],'#d3d8df');E(g,178,246,24,22,'#cfd3d8');E(g,203,236,13,9,'#7fb6e0');
 }
@@ -174,8 +224,8 @@ function modify(o,lv){
  const k=ks.length?pick(ks):'grow';
  if(k=='remove')return null;
  const m={...o};
- if(k=='color')m.h=(o.h+rnd(...D.hs)*(Math.random()<.5?1:-1)+360)%360;
- if(k=='grow')m.s=Math.random()<.5?D.gr:1/D.gr;
+ if(k=='color')m.h=(o.h+rnd(...D.hs)*(rng()<.5?1:-1)+360)%360;
+ if(k=='grow')m.s=rng()<.5?D.gr:1/D.gr;
  if(k=='move'){const a=rnd(0,6.28);m.x=Math.min(W-30,Math.max(30,o.x+Math.cos(a)*D.mv));m.y=Math.min(H-30,Math.max(30,o.y+Math.sin(a)*D.mv))}
  return m;
 }
@@ -206,27 +256,41 @@ function show(sel,c,name){
  a.onclick=()=>{const l=document.createElement('a');l.download=name+'.png';l.href=c.toDataURL('image/png');l.click()};
  b.appendChild(a);
 }
-/* ---------- Tool 1: generator ---------- */
-$('#gen').onclick=()=>{
- const lv=$('#lv').value,v=$('#sc').value,sc=v=='r'?pick(SC):SC[+v];
+/* ---------- Puzzle builder (same code + same seed = same puzzle, so a link can rebuild it) ---------- */
+function makePuzzle(si,lv,seed){
+ const sc=SC[si];rng=mul(seed);
  for(let a=0;a<80;a++){
-  const ins=sc.items.filter(()=>Math.random()<.88).map(it=>({it,x:it.x,y:it.y,s:1,h:it.h?rnd(...it.h):0}));
-  const idx=ins.map((_,i)=>i).sort(()=>Math.random()-.5),ch=[],gap=a<40?130:100;
-  for(const i of idx){
-   if(ch.every(j=>Math.hypot(ins[i].x-ins[j].x,ins[i].y-ins[j].y)>gap))ch.push(i);
-   if(ch.length==3)break;
-  }
+  const ins=sc.items.filter(()=>rng()<.88).map(it=>({it,x:it.x,y:it.y,s:1,h:it.h?rnd(...it.h):0}));
+  const idx=ins.map((_,i)=>i),ch=[],gap=a<40?130:100;
+  for(let i=idx.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]]}
+  for(const i of idx){if(ch.every(j=>Math.hypot(ins[i].x-ins[j].x,ins[i].y-ins[j].y)>gap))ch.push(i);if(ch.length==3)break}
   if(ch.length<3)continue;
   const mods=new Map(),boxes=[];
   ch.forEach(i=>{const m=modify(ins[i],lv);mods.set(i,m);boxes.push(bbox(ins[i],m))});
-  const left=render(sc,ins,new Map()),right=render(sc,ins,mods);
-  const nm=sc.name.toLowerCase().replace(/\W+/g,'-');
-  show('#pz',compose(left,right,'Find the 3 differences'),`puzzle-${nm}-${lv}`);
-  show('#an',compose(left,right,'Answers (circled in red)',boxes),`answer-${nm}-${lv}`);
-  $('#gmsg').textContent=sc.name+' · '+lv;return;
+  rng=Math.random;
+  return{sc,lv,left:render(sc,ins,new Map()),right:render(sc,ins,mods),boxes};
  }
- $('#gmsg').textContent='Could not place 3 differences, please press Generate again.';
+ rng=Math.random;return null;
+}
+/* ---------- Tool 1: create + share ---------- */
+let cur='';
+$('#gen').onclick=()=>{
+ const lv=$('#lv').value,v=$('#sc').value,si=v=='r'?Math.floor(Math.random()*SC.length):+v;
+ let seed,pz=null;
+ for(let t=0;t<20&&!pz;t++){seed=Math.floor(Math.random()*1e9);pz=makePuzzle(si,lv,seed)}
+ if(!pz){$('#gmsg').textContent='Could not place 3 differences, please press Generate again.';return}
+ const nm=pz.sc.name.toLowerCase().replace(/\W+/g,'-');
+ show('#pz',compose(pz.left,pz.right,'Find the 3 differences'),`puzzle-${nm}-${lv}`);
+ show('#an',compose(pz.left,pz.right,'Answers (circled in red)',pz.boxes),`answer-${nm}-${lv}`);
+ cur=location.href.split('#')[0]+`#p=${si}-${lv}-${seed.toString(36)}`;
+ $('#lnk').value=cur;$('#shr').hidden=false;$('#gmsg').textContent=pz.sc.name+' · '+lv;
 };
+$('#cp').onclick=async()=>{
+ try{if(navigator.share)await navigator.share({title:'Spot the 3 Differences',url:cur});
+ else{await navigator.clipboard.writeText(cur);$('#gmsg').textContent='Link copied. Send it to your friends.'}}
+ catch(e){$('#lnk').select()}
+};
+$('#pl').onclick=()=>{location.hash=cur.split('#')[1]};
 /* ---------- Tool 2: mark differences on any uploaded puzzle ---------- */
 const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
 function crop(img,sx,sw,t,cw,ch){
@@ -278,4 +342,55 @@ $('#run').onclick=async()=>{
   show('#an2',compose(Lc,Rc,'Answers (circled in red)',boxes),'my-answer');
  }catch(e){msg.textContent='Could not read the image: '+e.message}
 };
+/* ---------- Play mode (opened from a share link) ---------- */
+let G=null;
+const fmt=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+function ring(g,x,y,r,col,n,w=4){
+ g.strokeStyle=col;g.lineWidth=w;g.beginPath();g.arc(x,y,r,0,7);g.stroke();
+ if(n){g.fillStyle=col;g.font='bold 20px system-ui,sans-serif';g.textAlign='center';g.fillText(n,x+r*.8,y-r*.8)}
+}
+function draw(){
+ const{pz,marks,done,res}=G,gl=$('#cl').getContext('2d'),gr=$('#cr').getContext('2d');
+ gl.drawImage(pz.left,0,0);gr.drawImage(pz.right,0,0);
+ if(!done){marks.forEach((p,i)=>{ring(gl,p.x,p.y,26,'#e11',i+1);ring(gr,p.x,p.y,26,'#e11',i+1)});return}
+ pz.boxes.forEach((b,i)=>ring(gr,b.x+b.w/2,b.y+b.h/2,Math.max(b.w,b.h)/2+14,res.found[i]?'#12a150':'#e11',i+1));
+ res.wrong.forEach(p=>ring(gr,p.x,p.y,22,'#888',0,3));
+}
+function route(){
+ if(G)clearInterval(G.iv);G=null;
+ const m=/^#p=(\d+)-(easy|medium|hard)-([0-9a-z]+)$/.exec(location.hash);
+ const pz=m&&SC[+m[1]]?makePuzzle(+m[1],m[2],parseInt(m[3],36)):null;
+ $('#make').hidden=!!pz;$('#play').hidden=!pz;
+ if(!pz)return;
+ G={pz,marks:[],done:false,t0:Date.now()};
+ G.iv=setInterval(()=>{if(!G.done)$('#tm').textContent=fmt(Date.now()-G.t0)},500);
+ $('#ptitle').textContent=pz.sc.name+' · '+m[2];$('#res').innerHTML='';$('#pmsg').textContent='';$('#tm').textContent='0:00';$('#cnt2').textContent='0/3';
+ draw();
+}
+function upd(msg){$('#cnt2').textContent=G.marks.length+'/3';$('#pmsg').textContent=msg||'';draw()}
+['cl','cr'].forEach(id=>$('#'+id).addEventListener('pointerdown',e=>{
+ if(!G||G.done)return;
+ const r=e.target.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
+ const k=G.marks.findIndex(p=>Math.hypot(p.x-x,p.y-y)<24);
+ if(k>=0){G.marks.splice(k,1);upd()}
+ else if(G.marks.length<3){G.marks.push({x,y});upd()}
+ else upd('You already placed 3 circles. Tap a circle to remove it first.');
+}));
+$('#un').onclick=()=>{if(G&&!G.done){G.marks.pop();upd()}};
+$('#ca').onclick=()=>{if(G&&!G.done){G.marks=[];upd()}};
+$('#ck').onclick=()=>{
+ if(!G||G.done)return;
+ const{pz,marks}=G;
+ if(!marks.length){upd('Place at least one circle first.');return}
+ const found=pz.boxes.map(()=>false),used=new Set();
+ pz.boxes.forEach((b,i)=>{
+  const cx=b.x+b.w/2,cy=b.y+b.h/2,tol=Math.max(b.w,b.h)/2+22;
+  marks.forEach((p,j)=>{if(!found[i]&&!used.has(j)&&Math.hypot(p.x-cx,p.y-cy)<=tol){found[i]=true;used.add(j)}});
+ });
+ G.done=true;G.res={found,wrong:marks.filter((_,j)=>!used.has(j))};
+ const n=found.filter(Boolean).length;
+ $('#res').innerHTML=`<h3>${n==3?'Perfect! All 3 found':n+' of 3 found'}</h3><p class="s">Time: ${fmt(Date.now()-G.t0)}. On the right picture: green = differences you found, red = ones you missed, grey = circles that were not differences.</p><button onclick="route()">Play again</button> <button onclick="location.hash=''">Make my own puzzle</button>`;
+ upd();
+};
+window.addEventListener('hashchange',route);route();
 </script></body></html>
