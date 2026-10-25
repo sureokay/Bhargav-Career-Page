@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spot the 3 Differences – Generator & Answer Marker</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#5b5bd6;--bd:#dde1ee}
+@media(prefers-color-scheme:dark){:root{--bg:#14161d;--card:#1e212b;--tx:#eef0f6;--mut:#9aa3b5;--ac:#8c8cff;--bd:#333847}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif;padding:20px}
+main{max-width:1100px;margin:auto}
+h1{font-size:1.6rem;margin:0 0 4px}h2{font-size:1.2rem;margin:0 0 6px}
+p.s{color:var(--mut);margin:0 0 14px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:18px 0}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:12px}
+label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mut);gap:4px}
+select,input{font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+button{font:inherit;padding:9px 16px;border:0;border-radius:8px;background:var(--ac);color:#fff;cursor:pointer;margin-top:8px}
+button:hover{opacity:.9}
+.out canvas{max-width:100%;height:auto;border:1px solid var(--bd);border-radius:8px;display:block;margin-top:12px}
+.out button{margin-right:8px}
+#msg{color:var(--mut);margin:6px 0 0}
+</style></head>
+<body><main>
+<h1>Spot the 3 Differences</h1>
+<p class="s">Works fully offline in your browser. No API key, no server, free to host anywhere.</p>
+
+<section>
+<h2>1. Generate a new puzzle + answer</h2>
+<p class="s">Draws a random scene, changes 3 things, and circles them in the answer image. The answers are always correct because the code made the changes.</p>
+<div class="row">
+ <label>Difficulty<select id="lv"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></label>
+ <button id="gen">Generate puzzle</button>
+</div>
+<div class="out" id="pz"></div><div class="out" id="an"></div>
+</section>
+
+<section>
+<h2>2. Mark answers on your own puzzle image</h2>
+<p class="s">Upload a puzzle made anywhere (e.g. by an AI image tool). Either one image with the original on the left and the changed copy on the right, or two files (original first, then changed). The app compares them and circles the differences on the right side.</p>
+<div class="row">
+ <label>Image file(s)<input type="file" id="f" accept="image/*" multiple></label>
+ <label>Differences to find<input type="number" id="cnt" value="3" min="1" max="10" style="width:90px"></label>
+ <label>Sensitivity (lower = finds subtler)<input type="range" id="thr" min="10" max="120" value="45"></label>
+ <label>Trim border px<input type="number" id="trim" value="0" min="0" style="width:90px"></label>
+ <button id="run">Find &amp; circle differences</button>
+</div>
+<p id="msg"></p>
+<div class="out" id="pz2"></div><div class="out" id="an2"></div>
+</section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>Math.floor(rnd(a,b+1)),pick=a=>a[ri(0,a.length-1)];
+const W=640,H=480;
+const TYPES=['circle','square','tri','star','house','tree','flower','cloud','fish'];
+const DIFF={
+ easy:{n:[14,18],s:[1.1,1.5],ch:['remove','color','shape'],hs:[150,200],gr:1.5,mv:40},
+ medium:{n:[22,28],s:[.8,1.1],ch:['remove','color','grow','move','shape'],hs:[70,110],gr:1.35,mv:28},
+ hard:{n:[32,40],s:[.55,.85],ch:['color','grow','move','remove'],hs:[28,40],gr:1.2,mv:16}};
+
+function poly(g,p){g.beginPath();p.forEach(([a,b],i)=>i?g.lineTo(a,b):g.moveTo(a,b));g.closePath();g.fill();g.stroke()}
+function drawObj(g,o){
+ const c=`hsl(${o.h},70%,55%)`,d=`hsl(${o.h},70%,35%)`;
+ g.save();g.translate(o.x,o.y);g.scale(o.s,o.s);g.fillStyle=c;g.strokeStyle=d;g.lineWidth=3;
+ switch(o.t){
+  case'circle':g.beginPath();g.arc(0,0,25,0,7);g.fill();g.stroke();break;
+  case'square':g.fillRect(-22,-22,44,44);g.strokeRect(-22,-22,44,44);break;
+  case'tri':poly(g,[[0,-28],[28,22],[-28,22]]);break;
+  case'star':{const p=[];for(let i=0;i<10;i++){const r=i%2?12:28,a=i*Math.PI/5-Math.PI/2;p.push([r*Math.cos(a),r*Math.sin(a)])}poly(g,p);break}
+  case'house':g.fillRect(-24,-5,48,30);g.strokeRect(-24,-5,48,30);g.fillStyle=d;poly(g,[[-30,-5],[0,-32],[30,-5]]);g.fillStyle='#fffa';g.fillRect(-6,8,12,17);break;
+  case'tree':g.fillStyle='#7a4a21';g.fillRect(-5,5,10,24);g.fillStyle=c;g.beginPath();g.arc(0,-8,24,0,7);g.fill();g.stroke();break;
+  case'flower':g.fillStyle=c;for(let i=0;i<6;i++){g.beginPath();g.arc(16*Math.cos(i*1.047),16*Math.sin(i*1.047),11,0,7);g.fill()}g.fillStyle='#fc3';g.beginPath();g.arc(0,0,9,0,7);g.fill();break;
+  case'cloud':g.fillStyle=`hsl(${o.h},80%,80%)`;[[-18,4,16],[0,-6,20],[20,4,15]].forEach(([a,b,r])=>{g.beginPath();g.arc(a,b,r,0,7);g.fill()});break;
+  case'fish':g.beginPath();g.ellipse(0,0,28,16,0,0,7);g.fill();g.stroke();poly(g,[[24,0],[42,-14],[42,14]]);g.fillStyle='#000';g.beginPath();g.arc(-14,-4,3,0,7);g.fill();break;
+ }
+ g.restore();
+}
+function makeScene(lv){
+ const L=DIFF[lv],objs=[],n=ri(...L.n);let t=0;
+ while(objs.length<n&&t++<4000){
+  const o={t:pick(TYPES),x:rnd(50,W-50),y:rnd(50,H-50),s:rnd(...L.s),h:ri(0,360)};
+  if(objs.every(p=>Math.hypot(p.x-o.x,p.y-o.y)>(p.s+o.s)*38))objs.push(o);
+ }
+ return{objs,bg:ri(0,360)};
+}
+function render(sc,mods){
+ const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+ const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,`hsl(${sc.bg},60%,85%)`);gr.addColorStop(1,`hsl(${sc.bg},45%,70%)`);
+ g.fillStyle=gr;g.fillRect(0,0,W,H);
+ sc.objs.forEach((o,i)=>{const m=mods.get(i);if(m===undefined)drawObj(g,o);else if(m)drawObj(g,m)});
+ return c;
+}
+function modify(o,k,L){
+ if(k=='remove')return null;
+ const m={...o};
+ if(k=='color')m.h=(o.h+rnd(...L.hs)*(Math.random()<.5?1:-1)+360)%360;
+ if(k=='grow')m.s=o.s*(Math.random()<.5?L.gr:1/L.gr);
+ if(k=='shape')m.t=pick(TYPES.filter(t=>t!=o.t));
+ if(k=='move'){const a=rnd(0,6.28);m.x=Math.min(W-30,Math.max(30,o.x+Math.cos(a)*L.mv));m.y=Math.min(H-30,Math.max(30,o.y+Math.sin(a)*L.mv))}
+ return m;
+}
+function bbox(o,m){
+ const p=m?[o,m]:[o],r=q=>38*q.s;
+ const x0=Math.min(...p.map(q=>q.x-r(q))),x1=Math.max(...p.map(q=>q.x+r(q)));
+ const y0=Math.min(...p.map(q=>q.y-r(q))),y1=Math.max(...p.map(q=>q.y+r(q)));
+ return{x:x0,y:y0,w:x1-x0,h:y1-y0};
+}
+/* Puzzle layout: original left, changed right; optional red circles on the right image */
+function compose(L,R,title,boxes){
+ const w=L.width,h=L.height,G=24,P=20,T=64,c=document.createElement('canvas');
+ c.width=w*2+G+P*2;c.height=h+T+P;const g=c.getContext('2d');
+ g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);
+ g.fillStyle='#222';g.font=`bold ${Math.max(26,w/22)}px system-ui,sans-serif`;g.textAlign='center';g.fillText(title,c.width/2,42);
+ const x2=P+w+G;g.drawImage(L,P,T);g.drawImage(R,x2,T);
+ g.strokeStyle='#222';g.lineWidth=3;g.strokeRect(P,T,w,h);g.strokeRect(x2,T,w,h);
+ if(boxes)boxes.forEach((b,i)=>{
+  const cx=x2+b.x+b.w/2,cy=T+b.y+b.h/2,r=Math.max(b.w,b.h)/2+Math.max(12,w/45);
+  g.strokeStyle='#e11';g.lineWidth=Math.max(4,w/160);g.beginPath();g.arc(cx,cy,r,0,7);g.stroke();
+  g.fillStyle='#e11';g.font=`bold ${Math.max(18,w/26)}px system-ui,sans-serif`;g.fillText(i+1,cx+r*.8,cy-r*.8);
+ });
+ return c;
+}
+function show(sel,c,name){
+ const b=$(sel);b.innerHTML='';b.appendChild(c);
+ const a=document.createElement('button');a.textContent='Download '+name+'.png';
+ a.onclick=()=>{const l=document.createElement('a');l.download=name+'.png';l.href=c.toDataURL('image/png');l.click()};
+ b.appendChild(a);
+}
+/* ---------- Tool 1: generator ---------- */
+$('#gen').onclick=()=>{
+ const lv=$('#lv').value,L=DIFF[lv];
+ for(let a=0;a<50;a++){
+  const sc=makeScene(lv),idx=sc.objs.map((_,i)=>i).sort(()=>Math.random()-.5),ch=[];
+  for(const i of idx){
+   if(ch.every(j=>Math.hypot(sc.objs[i].x-sc.objs[j].x,sc.objs[i].y-sc.objs[j].y)>170))ch.push(i);
+   if(ch.length==3)break;
+  }
+  if(ch.length<3)continue;
+  const mods=new Map(),boxes=[];
+  ch.forEach(i=>{const o=sc.objs[i],m=modify(o,pick(L.ch),L);mods.set(i,m);boxes.push(bbox(o,m))});
+  const left=render(sc,new Map()),right=render(sc,mods);
+  show('#pz',compose(left,right,'Find the 3 differences'),'puzzle-'+lv);
+  show('#an',compose(left,right,'Answers (circled in red)',boxes),'answer-'+lv);
+  return;
+ }
+};
+/* ---------- Tool 2: mark differences on any uploaded puzzle ---------- */
+const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
+function crop(img,sx,sw,t,cw,ch){
+ const sh=img.height-2*t,c=document.createElement('canvas');
+ c.width=cw||sw-2*t;c.height=ch||sh;
+ c.getContext('2d').drawImage(img,sx+t,t,sw-2*t,sh,0,0,c.width,c.height);return c;
+}
+function detect(Lc,Rc,thr,n){
+ const S=Math.min(1,320/Lc.width),w=Math.round(Lc.width*S),h=Math.round(Lc.height*S);
+ const px=c=>{const t=document.createElement('canvas');t.width=w;t.height=h;const g=t.getContext('2d');g.drawImage(c,0,0,w,h);return g.getImageData(0,0,w,h).data};
+ const a=px(Lc),b=px(Rc),m=new Uint8Array(w*h);
+ for(let i=0;i<w*h;i++){const k=i*4;if(Math.max(Math.abs(a[k]-b[k]),Math.abs(a[k+1]-b[k+1]),Math.abs(a[k+2]-b[k+2]))>thr)m[i]=1}
+ const r=Math.max(2,Math.round(w/70)),d=new Uint8Array(w*h);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(m[y*w+x])
+  for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<w&&Y<h)d[Y*w+X]=1}
+ const seen=new Uint8Array(w*h),res=[];
+ for(let s=0;s<w*h;s++){
+  if(!d[s]||seen[s])continue;
+  const st=[s];seen[s]=1;let x0=w,y0=h,x1=0,y1=0,area=0;
+  while(st.length){
+   const p=st.pop(),x=p%w,y=(p-x)/w;
+   if(m[p]){area++;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+   for(const q of[p-1,p+1,p-w,p+w]){
+    if(q<0||q>=w*h||seen[q]||!d[q])continue;
+    if((q==p-1&&x==0)||(q==p+1&&x==w-1))continue;
+    seen[q]=1;st.push(q);
+   }
+  }
+  if(area>=4)res.push({area,x:x0/S,y:y0/S,w:(x1-x0+1)/S,h:(y1-y0+1)/S});
+ }
+ return res.sort((p,q)=>q.area-p.area).slice(0,n);
+}
+$('#run').onclick=async()=>{
+ const fs=[...$('#f').files],msg=$('#msg');
+ if(!fs.length){msg.textContent='Please choose an image first.';return}
+ try{
+  const t=+$('#trim').value||0,n=+$('#cnt').value||3,thr=+$('#thr').value;
+  let L,R;
+  if(fs.length>=2){
+   const[a,b]=await Promise.all([loadImg(fs[0]),loadImg(fs[1])]);
+   L=crop(a,0,a.width,t);R=crop(b,0,b.width,t,L.width,L.height);
+  }else{
+   const im=await loadImg(fs[0]),half=Math.floor(im.width/2);
+   L=crop(im,0,half,t);R=crop(im,half,half,t);
+  }
+  const boxes=detect(L,R,thr,n);
+  msg.textContent=boxes.length==n?`Found ${n} differences.`:`Found ${boxes.length} of ${n}. Try changing sensitivity or trimming borders.`;
+  show('#pz2',compose(L,R,'Find the '+n+' differences'),'my-puzzle');
+  show('#an2',compose(L,R,'Answers (circled in red)',boxes),'my-answer');
+ }catch(e){msg.textContent='Could not read the image: '+e.message}
+};
+</script></body></html>
