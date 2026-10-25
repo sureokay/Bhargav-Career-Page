@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Spot the 3 Differences – Cartoon Scenes</title>
 <style>
@@ -29,7 +31,7 @@ button:hover{opacity:.9}
 
 <div id="make">
 <section>
-<h2>1. Generate a new puzzle + answer</h2>
+<h2>Generate a new puzzle + answer</h2>
 <p class="s">Each press builds a fresh version of the scene (random colours and props), changes 3 things, and circles them in the answer image.</p>
 <div class="row">
  <label>Scene<select id="sc"></select></label>
@@ -41,19 +43,6 @@ button:hover{opacity:.9}
 <div class="out" id="pz"></div><div class="out" id="an"></div>
 </section>
 
-<section>
-<h2>2. Mark answers on your own puzzle image</h2>
-<p class="s">Upload one image (original left, changed copy right) or two files (original first). The differences are found and circled on the right side.</p>
-<div class="row">
- <label>Image file(s)<input type="file" id="f" accept="image/*" multiple></label>
- <label>Differences to find<input type="number" id="cnt" value="3" min="1" max="10" style="width:90px"></label>
- <label>Sensitivity (lower = subtler)<input type="range" id="thr" min="10" max="120" value="45"></label>
- <label>Trim border px<input type="number" id="trim" value="0" min="0" style="width:90px"></label>
- <button id="run">Find &amp; circle differences</button>
-</div>
-<p id="msg"></p>
-<div class="out" id="pz2"></div><div class="out" id="an2"></div>
-</section>
 </div>
 <section id="play" hidden>
 <h2 id="ptitle">Spot the differences</h2>
@@ -291,57 +280,6 @@ $('#cp').onclick=async()=>{
  catch(e){$('#lnk').select()}
 };
 $('#pl').onclick=()=>{location.hash=cur.split('#')[1]};
-/* ---------- Tool 2: mark differences on any uploaded puzzle ---------- */
-const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
-function crop(img,sx,sw,t,cw,ch){
- const sh=img.height-2*t,c=document.createElement('canvas');
- c.width=cw||sw-2*t;c.height=ch||sh;
- c.getContext('2d').drawImage(img,sx+t,t,sw-2*t,sh,0,0,c.width,c.height);return c;
-}
-function detect(Lc,Rc,thr,n){
- const S=Math.min(1,320/Lc.width),w=Math.round(Lc.width*S),h=Math.round(Lc.height*S);
- const px=c=>{const t=document.createElement('canvas');t.width=w;t.height=h;const g=t.getContext('2d');g.drawImage(c,0,0,w,h);return g.getImageData(0,0,w,h).data};
- const a=px(Lc),b=px(Rc),m=new Uint8Array(w*h);
- for(let i=0;i<w*h;i++){const k=i*4;if(Math.max(Math.abs(a[k]-b[k]),Math.abs(a[k+1]-b[k+1]),Math.abs(a[k+2]-b[k+2]))>thr)m[i]=1}
- const r=Math.max(2,Math.round(w/70)),d=new Uint8Array(w*h);
- for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(m[y*w+x])
-  for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<w&&Y<h)d[Y*w+X]=1}
- const seen=new Uint8Array(w*h),res=[];
- for(let s=0;s<w*h;s++){
-  if(!d[s]||seen[s])continue;
-  const st=[s];seen[s]=1;let x0=w,y0=h,x1=0,y1=0,area=0;
-  while(st.length){
-   const p=st.pop(),x=p%w,y=(p-x)/w;
-   if(m[p]){area++;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
-   for(const q of[p-1,p+1,p-w,p+w]){
-    if(q<0||q>=w*h||seen[q]||!d[q])continue;
-    if((q==p-1&&x==0)||(q==p+1&&x==w-1))continue;
-    seen[q]=1;st.push(q);
-   }
-  }
-  if(area>=4)res.push({area,x:x0/S,y:y0/S,w:(x1-x0+1)/S,h:(y1-y0+1)/S});
- }
- return res.sort((p,q)=>q.area-p.area).slice(0,n);
-}
-$('#run').onclick=async()=>{
- const fs=[...$('#f').files],msg=$('#msg');
- if(!fs.length){msg.textContent='Please choose an image first.';return}
- try{
-  const t=+$('#trim').value||0,n=+$('#cnt').value||3,thr=+$('#thr').value;
-  let Lc,Rc;
-  if(fs.length>=2){
-   const[a,b]=await Promise.all([loadImg(fs[0]),loadImg(fs[1])]);
-   Lc=crop(a,0,a.width,t);Rc=crop(b,0,b.width,t,Lc.width,Lc.height);
-  }else{
-   const im=await loadImg(fs[0]),half=Math.floor(im.width/2);
-   Lc=crop(im,0,half,t);Rc=crop(im,half,half,t);
-  }
-  const boxes=detect(Lc,Rc,thr,n);
-  msg.textContent=boxes.length==n?`Found ${n} differences.`:`Found ${boxes.length} of ${n}. Try changing sensitivity or trimming borders.`;
-  show('#pz2',compose(Lc,Rc,'Find the '+n+' differences'),'my-puzzle');
-  show('#an2',compose(Lc,Rc,'Answers (circled in red)',boxes),'my-answer');
- }catch(e){msg.textContent='Could not read the image: '+e.message}
-};
 /* ---------- Play mode (opened from a share link) ---------- */
 let G=null;
 const fmt=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
