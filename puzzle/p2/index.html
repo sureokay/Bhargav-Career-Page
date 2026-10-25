@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spot the 3 Differences – Cartoon Scenes</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--ac:#5b5bd6;--bd:#dde1ee}
+@media(prefers-color-scheme:dark){:root{--bg:#14161d;--card:#1e212b;--tx:#eef0f6;--mut:#9aa3b5;--ac:#8c8cff;--bd:#333847}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif;padding:20px}
+main{max-width:1100px;margin:auto}
+h1{font-size:1.6rem;margin:0 0 4px}h2{font-size:1.2rem;margin:0 0 6px}
+p.s{color:var(--mut);margin:0 0 14px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:18px 0}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin-bottom:12px}
+label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mut);gap:4px}
+select,input{font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+button{font:inherit;padding:9px 16px;border:0;border-radius:8px;background:var(--ac);color:#fff;cursor:pointer;margin-top:8px}
+button:hover{opacity:.9}
+.out canvas{max-width:100%;height:auto;border:1px solid var(--bd);border-radius:8px;display:block;margin-top:12px}
+.out button{margin-right:8px}
+#msg{color:var(--mut);margin:6px 0 0}
+</style></head>
+<body><main>
+<h1>Spot the 3 Differences – Cartoon Scenes</h1>
+<p class="s">All artwork (mountains, trees, clouds, birds and more) is drawn by this page’s own code. Nothing is downloaded, no API key, free to host anywhere.</p>
+
+<section>
+<h2>1. Generate a new puzzle + answer</h2>
+<p class="s">Each press builds a fresh version of the scene (random colours and props), changes 3 things, and circles them in the answer image.</p>
+<div class="row">
+ <label>Scene<select id="sc"></select></label>
+ <label>Difficulty<select id="lv"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></label>
+ <button id="gen">Generate puzzle</button>
+</div>
+<p id="gmsg" class="s"></p>
+<div class="out" id="pz"></div><div class="out" id="an"></div>
+</section>
+
+<section>
+<h2>2. Mark answers on your own puzzle image</h2>
+<p class="s">Upload one image (original left, changed copy right) or two files (original first). The differences are found and circled on the right side.</p>
+<div class="row">
+ <label>Image file(s)<input type="file" id="f" accept="image/*" multiple></label>
+ <label>Differences to find<input type="number" id="cnt" value="3" min="1" max="10" style="width:90px"></label>
+ <label>Sensitivity (lower = subtler)<input type="range" id="thr" min="10" max="120" value="45"></label>
+ <label>Trim border px<input type="number" id="trim" value="0" min="0" style="width:90px"></label>
+ <button id="run">Find &amp; circle differences</button>
+</div>
+<p id="msg"></p>
+<div class="out" id="pz2"></div><div class="out" id="an2"></div>
+</section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
+const W=640,H=480;
+/* ---- drawing helpers ---- */
+const E=(g,x,y,a,b,f)=>{g.beginPath();g.ellipse(x,y,a,b,0,0,7);g.fillStyle=f;g.fill()};
+const R=(g,x,y,w,h,f)=>{g.fillStyle=f;g.fillRect(x,y,w,h)};
+const P=(g,p,f)=>{g.beginPath();p.forEach(([a,b],i)=>i?g.lineTo(a,b):g.moveTo(a,b));g.closePath();g.fillStyle=f;g.fill()};
+const L=(g,p,c,w)=>{g.beginPath();p.forEach(([a,b],i)=>i?g.lineTo(a,b):g.moveTo(a,b));g.strokeStyle=c;g.lineWidth=w;g.lineCap=g.lineJoin='round';g.stroke()};
+const CL=g=>[[-22,6,18],[0,-6,24],[24,6,17]].forEach(([a,b,r])=>E(g,a,b,r,r,'#fff'));
+const SUN=(g,k)=>{for(let i=0;i<8;i++){g.save();g.rotate(i*.785);R(g,-3,-34,6,12,k(60));g.restore()}E(g,0,0,22,22,k(55))};
+/* item = changeable object: x,y centre, r radius, h hue range (null = fixed colour), f drawing fn */
+const I=(x,y,r,h,f)=>({x,y,r,h,f});
+const ANY=[0,360];
+const SK=(g,a,b,y=400)=>{const q=g.createLinearGradient(0,0,0,y);q.addColorStop(0,a);q.addColorStop(1,b);g.fillStyle=q;g.fillRect(0,0,W,H)};
+const CB=(g,x,y,s,c='#fff')=>{g.save();g.translate(x,y);g.scale(s,s);g.globalAlpha=.92;[[-24,6,17],[-6,-6,22],[16,-2,19],[34,7,14],[0,8,24]].forEach(([a,b,r])=>E(g,a,b,r,r*.8,c));g.restore()};
+const HL=(g,y,a,p,c,ph=0)=>{g.beginPath();g.moveTo(0,H);for(let x=0;x<=W;x+=8)g.lineTo(x,y+a*Math.sin(x/p+ph));g.lineTo(W,H);g.closePath();g.fillStyle=c;g.fill()};
+const TR=(g,x,y,s,c)=>{R(g,x-2*s,y-8*s,4*s,10*s,'#6b4a2b');E(g,x,y-16*s,10*s,11*s,c)};
+const PN=(g,x,y,s,c)=>{R(g,x-1.5*s,y-4*s,3*s,6*s,'#5a3d22');P(g,[[x,y-30*s],[x+10*s,y-4*s],[x-10*s,y-4*s]],c);P(g,[[x,y-40*s],[x+8*s,y-16*s],[x-8*s,y-16*s]],c)};
+const VB=(g,x,y,s)=>L(g,[[x-7*s,y],[x-3*s,y-4*s],[x,y],[x+3*s,y-4*s],[x+7*s,y]],'#333',2);
+const MT=(g,x,y,w,h,c,sn)=>{P(g,[[x-w,y],[x,y-h],[x+w,y]],c);if(sn)P(g,[[x,y-h],[x+w*.28,y-h*.7],[x+w*.1,y-h*.76],[x,y-h*.64],[x-w*.12,y-h*.76],[x-w*.28,y-h*.7]],'#fff')};
+
+/* ---- Scene 1: cat in the kitchen ---- */
+function bgCat(g){
+ R(g,0,0,640,330,'#f7e6c8');
+ g.globalAlpha=.35;for(let x=0;x<640;x+=40)R(g,x,0,18,326,'#efd3a6');g.globalAlpha=1;
+ R(g,0,0,640,14,'#e6c79a');
+ R(g,0,165,205,75,'#e9f2f5');for(let x=0;x<205;x+=25)R(g,x,165,2,75,'#c9dbe0');for(let y=165;y<240;y+=25)R(g,0,y,205,2,'#c9dbe0');
+ R(g,0,28,85,72,'#8c6a49');R(g,41,28,3,72,'#6e5236');E(g,36,70,3,6,'#e8c35a');E(g,49,70,3,6,'#e8c35a');
+ for(let r=0;r<3;r++)for(let c=0;c<11;c++)R(g,c*60,330+r*50,60,50,(r+c)%2?'#cfa273':'#c19163');
+ R(g,0,326,640,10,'#a87a50');
+ R(g,0,245,200,135,'#7b5a3c');R(g,0,238,205,12,'#e8e8e8');R(g,15,265,80,100,'#8c6a49');R(g,105,265,80,100,'#8c6a49');
+ E(g,84,300,3,6,'#e8c35a');E(g,116,300,3,6,'#e8c35a');
+ R(g,430,213,170,10,'#e9dcc8');
+ g.save();g.beginPath();g.rect(444,89,142,124);g.clip();
+ SK(g,'#7fcbf0','#d7f1ff',215);MT(g,540,185,70,50,'#9fb3c8',1);HL(g,178,5,20,'#8fd06a');
+ TR(g,458,190,.9,'#4f9a4a');TR(g,566,186,1.1,'#3f8a45');TR(g,582,190,.8,'#5aa05a');CB(g,470,112,.45);CB(g,556,104,.4);g.restore();
+ R(g,436,81,158,8,'#fff');R(g,436,213,158,8,'#fff');R(g,436,81,8,140,'#fff');R(g,586,81,8,140,'#fff');R(g,511,89,8,124,'#fff');
+ E(g,330,445,175,30,'#b5533c');E(g,330,445,145,22,'#d9835f');E(g,330,445,100,14,'#b5533c');
+ L(g,[[385,410],[440,400],[445,350],[412,330]],'#e8903a',14);
+ E(g,330,398,62,46,'#e8903a');E(g,300,436,18,10,'#f5b36b');E(g,360,436,18,10,'#f5b36b');
+ for(const x of[300,330,360])L(g,[[x,372],[x+4,392]],'#c46f1d',5);
+ P(g,[[295,312],[300,278],[325,303]],'#e8903a');P(g,[[365,312],[360,278],[335,303]],'#e8903a');
+ P(g,[[302,306],[304,290],[318,302]],'#f5a3a3');P(g,[[358,306],[356,290],[342,302]],'#f5a3a3');
+ E(g,330,335,42,36,'#e8903a');
+ for(const x of[315,345]){E(g,x,331,7,9,'#8bd04a');E(g,x,331,3,7,'#111')}
+ P(g,[[326,342],[334,342],[330,348]],'#f08080');
+ [[300,344,270,338],[300,348,270,352],[360,344,390,338],[360,348,390,352]].forEach(([a,b,c,d])=>L(g,[[a,b],[c,d]],'#fff',2));
+}
+const catItems=[
+ I(470,430,24,ANY,(g,k)=>{E(g,0,6,26,12,k(50));E(g,0,0,21,8,'#8b5a2b')}),
+ I(330,368,22,ANY,(g,k)=>{E(g,0,0,30,7,k(50));E(g,0,10,5,5,'#ffd23f')}),
+ I(320,90,30,ANY,(g,k)=>{E(g,0,0,30,30,k(50));E(g,0,0,24,24,'#fff');L(g,[[0,0],[0,-16]],'#222',3);L(g,[[0,0],[11,5]],'#222',3)}),
+ I(120,120,34,ANY,(g,k)=>{R(g,-34,-26,68,52,k(35));R(g,-28,-20,56,40,'#cfe8ff');P(g,[[-28,20],[-8,-5],[10,20]],'#5fae5f');E(g,14,-8,6,6,'#ffd23f')}),
+ I(515,190,28,ANY,(g,k)=>{E(g,0,-12,7,16,'#3fa34d');E(g,-12,-6,6,12,'#3fa34d');E(g,12,-6,6,12,'#3fa34d');P(g,[[-14,6],[14,6],[10,26],[-10,26]],k(45))}),
+ I(35,224,15,ANY,(g,k)=>{R(g,-10,-12,20,24,k(55));R(g,10,-6,6,12,k(55))}),
+ I(100,215,20,ANY,(g,k)=>{R(g,-14,-20,28,40,k(60,50));R(g,-17,-25,34,8,'#555')}),
+ I(165,224,22,[0,15],(g,k)=>{E(g,0,8,26,12,'#d9d9d9');E(g,-10,0,9,9,k(50));E(g,8,0,9,9,k(50));E(g,0,-8,9,9,k(50))}),
+ I(230,440,20,ANY,(g,k)=>{E(g,0,0,18,18,k(55));g.strokeStyle='rgba(0,0,0,.25)';g.lineWidth=2;g.beginPath();g.arc(0,0,11,.5,4);g.stroke();L(g,[[16,10],[34,16]],k(55),3)}),
+ I(130,440,26,ANY,(g,k)=>{E(g,0,6,32,12,'#fff');E(g,-3,0,17,8,k(50));P(g,[[12,0],[24,-8],[24,8]],k(50))}),
+ I(500,140,14,ANY,(g,k)=>{E(g,0,0,12,8,k(55));P(g,[[11,-2],[18,0],[11,3]],'#f90');E(g,-4,-2,2,2,'#111')}),
+ I(590,435,16,null,g=>{E(g,0,0,14,9,'#9a9a9a');E(g,-6,-8,5,5,'#c0c0c0');L(g,[[14,2],[30,8]],'#9a9a9a',2);E(g,-9,-1,2,2,'#111')}),
+ I(200,60,28,ANY,(g,k)=>{L(g,[[0,-70],[0,-18]],'#555',2);P(g,[[-8,-18],[8,-18],[26,10],[-26,10]],k(55));E(g,0,14,5,5,'#fff2a0')})
+];
+
+/* ---- Scene 2: farmer in his field ---- */
+function bgFarm(g){
+ SK(g,'#5fb8f5','#e0f4ff',340);E(g,560,70,70,70,'rgba(255,240,150,.35)');
+ [[80,60,1],[330,45,.8],[520,150,.7],[40,170,.6],[610,60,.7],[150,130,.6],[440,200,.5]].forEach(([x,y,s])=>CB(g,x,y,s));
+ [[140,50],[165,62],[120,66],[480,30],[500,40],[470,44]].forEach(([x,y])=>VB(g,x,y,1));
+ MT(g,90,305,150,120,'#8fa6c4',1);MT(g,250,305,140,90,'#a3b7d1',1);MT(g,430,305,170,130,'#8fa6c4',1);MT(g,590,305,120,80,'#a3b7d1',1);
+ HL(g,303,8,60,'#8dc87a');
+ for(let x=10;x<640;x+=26)TR(g,x,312+7*Math.sin(x/60),.8,x%52?'#5aa05a':'#4a8f4f');
+ P(g,[[490,305],[502,305],[499,262],[493,262]],'#e9e1d0');
+ [[480,248],[510,276],[509,248],[481,276]].forEach(([a,b])=>L(g,[[495,262],[a,b]],'#777',3));
+ HL(g,336,8,55,'#9bd66f',1);R(g,0,350,640,130,'#9bd66f');
+ for(let i=0;i<7;i++)L(g,[[20+i*110,480],[230+i*30,352]],'#6fb24a',4);
+ for(let i=0;i<45;i++)E(g,(i*97)%640,365+(i*53)%110,2.5,2.5,i%2?'#fff':'#ffd23f');
+ for(let x=200;x<=640;x+=40)R(g,x,338,5,28,'#fff');R(g,200,344,440,4,'#fff');R(g,200,356,440,4,'#fff');
+ R(g,30,205,150,125,'#c0392b');P(g,[[18,210],[105,150],[192,210]],'#8e2a20');R(g,75,255,60,75,'#f0e0c0');
+ L(g,[[75,255],[135,330]],'#c0392b',4);L(g,[[135,255],[75,330]],'#c0392b',4);E(g,105,185,10,10,'#f0e0c0');
+ R(g,308,311,44,40,'#2f5fa8');R(g,311,349,15,46,'#2f5fa8');R(g,334,349,15,46,'#2f5fa8');
+ E(g,318,398,12,6,'#4a2f1b');E(g,342,398,12,6,'#4a2f1b');R(g,324,277,12,8,'#f2c9a0');E(g,330,255,24,26,'#f2c9a0');
+ E(g,321,254,3,3,'#222');E(g,339,254,3,3,'#222');g.strokeStyle='#8a4b2a';g.lineWidth=2;g.beginPath();g.arc(330,260,8,.2,2.9);g.stroke();
+ E(g,296,318,7,7,'#f2c9a0');E(g,364,318,7,7,'#f2c9a0');
+}
+const farmItems=[
+ I(560,70,36,[40,55],SUN),
+ I(230,85,40,null,CL),
+ I(410,120,32,null,g=>{g.scale(.8,.8);CL(g)}),
+ I(330,232,30,ANY,(g,k)=>{E(g,0,8,34,8,k(50));E(g,0,0,20,14,k(50));R(g,-20,2,40,5,k(25))}),
+ I(330,297,28,ANY,(g,k)=>{R(g,-22,-14,44,24,k(50));R(g,-34,-12,14,26,k(50));R(g,20,-12,14,26,k(50))}),
+ I(400,335,30,[20,40],(g,k)=>{R(g,-2,-28,4,60,'#8a5a2b');R(g,-12,-32,24,4,k(50,15));[-12,-1,9].forEach(x=>R(g,x,-32,3,14,k(50,15)))}),
+ I(545,375,44,ANY,(g,k)=>{R(g,-34,-12,50,26,k(50));R(g,4,-34,28,24,k(35));R(g,8,-30,20,16,'#bfe3f5');E(g,-22,16,18,18,'#222');E(g,-22,16,8,8,'#999');E(g,22,20,12,12,'#222')}),
+ I(210,400,18,[30,50],(g,k)=>{E(g,0,0,16,13,k(75));E(g,14,-12,7,7,k(75));E(g,14,-20,3,3,'#e22');P(g,[[20,-12],[27,-10],[20,-8]],'#f90');P(g,[[-14,-4],[-26,-14],[-14,4]],k(75))}),
+ I(95,420,24,ANY,(g,k)=>{[[-14,6],[0,-6],[14,6]].forEach(([a,b])=>{L(g,[[a,b],[a,b+16]],'#3a8a3a',3);E(g,a,b,7,7,k(55));E(g,a,b,3,3,'#ffd23f')})}),
+ I(160,448,18,[20,30],(g,k)=>{E(g,0,0,18,14,k(50));E(g,0,0,7,14,k(42));R(g,-2,-18,4,6,'#3a7a2a')}),
+ I(590,235,48,[0,15],(g,k)=>{R(g,-6,0,12,50,'#7a4a21');E(g,0,-10,40,34,'#4fa34d');[[-18,-14],[14,-18],[2,2]].forEach(([a,b])=>E(g,a,b,6,6,k(50)))}),
+ I(320,140,12,null,g=>L(g,[[-12,0],[-5,-6],[0,0],[5,-6],[12,0]],'#333',3)),
+ I(255,372,14,ANY,(g,k)=>{P(g,[[-12,-12],[12,-12],[9,12],[-9,12]],k(55));L(g,[[-12,-12],[0,-22],[12,-12]],'#555',2)})
+];
+
+/* ---- Scene 3: aeroplane in the sky ---- */
+function bgPlane(g){
+ SK(g,'#3a9ae8','#d6f1ff',400);E(g,90,80,80,80,'rgba(255,245,170,.3)');
+ g.save();g.globalAlpha=.4;['#e33','#f93','#fd3','#4c4','#38f','#85c'].forEach((c,i)=>{g.beginPath();g.arc(470,410,150-i*7,Math.PI,2*Math.PI);g.strokeStyle=c;g.lineWidth=7;g.stroke()});g.restore();
+ [[40,40,1],[280,36,.8],[400,70,.7],[610,40,.7],[30,160,.7],[250,150,.6],[360,372,.9],[260,390,.8],[620,250,.6],[20,300,.6]].forEach(([x,y,s])=>CB(g,x,y,s));
+ [[230,80],[250,90],[210,92],[430,200],[445,210]].forEach(([x,y])=>VB(g,x,y,1));
+ MT(g,70,400,150,110,'#7a8a99',1);MT(g,250,400,150,90,'#8d9cab',1);MT(g,400,400,130,70,'#9fb0c0',1);MT(g,590,400,130,95,'#7a8a99',1);
+ for(let x=150;x<640;x+=20)PN(g,x,404,.7,'#3f7f4f');
+ R(g,0,400,640,80,'#2f8fd0');
+ for(let y=412;y<480;y+=14)for(let x=(y/14%2)*20;x<640;x+=40)L(g,[[x,y],[x+10,y-4],[x+20,y]],'rgba(255,255,255,.5)',2);
+ E(g,75,410,60,14,'#d9c28a');E(g,570,418,50,12,'#e4cf98');
+ L(g,[[570,418],[574,392],[580,380]],'#7a4a21',4);
+ [[-22,6],[-12,-8],[22,6],[12,-8]].forEach(([a,b])=>L(g,[[580,380],[580+a,380+b]],'#2e9a4a',4));
+ P(g,[[435,245],[492,250],[492,264],[435,258]],'#d3d8df');E(g,320,245,150,34,'#f4f4f4');
+ P(g,[[290,252],[350,252],[392,322],[332,322]],'#d3d8df');E(g,178,246,24,22,'#cfd3d8');E(g,203,236,13,9,'#7fb6e0');
+}
+const planeItems=[
+ I(90,80,34,[40,55],(g,k)=>{g.scale(.9,.9);SUN(g,k)}),
+ I(170,340,36,null,CL),
+ I(520,110,34,null,g=>{g.scale(.9,.9);CL(g)}),
+ I(580,340,30,null,g=>{g.scale(.75,.75);CL(g)}),
+ I(130,200,30,ANY,(g,k)=>{E(g,0,-6,24,28,k(50));E(g,0,-6,8,28,k(75));L(g,[[-14,18],[-6,26]],'#444',1);L(g,[[14,18],[6,26]],'#444',1);R(g,-8,26,16,10,'#8a5a2b')}),
+ I(470,320,22,null,g=>{L(g,[[-18,0],[-10,-8],[-2,0],[6,-8],[14,0]],'#333',3);L(g,[[0,12],[6,6],[12,12],[18,6],[24,12]],'#333',3)}),
+ I(590,200,26,ANY,(g,k)=>{P(g,[[0,-24],[16,0],[0,24],[-16,0]],k(55));L(g,[[0,24],[8,38],[-4,50]],'#444',2)}),
+ I(480,438,26,ANY,(g,k)=>{P(g,[[-22,0],[22,0],[14,12],[-14,12]],k(35));R(g,-1,-26,3,26,'#444');P(g,[[2,-26],[20,-4],[2,-4]],k(85))}),
+ I(75,375,34,ANY,(g,k)=>{P(g,[[-9,30],[9,30],[6,-30],[-6,-30]],'#fff');R(g,-8,-10,16,10,k(50));E(g,0,-34,7,6,'#ffd23f');P(g,[[-9,-30],[9,-30],[0,-42]],k(40))}),
+ I(452,207,30,ANY,(g,k)=>P(g,[[-15,18],[15,18],[28,-20],[2,-20]],k(50))),
+ I(300,243,18,ANY,(g,k)=>{E(g,0,0,12,12,k(50));E(g,0,0,5,5,'#fff')}),
+ I(255,238,32,null,g=>[-26,0,26].forEach(a=>E(g,a,0,7,7,'#7fb6e0'))),
+ I(168,246,28,null,g=>{R(g,-3,-26,6,52,'#555');E(g,0,0,5,5,'#999')})
+];
+const SC=[{name:'Cat in the kitchen',bg:bgCat,items:catItems},{name:'Farmer in his field',bg:bgFarm,items:farmItems},{name:'Aeroplane in the sky',bg:bgPlane,items:planeItems}];
+$('#sc').innerHTML='<option value="r">Random scene</option>'+SC.map((s,i)=>`<option value="${i}">${s.name}</option>`).join('');
+
+/* ---- difficulty ---- */
+const DIFF={
+ easy:{ch:['color','remove'],hs:[150,200],gr:1.5,mv:40},
+ medium:{ch:['color','remove','grow','move'],hs:[70,110],gr:1.35,mv:28},
+ hard:{ch:['color','grow','move','remove'],hs:[28,40],gr:1.2,mv:16}};
+
+function drawInst(g,o){
+ g.save();g.translate(o.x,o.y);g.scale(o.s,o.s);
+ o.it.f(g,(l,s=70)=>`hsl(${o.h},${s}%,${l}%)`);g.restore();
+}
+function render(sc,ins,mods){
+ const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+ sc.bg(g);
+ ins.forEach((o,i)=>{const q=mods.has(i)?mods.get(i):o;if(q)drawInst(g,q)});
+ return c;
+}
+function modify(o,lv){
+ const D=DIFF[lv];
+ let ks=D.ch.filter(k=>(k!='color'||o.it.h)&&!(lv=='hard'&&k=='remove'&&o.it.r>24));
+ const k=ks.length?pick(ks):'grow';
+ if(k=='remove')return null;
+ const m={...o};
+ if(k=='color')m.h=(o.h+rnd(...D.hs)*(Math.random()<.5?1:-1)+360)%360;
+ if(k=='grow')m.s=Math.random()<.5?D.gr:1/D.gr;
+ if(k=='move'){const a=rnd(0,6.28);m.x=Math.min(W-30,Math.max(30,o.x+Math.cos(a)*D.mv));m.y=Math.min(H-30,Math.max(30,o.y+Math.sin(a)*D.mv))}
+ return m;
+}
+function bbox(o,m){
+ const p=m?[o,m]:[o],r=q=>q.it.r*q.s;
+ const x0=Math.min(...p.map(q=>q.x-r(q))),x1=Math.max(...p.map(q=>q.x+r(q)));
+ const y0=Math.min(...p.map(q=>q.y-r(q))),y1=Math.max(...p.map(q=>q.y+r(q)));
+ return{x:x0,y:y0,w:x1-x0,h:y1-y0};
+}
+/* layout: original left, changed right; optional red circles on the right image */
+function compose(Lc,Rc,title,boxes){
+ const w=Lc.width,h=Lc.height,G=24,Pd=20,T=64,c=document.createElement('canvas');
+ c.width=w*2+G+Pd*2;c.height=h+T+Pd;const g=c.getContext('2d');
+ g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);
+ g.fillStyle='#222';g.font=`bold ${Math.max(26,w/22)}px system-ui,sans-serif`;g.textAlign='center';g.fillText(title,c.width/2,42);
+ const x2=Pd+w+G;g.drawImage(Lc,Pd,T);g.drawImage(Rc,x2,T);
+ g.strokeStyle='#222';g.lineWidth=3;g.strokeRect(Pd,T,w,h);g.strokeRect(x2,T,w,h);
+ if(boxes)boxes.forEach((b,i)=>{
+  const cx=x2+b.x+b.w/2,cy=T+b.y+b.h/2,r=Math.max(b.w,b.h)/2+Math.max(12,w/45);
+  g.strokeStyle='#e11';g.lineWidth=Math.max(4,w/160);g.beginPath();g.arc(cx,cy,r,0,7);g.stroke();
+  g.fillStyle='#e11';g.font=`bold ${Math.max(18,w/26)}px system-ui,sans-serif`;g.fillText(i+1,cx+r*.8,cy-r*.8);
+ });
+ return c;
+}
+function show(sel,c,name){
+ const b=$(sel);b.innerHTML='';b.appendChild(c);
+ const a=document.createElement('button');a.textContent='Download '+name+'.png';
+ a.onclick=()=>{const l=document.createElement('a');l.download=name+'.png';l.href=c.toDataURL('image/png');l.click()};
+ b.appendChild(a);
+}
+/* ---------- Tool 1: generator ---------- */
+$('#gen').onclick=()=>{
+ const lv=$('#lv').value,v=$('#sc').value,sc=v=='r'?pick(SC):SC[+v];
+ for(let a=0;a<80;a++){
+  const ins=sc.items.filter(()=>Math.random()<.88).map(it=>({it,x:it.x,y:it.y,s:1,h:it.h?rnd(...it.h):0}));
+  const idx=ins.map((_,i)=>i).sort(()=>Math.random()-.5),ch=[],gap=a<40?130:100;
+  for(const i of idx){
+   if(ch.every(j=>Math.hypot(ins[i].x-ins[j].x,ins[i].y-ins[j].y)>gap))ch.push(i);
+   if(ch.length==3)break;
+  }
+  if(ch.length<3)continue;
+  const mods=new Map(),boxes=[];
+  ch.forEach(i=>{const m=modify(ins[i],lv);mods.set(i,m);boxes.push(bbox(ins[i],m))});
+  const left=render(sc,ins,new Map()),right=render(sc,ins,mods);
+  const nm=sc.name.toLowerCase().replace(/\W+/g,'-');
+  show('#pz',compose(left,right,'Find the 3 differences'),`puzzle-${nm}-${lv}`);
+  show('#an',compose(left,right,'Answers (circled in red)',boxes),`answer-${nm}-${lv}`);
+  $('#gmsg').textContent=sc.name+' · '+lv;return;
+ }
+ $('#gmsg').textContent='Could not place 3 differences, please press Generate again.';
+};
+/* ---------- Tool 2: mark differences on any uploaded puzzle ---------- */
+const loadImg=f=>new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f)});
+function crop(img,sx,sw,t,cw,ch){
+ const sh=img.height-2*t,c=document.createElement('canvas');
+ c.width=cw||sw-2*t;c.height=ch||sh;
+ c.getContext('2d').drawImage(img,sx+t,t,sw-2*t,sh,0,0,c.width,c.height);return c;
+}
+function detect(Lc,Rc,thr,n){
+ const S=Math.min(1,320/Lc.width),w=Math.round(Lc.width*S),h=Math.round(Lc.height*S);
+ const px=c=>{const t=document.createElement('canvas');t.width=w;t.height=h;const g=t.getContext('2d');g.drawImage(c,0,0,w,h);return g.getImageData(0,0,w,h).data};
+ const a=px(Lc),b=px(Rc),m=new Uint8Array(w*h);
+ for(let i=0;i<w*h;i++){const k=i*4;if(Math.max(Math.abs(a[k]-b[k]),Math.abs(a[k+1]-b[k+1]),Math.abs(a[k+2]-b[k+2]))>thr)m[i]=1}
+ const r=Math.max(2,Math.round(w/70)),d=new Uint8Array(w*h);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(m[y*w+x])
+  for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<w&&Y<h)d[Y*w+X]=1}
+ const seen=new Uint8Array(w*h),res=[];
+ for(let s=0;s<w*h;s++){
+  if(!d[s]||seen[s])continue;
+  const st=[s];seen[s]=1;let x0=w,y0=h,x1=0,y1=0,area=0;
+  while(st.length){
+   const p=st.pop(),x=p%w,y=(p-x)/w;
+   if(m[p]){area++;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+   for(const q of[p-1,p+1,p-w,p+w]){
+    if(q<0||q>=w*h||seen[q]||!d[q])continue;
+    if((q==p-1&&x==0)||(q==p+1&&x==w-1))continue;
+    seen[q]=1;st.push(q);
+   }
+  }
+  if(area>=4)res.push({area,x:x0/S,y:y0/S,w:(x1-x0+1)/S,h:(y1-y0+1)/S});
+ }
+ return res.sort((p,q)=>q.area-p.area).slice(0,n);
+}
+$('#run').onclick=async()=>{
+ const fs=[...$('#f').files],msg=$('#msg');
+ if(!fs.length){msg.textContent='Please choose an image first.';return}
+ try{
+  const t=+$('#trim').value||0,n=+$('#cnt').value||3,thr=+$('#thr').value;
+  let Lc,Rc;
+  if(fs.length>=2){
+   const[a,b]=await Promise.all([loadImg(fs[0]),loadImg(fs[1])]);
+   Lc=crop(a,0,a.width,t);Rc=crop(b,0,b.width,t,Lc.width,Lc.height);
+  }else{
+   const im=await loadImg(fs[0]),half=Math.floor(im.width/2);
+   Lc=crop(im,0,half,t);Rc=crop(im,half,half,t);
+  }
+  const boxes=detect(Lc,Rc,thr,n);
+  msg.textContent=boxes.length==n?`Found ${n} differences.`:`Found ${boxes.length} of ${n}. Try changing sensitivity or trimming borders.`;
+  show('#pz2',compose(Lc,Rc,'Find the '+n+' differences'),'my-puzzle');
+  show('#an2',compose(Lc,Rc,'Answers (circled in red)',boxes),'my-answer');
+ }catch(e){msg.textContent='Could not read the image: '+e.message}
+};
+</script></body></html>
