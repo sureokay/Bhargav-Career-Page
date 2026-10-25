@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: https://fungames.goatcounter.com/count; connect-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Spot the 3 Differences – Cartoon Scenes</title>
@@ -53,6 +53,7 @@ button:hover{opacity:.9}
 <div class="row"><button id="un">Undo</button><button id="ca">Clear</button><button id="ck">Check my answers</button></div>
 <div id="res"></div>
 </section>
+<p class="s" style="text-align:center">Privacy: this page counts visits anonymously with GoatCounter (no cookies, no personal data).</p>
 </main>
 <script>
 const $=s=>document.querySelector(s);
@@ -245,6 +246,16 @@ function show(sel,c,name){
  a.onclick=()=>{const l=document.createElement('a');l.download=name+'.png';l.href=c.toDataURL('image/png');l.click()};
  b.appendChild(a);
 }
+/* ---------- Anonymous statistics (GoatCounter: no cookies, no personal data) ---------- */
+const GC='https://fungames.goatcounter.com/count';
+function track(path,title,ev){
+ try{
+  if(location.protocol!=='https:'||navigator.doNotTrack==='1')return;
+  const q=new URLSearchParams({p:path,t:title||path,rnd:Math.random().toString(36).slice(2)});
+  if(ev)q.set('e','true');else if(document.referrer)q.set('r',document.referrer.slice(0,200));
+  new Image().src=GC+'?'+q;
+ }catch(e){}
+}
 /* ---------- Puzzle builder (same code + same seed = same puzzle, so a link can rebuild it) ---------- */
 function makePuzzle(si,lv,seed){
  const sc=SC[si];rng=mul(seed);
@@ -273,8 +284,10 @@ $('#gen').onclick=()=>{
  show('#an',compose(pz.left,pz.right,'Answers (circled in red)',pz.boxes),`answer-${nm}-${lv}`);
  cur=location.href.split('#')[0]+`#p=${si}-${lv}-${seed.toString(36)}`;
  $('#lnk').value=cur;$('#shr').hidden=false;$('#gmsg').textContent=pz.sc.name+' · '+lv;
+ track('generated/'+pz.sc.name+' '+lv,'',1);
 };
 $('#cp').onclick=async()=>{
+ track('link-shared','',1);
  try{if(navigator.share)await navigator.share({title:'Spot the 3 Differences',url:cur});
  else{await navigator.clipboard.writeText(cur);$('#gmsg').textContent='Link copied. Send it to your friends.'}}
  catch(e){$('#lnk').select()}
@@ -294,11 +307,12 @@ function draw(){
  pz.boxes.forEach((b,i)=>ring(gr,b.x+b.w/2,b.y+b.h/2,Math.max(b.w,b.h)/2+14,res.found[i]?'#12a150':'#e11',i+1));
  res.wrong.forEach(p=>ring(gr,p.x,p.y,22,'#888',0,3));
 }
-function route(){
+function route(replay){
  if(G)clearInterval(G.iv);G=null;
  const m=/^#p=(\d+)-(easy|medium|hard)-([0-9a-z]+)$/.exec(location.hash);
  const pz=m&&SC[+m[1]]?makePuzzle(+m[1],m[2],parseInt(m[3],36)):null;
  $('#make').hidden=!!pz;$('#play').hidden=!pz;
+ if(replay!==true)track(pz?'/play':'/',pz?'Shared puzzle':'Main game');
  if(!pz)return;
  G={pz,marks:[],done:false,t0:Date.now()};
  G.iv=setInterval(()=>{if(!G.done)$('#tm').textContent=fmt(Date.now()-G.t0)},500);
@@ -326,8 +340,11 @@ $('#ck').onclick=()=>{
   marks.forEach((p,j)=>{if(!found[i]&&!used.has(j)&&Math.hypot(p.x-cx,p.y-cy)<=tol){found[i]=true;used.add(j)}});
  });
  G.done=true;G.res={found,wrong:marks.filter((_,j)=>!used.has(j))};
- const n=found.filter(Boolean).length;
- $('#res').innerHTML=`<h3>${n==3?'Perfect! All 3 found':n+' of 3 found'}</h3><p class="s">Time: ${fmt(Date.now()-G.t0)}. On the right picture: green = differences you found, red = ones you missed, grey = circles that were not differences.</p><button onclick="route()">Play again</button> <button onclick="location.hash=''">Make my own puzzle</button>`;
+ const n=found.filter(Boolean).length,sec=Math.round((Date.now()-G.t0)/1000);
+ track('result/'+n+'-of-3','',1);
+ track('solve-time/'+String(sec>=600?600:Math.floor(sec/15)*15).padStart(3,'0')+(sec>=600?'s-or-more':'s'),'',1);
+ track('played/'+pz.sc.name+' '+pz.lv,'',1);
+ $('#res').innerHTML=`<h3>${n==3?'Perfect! All 3 found':n+' of 3 found'}</h3><p class="s">Time: ${fmt(Date.now()-G.t0)}. On the right picture: green = differences you found, red = ones you missed, grey = circles that were not differences.</p><button onclick="route(true)">Play again</button> <button onclick="location.hash=''">Make my own puzzle</button>`;
  upd();
 };
 window.addEventListener('hashchange',route);route();
